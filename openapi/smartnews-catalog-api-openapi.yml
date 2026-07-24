@@ -1,0 +1,1514 @@
+openapi: 3.0.3
+info:
+  version: 3.0.1
+  title: SmartNews Marketing ad catalog API
+  description: "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n"
+  contact:
+    name: SmartNews Ads Support
+servers:
+- url: https://ads.smartnews.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: catalog
+paths:
+  /api/bm-external/v1/businesses/{business_id}/catalogs:
+    get:
+      tags:
+      - catalog
+      description: 'Retrieve all catalogs associated with the specified business.
+
+        '
+      operationId: listBusinessCatalogs
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business whose catalogs will be listed.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Catalogs associated with the specified business.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogArrayResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the business resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    post:
+      tags:
+      - catalog
+      description: 'Create a new catalog for the specified business.
+
+        Only business admins can create catalogs.
+
+        The catalog will be created with the provided configuration and linked to the specified ad accounts.
+
+        '
+      operationId: createBusinessCatalog
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business that will own the catalog.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCatalogRequest'
+      responses:
+        '201':
+          description: Catalog created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateCatalogResponse'
+        '400':
+          description: Bad Request. The request body or query parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Only business admins can create catalogs.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Only business admins can create catalogs.
+                      retriable: false
+        '404':
+          description: When the business resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ValidationErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}:
+    get:
+      tags:
+      - catalog
+      description: 'Retrieve metadata of a specific catalog under the specified business.
+
+        '
+      operationId: getBusinessCatalog
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business that owns the catalog.
+        schema:
+          type: integer
+          format: int64
+      - name: catalog_id
+        in: path
+        required: true
+        description: Identifier of the catalog to retrieve.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Catalog details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                access_denied:
+                  summary: Missing `ViewCatalog` permission.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: ViewCatalog permission is required.
+                      retriable: false
+        '404':
+          description: When the business or catalog resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    patch:
+      tags:
+      - catalog
+      description: 'Update metadata of an existing catalog under the specified business.
+
+        Only the catalog-level fields are editable here; product source fields are
+
+        managed via the product source endpoint and no connection validation is
+
+        triggered by this operation.
+
+        '
+      operationId: updateBusinessCatalog
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business that owns the catalog.
+        schema:
+          type: integer
+          format: int64
+      - name: catalog_id
+        in: path
+        required: true
+        description: Identifier of the catalog to update.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCatalogRequest'
+      responses:
+        '200':
+          description: Catalog updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogResponse'
+        '400':
+          description: Bad Request. The request body or query parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+        '404':
+          description: When the business or catalog resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ValidationErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_sets:
+    get:
+      tags:
+      - catalog
+      description: 'Retrieve all product sets configured under the specified catalog.
+
+        '
+      operationId: listCatalogProductSets
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business that owns the catalog.
+        schema:
+          type: integer
+          format: int64
+      - name: catalog_id
+        in: path
+        required: true
+        description: Identifier of the catalog whose product sets will be listed.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Product sets associated with the specified catalog.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSetArrayResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+        '404':
+          description: When the business or catalog resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    post:
+      tags:
+      - catalog
+      description: 'Create a new product set under the specified catalog.
+
+        Users can configure name, rule_match_type, and filter_rules.
+
+        Each filter rule must specify a valid field, condition, and values combination.
+
+        '
+      operationId: createCatalogProductSet
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business that owns the catalog.
+        schema:
+          type: integer
+          format: int64
+      - name: catalog_id
+        in: path
+        required: true
+        description: Identifier of the catalog under which to create the product set.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostProductSetRequest'
+      responses:
+        '201':
+          description: Product set created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSetResponse'
+        '400':
+          description: Bad Request. The request body or query parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+        '404':
+          description: When the business or catalog resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ValidationErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_sets/{product_set_id}:
+    get:
+      tags:
+      - catalog
+      description: 'Retrieve details of a specific product set under the specified catalog.
+
+        '
+      operationId: getCatalogProductSet
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business that owns the catalog.
+        schema:
+          type: integer
+          format: int64
+      - name: catalog_id
+        in: path
+        required: true
+        description: Identifier of the catalog that contains the product set.
+        schema:
+          type: integer
+          format: int64
+      - name: product_set_id
+        in: path
+        required: true
+        description: Identifier of the product set to retrieve.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Product set details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSetResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+        '404':
+          description: When the business, catalog, or product set resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    patch:
+      tags:
+      - catalog
+      description: 'Update an existing product set under the specified catalog.
+
+        Users can update name, rule_match_type, and filter_rules.
+
+        Each filter rule must specify a valid field, condition, and values combination.
+
+        At least one field must be provided in the request body.
+
+        '
+      operationId: updateCatalogProductSet
+      parameters:
+      - name: business_id
+        in: path
+        required: true
+        description: Identifier of the business that owns the catalog.
+        schema:
+          type: integer
+          format: int64
+      - name: catalog_id
+        in: path
+        required: true
+        description: Identifier of the catalog that contains the product set.
+        schema:
+          type: integer
+          format: int64
+      - name: product_set_id
+        in: path
+        required: true
+        description: Identifier of the product set to update.
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchProductSetRequest'
+      responses:
+        '200':
+          description: Product set updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductSetResponse'
+        '400':
+          description: Bad Request. The request body or query parameters are invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+        '404':
+          description: When the business, catalog, or product set resource specified in the path is not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonSchemas_ValidationErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+components:
+  schemas:
+    ProductSourceRequest:
+      type: object
+      required:
+      - product_source_name
+      - file_type
+      - file_url
+      properties:
+        product_source_name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Name of the product source.
+        file_type:
+          $ref: '#/components/schemas/CommonSchemas_FileType'
+        file_url:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: FTP, HTTP, or HTTPS URL to the feed file.
+        username:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Optional username for feed file access.
+        password:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Optional password for feed file access.
+      description: Product source configuration for catalog creation.
+    CommonSchemas_ValidationErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/CommonSchemas_ValidationError'
+    CatalogArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogResponse'
+          description: Array of catalog objects returned by the list operation.
+      description: Response wrapper containing a list of catalogs for a given business.
+    PostProductSetRequest:
+      type: object
+      required:
+      - name
+      - rule_match_type
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          description: Human-readable display name for the product set.
+        rule_match_type:
+          $ref: '#/components/schemas/RuleMatchType'
+        filter_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterRuleRequest'
+          maxItems: 2
+          minItems: 1
+          description: 'Collection of filter rules to apply. Each field can have 1 or up to 2 rules.
+
+            '
+      description: Request body for creating a new product set.
+    ProductSourceStatus:
+      type: string
+      enum:
+      - CREATED
+      - SUCCESS
+      - WARNING
+      - ERROR
+      description: "Status of the product source, covering both the latest fetch (connection)\nand the health of the items it imported. On a successful fetch the status\nreflects the item import breakdown; WARNING is derived on the backend so the\nthreshold stays configurable (BMT-1190). out_of_stock items are NOT counted\nas excluded for the WARNING calculation.\n- CREATED: Product source has been created and is awaiting a successful fetch\n- SUCCESS: Last fetch completed successfully and at most 20% of input items\n  were excluded (unparsable + blocked)\n- WARNING: Last fetch completed successfully but more than 20% of input items\n  were excluded (unparsable + blocked). The threshold is backend-configurable.\n- ERROR: Last fetch failed with errors\n"
+    CommonSchemas_ValidationErrorExtension:
+      required:
+      - type
+      - error_fields
+      properties:
+        type:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+        error_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: 'The field name that doesn''t pass the validation.
+
+                  '
+              reason:
+                type: string
+    CreateCatalogResponse:
+      type: object
+      required:
+      - catalog_id
+      - business_id
+      - name
+      - currency
+      - review_status
+      - total_item_count
+      - ad_accounts
+      - product_sources
+      - created_at
+      - updated_at
+      properties:
+        catalog_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the newly created catalog.
+        business_id:
+          type: integer
+          format: int64
+          description: Identifier of the business that owns this catalog.
+        name:
+          type: string
+          description: Human-readable display name for the catalog.
+        currency:
+          type: string
+          description: Currency for the catalog.
+        description:
+          type: string
+          description: Optional description of the catalog.
+        review_status:
+          $ref: '#/components/schemas/ReviewStatus'
+        total_item_count:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Total number of product items currently available in the catalog.
+        all_ad_account_access:
+          type: boolean
+          description: Whether all DA ad accounts of the business have access to this catalog.
+        pixel_tag_id:
+          type: string
+          description: Pixel tag ID associated with this catalog for web tracking.
+        app_tracking:
+          $ref: '#/components/schemas/AppTracking'
+        ad_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogAdAccount'
+          description: List of ad accounts that can access this catalog.
+        product_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSource'
+          description: List of product sources that populate the catalog with product data.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the catalog was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the catalog metadata or configuration was last updated.
+      description: Response for catalog creation containing the newly created catalog details.
+    RuleMatchType:
+      type: string
+      enum:
+      - ALL
+      - AT_LEAST_ONE
+      description: 'Rule matching strategy within a product set.
+
+        - ALL: Products must satisfy every rule (logical AND).
+
+        - AT_LEAST_ONE: Products may satisfy any single rule (logical OR).
+
+        '
+    FilterCondition:
+      type: string
+      enum:
+      - IS
+      - IS_NOT
+      - CONTAINS
+      - NOT_CONTAINS
+      - GREATER_THAN
+      - LESS_THAN
+      - GREATER_THAN_OR_EQUAL
+      - LESS_THAN_OR_EQUAL
+      - IS_ANY_OF_THE_FOLLOWINGS
+      - IS_NOT_ANY_OF_THE_FOLLOWINGS
+      description: Supported operators for catalog product filtering rules.
+    CreateCatalogRequest:
+      type: object
+      required:
+      - name
+      - currency
+      - da_ad_account_ids
+      - pixel_tag_id
+      - product_source
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Human-readable display name for the catalog.
+        currency:
+          type: string
+          enum:
+          - JPY
+          description: Currency for the catalog. Currently only JPY is supported.
+        description:
+          type: string
+          maxLength: 1024
+          description: Optional description of the catalog.
+        da_ad_account_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          minItems: 1
+          description: List of dynamic ad account IDs that can access this catalog. At least one is required.
+        all_ad_account_access:
+          type: boolean
+          default: false
+          description: If true, all DA ad accounts of the business have access to this catalog.
+        pixel_tag_id:
+          type: string
+          maxLength: 64
+          description: Pixel tag ID to associate with this catalog for web tracking.
+        app_tracking:
+          $ref: '#/components/schemas/AppTracking'
+        product_source:
+          $ref: '#/components/schemas/ProductSourceRequest'
+      description: Request body for creating a new catalog.
+    AppTracking:
+      type: object
+      required:
+      - tracking_type
+      properties:
+        tracking_type:
+          $ref: '#/components/schemas/TrackingType'
+        ios_app_id:
+          type: string
+          description: iOS App ID. Required if tracking_type is IOS or ALL.
+        android_app_id:
+          type: string
+          description: Android App ID. Required if tracking_type is ANDROID or ALL.
+      description: Mobile app tracking configuration for the catalog.
+    ProductSource:
+      type: object
+      required:
+      - product_source_id
+      - catalog_id
+      - product_source_name
+      - file_type
+      - file_url
+      - status
+      - last_fetched_at
+      - last_failed_item_count
+      - last_successful_item_count
+      properties:
+        product_source_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the product source.
+        catalog_id:
+          type: integer
+          format: int64
+          description: Identifier of the catalog this product source belongs to.
+        product_source_name:
+          type: string
+          description: Name of the product source.
+        file_type:
+          $ref: '#/components/schemas/CommonSchemas_FileType'
+        file_url:
+          type: string
+          description: FTP, HTTP, or HTTPS URL to the feed file.
+        username:
+          type: string
+          nullable: true
+          description: 'Optional username for feed file access. The stored password is never
+
+            returned.
+
+            '
+        status:
+          $ref: '#/components/schemas/ProductSourceStatus'
+        ingestion_error_reason:
+          $ref: '#/components/schemas/IngestionErrorReason'
+        ingestion_error_message:
+          type: string
+          nullable: true
+          description: 'Localized human-readable error message resolved from ingestion_error_reason.
+
+            Language is determined by the Accept-Language header. Null when status is not ERROR.
+
+            '
+        last_fetched_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent ingestion attempt.
+        last_failed_item_count:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Number of items that failed in the latest ingestion.
+        last_successful_item_count:
+          type: integer
+          format: int64
+          minimum: 0
+          description: 'Number of items successfully imported in the latest ingestion (deliverable: in stock and not blocked).'
+        last_out_of_stock_item_count:
+          type: integer
+          format: int64
+          minimum: 0
+          nullable: true
+          x-bypass-name-conversion: true
+          description: Number of items excluded in the latest ingestion because they are out of stock. Retained in the catalog but not deliverable. NOT counted toward the WARNING threshold. Null until a successful ingestion has produced a breakdown.
+        last_unparsable_item_count:
+          type: integer
+          format: int64
+          minimum: 0
+          nullable: true
+          x-bypass-name-conversion: true
+          description: Number of items in the latest ingestion that failed field validation (missing/invalid required fields). Null until a successful ingestion has produced a breakdown.
+        last_blocked_item_count:
+          type: integer
+          format: int64
+          minimum: 0
+          nullable: true
+          x-bypass-name-conversion: true
+          description: Number of items blocked by content/moderation policy in the latest ingestion. Aggregate across all blocking reasons (specific reasons are not disclosed). Null until a successful ingestion has produced a breakdown.
+      description: "Product source configuration and operational data. Returned identically by\nthe catalog endpoints (nested under `product_sources`) and by the product\nsource endpoints, so a client always sees the same complete representation\nof a product source regardless of which API surface it consumed.\nItem import breakdown (last_out_of_stock_item_count, last_unparsable_item_count,\nlast_blocked_item_count) from the latest successful ingestion's ParseSummary:\n  input    = parsable + last_unparsable_item_count\n  parsable = in_stock + last_out_of_stock_item_count\n  in_stock = last_successful_item_count (deliverable) + last_blocked_item_count\nThe breakdown counts are null until a successful ingestion has produced them.\n"
+    BadRequestError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BadRequestErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    BadRequestErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BAD_REQUEST
+    CommonSchemas_ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CommonSchemas_ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ProductSetResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/ProductSet'
+      description: Response body containing a single product set.
+    ProductSetArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSet'
+          description: Collection of product sets owned by the catalog.
+      description: Response body containing multiple product sets.
+    PatchProductSetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          description: Human-readable display name for the product set.
+        rule_match_type:
+          $ref: '#/components/schemas/RuleMatchType'
+        filter_rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterRuleRequest'
+          description: 'Collection of filter rules to apply. Each field can have 1 or up to 2 rules.
+
+            '
+      description: Request body for updating an existing product set. At least one field must be provided.
+    ProductSet:
+      type: object
+      required:
+      - product_set_id
+      - catalog_id
+      - name
+      - status
+      - rule_match_type
+      - item_count
+      - is_universal_set
+      - created_at
+      - updated_at
+      properties:
+        product_set_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the product set.
+        catalog_id:
+          type: integer
+          format: int64
+          description: Identifier of the catalog this product set belongs to.
+        name:
+          type: string
+          maxLength: 255
+          description: Human-readable display name for the product set.
+        status:
+          $ref: '#/components/schemas/Status'
+        rule_match_type:
+          $ref: '#/components/schemas/RuleMatchType'
+        filter_rules:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/FilterRule'
+          description: Collection of filter rules applied to build this product set. Empty array represents no filters applied.
+        item_count:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Number of catalog items that satisfied the filter rules in the latest run.
+        last_processed_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp of the latest product set generation completion.
+        condition_updated_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: The timestamp at which productSet’s condition (rule_match_type, filter_rules) are changed.
+        is_universal_set:
+          type: boolean
+          description: Indicates whether this product set represents the default all-items set.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the product set was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the product set configuration was last updated.
+      description: Product set definition along with the latest operational metadata.
+    CatalogAdAccount:
+      type: object
+      required:
+      - ad_account_id
+      - ad_account_name
+      properties:
+        ad_account_id:
+          type: string
+          description: Identifier of the ad account.
+        ad_account_name:
+          type: string
+          description: Name of the ad account.
+      description: Ad account that has access to the catalog.
+    Status:
+      type: string
+      enum:
+      - CREATED
+      - READY
+      - ERROR
+      description: 'Status of the product set generation.
+
+        - CREATED: Product set is pending processing or regeneration.
+
+        - READY: Latest processing succeeded and the set is ready for delivery.
+
+        - ERROR: Latest processing failed or produced zero matching items.
+
+        '
+    CommonSchemas_FileType:
+      type: string
+      enum:
+      - CSV
+      - TSV
+      description: 'The file format for product feed.
+
+        - CSV: Comma-separated values
+
+        - TSV: Tab-separated values
+
+        '
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    FilterRule:
+      type: object
+      required:
+      - filter_rule_id
+      - field
+      - condition
+      - values
+      properties:
+        filter_rule_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the filter rule.
+        field:
+          $ref: '#/components/schemas/FilterField'
+        condition:
+          $ref: '#/components/schemas/FilterCondition'
+        values:
+          type: array
+          items:
+            type: string
+          maxItems: 10
+          description: 'Array of values used by the condition. Maximum 10 values allowed for IS_ANY_OF_THE_FOLLOWINGS and IS_NOT_ANY_OF_THE_FOLLOWINGS conditions.
+
+            '
+      description: Filter rule definition used to build a product set.
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    IngestionErrorReason:
+      type: string
+      nullable: true
+      enum:
+      - AUTH_FAILED
+      - FILE_NOT_FOUND
+      - TIMEOUT
+      - INVALID_FORMAT
+      - REQUEST_ERROR
+      - SERVER_UNAVAILABLE
+      - UNKNOWN_ERROR
+      description: 'The reason for an ingestion error. Null when product source status is not ERROR.
+
+        - AUTH_FAILED: Authentication failed (HTTP 401/403, FTP 530)
+
+        - FILE_NOT_FOUND: File does not exist at the specified path (HTTP 404, FTP 550)
+
+        - TIMEOUT: Server unreachable or timed out (HTTP 504, DNS failure)
+
+        - INVALID_FORMAT: File is empty, starts with blank lines, or header cannot be parsed
+
+        - REQUEST_ERROR: Bad URL, SSL issues, or too many redirects (HTTP 400)
+
+        - SERVER_UNAVAILABLE: Server error or temporarily unavailable (HTTP 500/502/503/429, FTP 421-452/552, connection reset)
+
+        - UNKNOWN_ERROR: Unclassifiable error (FTP 500-503/551, other)
+
+        '
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    CommonSchemas_ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ReviewStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - APPROVED
+      - REJECTED
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    UpdateCatalogRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Human-readable display name for the catalog.
+        da_ad_account_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          description: 'Ad account access is addition-only. This list carries only the newly
+
+            added dynamic ad account IDs to associate with the catalog; they are
+
+            merged with the existing associations. Existing associations cannot be
+
+            removed. Ignored when all_ad_account_access is true.
+
+            '
+        all_ad_account_access:
+          type: boolean
+          description: 'Set to true to grant all DA ad accounts of the business access to this
+
+            catalog. Once enabled it cannot be reverted to specific ad accounts;
+
+            a request attempting to set it back to false is rejected with 400.
+
+            '
+        pixel_tag_id:
+          type: string
+          maxLength: 64
+          description: 'Pixel tag ID to associate with this catalog for web tracking. Can be
+
+            changed regardless of campaign delivery status.
+
+            '
+        app_tracking:
+          $ref: '#/components/schemas/AppTracking'
+      description: 'Request body for updating catalog metadata. Only catalog-level fields are
+
+        editable; region, currency, and timezone are read-only. At least one field
+
+        must be provided.
+
+        '
+    BadRequestErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BadRequestError'
+    TrackingType:
+      type: string
+      enum:
+      - ANDROID
+      - IOS
+      - ALL
+      description: 'The platform type for app tracking.
+
+        - ANDROID: Android platform only
+
+        - IOS: iOS platform only
+
+        - ALL: Both Android and iOS platforms
+
+        '
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    CommonSchemas_ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundError'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    CommonSchemas_ResourceNotFoundErrorExtension:
+      type: object
+      required:
+      - type
+      - resource_type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_FOUND
+          - DELETED
+        resource_type:
+          type: string
+          enum:
+          - USER
+          - BUSINESS
+          - AD_ACCOUNT
+          - DEVELOPER_APP
+          - ENDPOINT
+          - USER_AD_ACCOUNT_ACCESS
+          - TERMS_OF_SERVICE
+          - BRAND
+          - CREDIT_CARD_PAYMENT_METHOD
+          - AD_ACCOUNT_PAYMENT_THRESHOLD
+          - MONTHLY_RECEIPT
+          - AD_ACCOUNT_OUTSTANDING_BALANCE
+          - AD_CREDIT_ACCOUNT
+          - CATALOG
+          - PRODUCT_SET
+          - STORE_SET
+    FilterRuleRequest:
+      type: object
+      required:
+      - field
+      - condition
+      - values
+      properties:
+        field:
+          $ref: '#/components/schemas/FilterField'
+        condition:
+          $ref: '#/components/schemas/FilterCondition'
+        values:
+          type: array
+          items:
+            type: string
+            maxLength: 255
+          maxItems: 10
+          description: 'Array of values used by the condition. Maximum 10 values allowed for IS_ANY_OF_THE_FOLLOWINGS and IS_NOT_ANY_OF_THE_FOLLOWINGS conditions. Other conditions take only one value.
+
+            For numeric comparison conditions (GREATER_THAN, LESS_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL), values must be numeric strings. Non-numeric strings will result in an error.
+
+            '
+      description: Filter rule input for creating or updating a product set.
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    CatalogResponse:
+      type: object
+      required:
+      - catalog_id
+      - business_id
+      - name
+      - review_status
+      - total_item_count
+      - ad_accounts
+      - product_sources
+      - created_at
+      - updated_at
+      properties:
+        catalog_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the catalog.
+        business_id:
+          type: integer
+          format: int64
+          description: Identifier of the business that owns this catalog.
+        name:
+          type: string
+          maxLength: 256
+          description: Human-readable display name for the catalog.
+        currency:
+          type: string
+          description: Currency for the catalog.
+        description:
+          type: string
+          description: Optional description of the catalog.
+        review_status:
+          $ref: '#/components/schemas/ReviewStatus'
+        total_item_count:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Total number of product items currently available in the catalog across all product sources.
+        all_ad_account_access:
+          type: boolean
+          description: Whether all DA ad accounts of the business have access to this catalog.
+        pixel_tag_id:
+          type: string
+          description: Pixel tag ID associated with this catalog for web tracking.
+        app_tracking:
+          $ref: '#/components/schemas/AppTracking'
+        ad_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogAdAccount'
+          description: List of ad accounts that can access this catalog.
+        product_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSource'
+          description: List of product sources that populate the catalog with product data.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the catalog was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the catalog metadata or configuration was last updated.
+      description: Complete representation of a catalog including metadata and configuration.
+    FilterField:
+      type: string
+      enum:
+      - ID
+      - TITLE
+      - PRICE
+      - PRODUCT_TYPE
+      - SHOP_ID
+      - RATING
+      - CUSTOM_LABEL_0
+      - CUSTOM_LABEL_1
+      - CUSTOM_LABEL_2
+      - CUSTOM_LABEL_3
+      - CUSTOM_LABEL_4
+      - CUSTOM_NUMBER_0
+      - CUSTOM_NUMBER_1
+      - CUSTOM_NUMBER_2
+      - CUSTOM_NUMBER_3
+      - CUSTOM_NUMBER_4
+      description: Supported fields for catalog product filtering.
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

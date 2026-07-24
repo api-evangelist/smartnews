@@ -1,0 +1,2311 @@
+openapi: 3.0.3
+info:
+  version: 3.0.1
+  title: SmartNews Marketing ad insights API
+  description: "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n"
+  contact:
+    name: SmartNews Ads Support
+servers:
+- url: https://ads.smartnews.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: insights
+paths:
+  /api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}:
+    get:
+      tags:
+      - insights
+      description: 'Get a list of metadata and metrics information for objects matching the query for the specified layer (Campaign/AdGroup/Ad).
+
+
+        The fields to include in the response must be specified by the API caller, using the `fields` parameter.
+
+
+        Note: Only Ads Manager v2 objects can be retrieved by this API.
+
+
+        Both JSON (`application/json`) and CSV (`text/csv`) response formats are supported. Use the `Accept` header to specify the desired format.
+
+        '
+      operationId: getInsightsV3
+      summary: Insights
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: layer
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Layer'
+      - name: since
+        required: true
+        example: '2024-08-15T15:00:00Z'
+        description: 'Only include metrics from this datetime (inclusive).
+
+
+          It must be specified in ISO 8601 format with UTC timezone (ends with `Z`).
+
+          '
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        example: '2024-08-15T15:00:00Z'
+        description: 'Only include metrics until this datetime (inclusive).
+
+
+          It must be specified in ISO 8601 format with UTC timezone (ends with `Z`).
+
+          '
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: fields
+        required: true
+        description: 'The fields to include in the response. For a detailed description of each field, see the response section under `metadata` or `metrics`.
+
+
+          The prefix indicates whether the field will be present in the `metadata` or `metrics` object of the response.
+
+
+          - Starts with `metadata_`: Is a `metadata` field.
+
+          - Starts with `metrics_`: Is a `metrics` field.
+
+
+          * `metrics_reach` and `metrics_frequency` are not currently supported
+
+
+          ### Layer Specific Metadata fields
+
+
+          #### Campaign
+
+          - `metadata_objective`
+
+          - `metadata_daily_budget_amount`
+
+          - `metadata_start_date_time`
+
+          - `metadata_end_date_time`
+
+          - `metadata_optimization_event`
+
+          - `metadata_optimization_goal`
+
+          - `metadata_spending_limit`
+
+
+          #### Ad Group
+
+          - `metadata_campaign_id`
+
+          - `metadata_campaign_name`
+
+
+          #### Ad
+
+          - `metadata_campaign_id`
+
+          - `metadata_campaign_name`
+
+          - `metadata_ad_group_id`
+
+          - `metadata_ad_group_name`
+
+          - `metadata_submission_status`
+
+          - `metadata_moderation_status`
+
+          - `metadata_thumbnails`
+
+          - `metadata_video`
+
+          - `metadata_ad_headline`
+
+          - `metadata_ad_description`
+
+          - `metadata_ad_creative_format`
+
+          '
+        in: query
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldV3'
+      - name: breakdown_type
+        in: query
+        description: "When specified, the report is broken down by the specified audience breakdown type. The breakdown can be found inside the `metrics_breakdown` field in the response. \n\n**When included in a JSON request, the following restrictions apply:**\n- cannot use the `city`, `county`, `os`, `device_type` or `hyper_location_segment` breakdowns.\n- cannot use `breakdown_type` together with `breakdown_period`.\n"
+        schema:
+          $ref: '#/components/schemas/BreakdownType'
+      - name: breakdown_period
+        in: query
+        description: "The time period to breakdown the report by. The breakdown can be found inside the `metrics_breakdown` field in the response. \n\nThis option combines with the `breakdown_type` param. For example `breakdown_type=age&breakdown_period=day` \nresults in one breakdown row for each day and age combination within the specified date range.\n\n**When included in a JSON request, the following restrictions apply:**\n- When using `hour` breakdown period, 1-5 object IDs must be specified using the `target_ids` parameter.\n- cannot use `breakdown_type` together with `breakdown_period`.\n"
+        schema:
+          $ref: '#/components/schemas/BreakdownPeriod'
+      - name: include_deleted
+        in: query
+        required: false
+        description: Boolean flag for including deleted objects in the response.
+        schema:
+          $ref: '#/components/schemas/IncludeDeleted'
+      - name: mobile_app_attribution_mode
+        in: query
+        description: 'The mobile app attribution mode for counting conversions of app campaigns only. The mobile app attribution mode will not be applied for web campaigns.
+
+
+          There are two modes: `all` and `mmp_only`.
+
+
+          `all` mode counts all app campaigns'' conversions including those attributed by a Mobile Measurement Partner and SmartNews attribution.
+
+          `mmp_only` mode only counts app campaigns'' conversions attributed by a Mobile Measurement Partner.
+
+          '
+        schema:
+          $ref: '#/components/schemas/MobileAppAttributionMode'
+      - name: click_attribution_window
+        in: query
+        description: 'The attribution window for counting conversions.
+
+
+          Calculate the conversions that occur within the specified time window after a click.
+
+
+          The default value is 30 days.
+
+          '
+        schema:
+          $ref: '#/components/schemas/ClickAttributionWindow'
+      - name: vimp_attribution_window
+        in: query
+        description: 'The attribution window for counting conversions.
+
+
+          Calculate the conversions that occur within the specified time window after a viewable impression.
+
+
+          The default value is 1 day.
+
+          '
+        schema:
+          $ref: '#/components/schemas/VimpAttributionWindow'
+      - name: target_ids
+        in: query
+        description: 'Filter by target id(s) (campaign_id for Campaign, ad_group_id for AdGroup, ad_id for Ad)
+
+          Only the ad object id of the specified layer (determined by the `layer` in the path) is supported.
+
+
+          **When included in a JSON request, this field is required when either of  the following parameters is specified:**
+
+          - breakdown_type
+
+          - breakdown_period
+
+
+          Note: when `breakdown_period` is `hour`, the maximum size of `target_ids` is 5, not 100.
+
+          '
+        schema:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            type: integer
+            format: int64
+        style: form
+        explode: false
+        example:
+        - 1
+        - 2
+        - 3
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          example: 100
+          type: integer
+          minimum: 1
+          maximum: 100
+        description: 'The number of objects to return per page.
+
+
+          The maximum page size is 100.
+
+          '
+      - name: page
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Page'
+      - name: sort
+        in: query
+        required: false
+        description: "Specify an array of fields and orders to sort the response by. The format of each item is `{field}:{order}`.\n\nIf not specified, the default sort order is by `id` descending.\n\nOrder must be either `asc` or `desc`.\n\nFor available values of `field`, see the `SortableField` enum, which includes:\n\n- Sortable Metadata fields:\n  - `metadata_configured_status`\n  - `metadata_name`\n  - `metadata_start_date_time`\n  - `metadata_end_date_time`\n  - `metadata_objective`\n  - `metadata_daily_budget_amount`\n  - `metadata_spending_limit`\n  - `metadata_submission_status`\n  - `metadata_moderation_status`\n  - `metadata_campaign_name`\n  - `metadata_ad_group_name`\n- Sortable Metrics fields:\n  - All fields starting with `metrics_` are available for sorting, except for:\n    - `metrics_reach`\n    - `metrics_frequency`\n    - `metrics_spent_before_this_month`\n    - `metrics_lifetime_spent`\n"
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/SortParameter'
+          minItems: 1
+          maxItems: 2
+        style: form
+        explode: false
+        example:
+        - metrics_click:desc
+        - metadata_name:asc
+      - name: search
+        in: query
+        schema:
+          example: My Campaign Name
+          type: string
+          minLength: 1
+          maxLength: 256
+        description: 'Filter by objects in the specified layer whose name or ID contains the search query.
+
+          '
+      - name: parent_ids
+        in: query
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+          minItems: 1
+          maxItems: 100
+        style: form
+        explode: false
+        example:
+        - 1
+        - 2
+        - 3
+        description: 'Only available when `layer` is `ad_groups` or `ads`.
+
+
+          A comma separated list of parent IDs to filter the result by.
+
+
+          In `ad_groups` layer, it represents the `campaign_id` of the campaign(s) which own the ad groups.
+
+          In `ads` layer, it represents the `ad_group_id` of the ad group(s) which own the ads.
+
+          '
+      - name: remove_csv_header
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: 'Only applicable when the `Accept` header is `text/csv`.
+
+
+          When set to `true`, the CSV header row is omitted from the response.
+
+
+          This is recommended when joining multiple CSV responses together, to avoid duplicate header rows.
+
+          '
+      responses:
+        '200':
+          description: 'Returns insights data in the requested format (JSON or CSV).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsightsResponseV3'
+            text/csv:
+              schema:
+                type: string
+                description: CSV formatted insights data.
+        '400':
+          description: 'Bad request, required query parameter is not found. (ie: metrics_fields)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the query is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '406':
+          description: Not Acceptable. The requested format is not supported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAcceptableErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/ma/v3/ad_accounts/{ad_account_id}/aggregated_insights/{layer}:
+    get:
+      tags:
+      - insights
+      description: 'Get aggregated metrics information for objects matching the query for the specified layer (Campaign/AdGroup/Ad).
+
+
+        The fields to include in the response must be specified by the API caller, using the `fields` parameter.
+
+
+        Note: Only Ads Manager v2 metrics can be retrieved by this API.
+
+        '
+      operationId: getAggregatedInsightsV3
+      summary: Aggregated Insights
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: layer
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/Layer'
+      - name: since
+        required: true
+        example: '2024-08-15T15:00:00Z'
+        description: 'Only include metrics from this datetime (inclusive).
+
+
+          It must be specified in ISO 8601 format with UTC timezone (ends with `Z`).
+
+          '
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: until
+        example: '2024-08-15T15:00:00Z'
+        description: 'Only include metrics until this datetime (inclusive).
+
+
+          It must be specified in ISO 8601 format with UTC timezone (ends with `Z`).
+
+          '
+        in: query
+        schema:
+          type: string
+          format: date-time
+      - name: fields
+        description: 'The fields to include in the response. For a detailed description of each field, see the response section under `metrics`.
+
+
+          Note: only fields beginning with `metrics_` are supported for aggregated insights.
+
+          '
+        in: query
+        schema:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldV3'
+      - name: include_deleted
+        in: query
+        required: false
+        description: Boolean flag for including deleted objects in the response.
+        schema:
+          $ref: '#/components/schemas/IncludeDeleted'
+      - name: mobile_app_attribution_mode
+        in: query
+        description: 'The mobile app attribution mode for counting conversions of app campaigns only. The mobile app attribution mode will not be applied for web campaigns.
+
+
+          There are two modes: `all` and `mmp_only`:
+
+
+          - `all` mode counts all app campaigns'' conversions including those attributed by a Mobile Measurement Partner and SmartNews attribution.
+
+          - `mmp_only` mode only counts app campaigns'' conversions attributed by a Mobile Measurement Partner.
+
+          '
+        schema:
+          $ref: '#/components/schemas/MobileAppAttributionMode'
+      - name: click_attribution_window
+        in: query
+        description: 'The attribution window for counting conversions.
+
+
+          Calculate the conversions that occur within the specified time window after a click.
+
+
+          The default value is 30 days.
+
+          '
+        schema:
+          $ref: '#/components/schemas/ClickAttributionWindow'
+      - name: vimp_attribution_window
+        in: query
+        description: 'The attribution window for counting conversions.
+
+
+          Calculate the conversions that occur within the specified time window after a viewable impression.
+
+
+          The default value is 1 day.
+
+          '
+        schema:
+          $ref: '#/components/schemas/VimpAttributionWindow'
+      - name: target_ids
+        in: query
+        description: 'Filter by target id(s) (campaign_id for Campaign, ad_group_id for AdGroup, ad_id for Ad)
+
+          Only the ad object id of the specified layer (determined by the `layer` in the path) is supported.
+
+          '
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+      - name: breakdown_period
+        in: query
+        description: 'The time period to breakdown the report by. The breakdown can be found inside the `metrics_breakdown` field in the response.
+
+          '
+        schema:
+          $ref: '#/components/schemas/BreakdownPeriod'
+      - name: breakdown_type
+        in: query
+        description: 'When specified, the report is broken down by the specified audience breakdown type. The breakdown can be found inside the `metrics_breakdown` field in the response.
+
+          '
+        schema:
+          $ref: '#/components/schemas/AggregatedInsightsBreakdownType'
+      responses:
+        '200':
+          description: An object of aggregated insights data of a specific object.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AggregatedInsightsResponseV3'
+        '400':
+          description: 'Bad request, required query parameter is not found. (ie: metrics_fields)'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the query is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '406':
+          description: Not Acceptable. The requested format is not supported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotAcceptableErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+components:
+  schemas:
+    ObjectType:
+      type: string
+      enum:
+      - CAMPAIGN
+      - AD_GROUP
+      - AD
+      description: The type of object.
+    NotAcceptableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_ACCEPTABLE
+    DeliveryStatus:
+      type: string
+      enum:
+      - DELETED
+      - PAUSED
+      - NOT_ELIGIBLE
+      - PENDING
+      - ENDED
+      - ELIGIBLE
+      - UNKNOWN
+      - DISABLED
+      description: 'The delivery status of the object determined by the system.
+
+
+        | Delivery status | What it means |
+
+        |-----------------|---------------|
+
+        | DELETED         | The object is deleted by an ad operator |
+
+        | PAUSED          | The object is paused by an ad operator  |
+
+        | NOT_ELIGIBLE    | The object is configured to be active but is not delivered due to some conditions. Please check the `reason` or `description` field for more details |
+
+        | PENDING         | The object is configured to be active and will be delivered when certain conditions are met. Please check Please check the `reason` or `description` field for more details |
+
+        | ENDED           | The object is configured to be active but the campaign has ended |
+
+        | ELIGIBLE        | The object is configured to be active and is delivering ads |
+
+        | UNKNOWN         | The object is configured to be active but its delivery status is unknown |
+
+        | DISABLED        | The object is disabled because the business, account, or brand is disabled|
+
+        '
+    StoreSetId:
+      type: integer
+      format: int64
+      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
+
+        Store sets are managed under Business Management.
+
+        '
+    IncludeDeleted:
+      type: boolean
+      default: false
+    InsightsResponseV3:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          description: An array of objects containing fields for each ad object.
+          type: array
+          items:
+            $ref: '#/components/schemas/StandardInsightsItemV3'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoResponse'
+    AdThumbnail:
+      type: object
+      required:
+      - aspect_ratio_type
+      - url
+      properties:
+        aspect_ratio_type:
+          $ref: '#/components/schemas/AspectRatioType'
+        url:
+          $ref: '#/components/schemas/Url'
+    AcceptLanguage:
+      type: string
+      description: 'The language to use for system generated text within API responses.
+
+
+        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
+
+        '
+      example: en-US
+    StandardInsightsItemV3:
+      type: object
+      required:
+      - type
+      - id
+      properties:
+        type:
+          $ref: '#/components/schemas/ObjectType'
+        id:
+          description: The ID of a object.
+          type: integer
+          format: int64
+        metadata:
+          $ref: '#/components/schemas/MetadataV3'
+        metrics:
+          $ref: '#/components/schemas/MetricsV3'
+        metrics_breakdown:
+          description: 'This field is included when `breakdown_type` or `breakdown_period` parameter(s) are specified.
+
+            '
+          type: array
+          items:
+            $ref: '#/components/schemas/MetricsBreakdownV3'
+        parent:
+          $ref: '#/components/schemas/Parent'
+    PaginationInfoResponse:
+      description: 'An object describing pagination parameters for this response.
+
+        '
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_objects
+      properties:
+        page:
+          type: integer
+          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
+          example: 1
+        page_size:
+          type: integer
+          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
+          example: 100
+        total_pages:
+          type: integer
+          description: The total number of pages for this query.
+          example: 10
+        total_objects:
+          type: integer
+          description: The total number of objects that exist across all pages.
+          example: 987
+    BadRequestError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BadRequestErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    HasAnyVideoAds:
+      type: boolean
+      description: Whether the ad object has any video ads, including those that have been deleted.
+    Page:
+      type: integer
+      minimum: 1
+      default: 1
+      example: 2
+      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
+
+
+        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
+
+        '
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AspectRatioType:
+      type: string
+      enum:
+      - ASPECT_RATIO_1_1
+      - ASPECT_RATIO_6_5
+      - ASPECT_RATIO_16_9
+      - ASPECT_RATIO_191_100
+      description: The predefined enums for the aspect ratio of images and videos.
+    MetricsBreakdownV3:
+      allOf:
+      - type: object
+        properties:
+          segment_name:
+            type: string
+            example: 21-24 & MALE
+            description: "A breakdown type can encompass numerous segment labels. For instance, the age breakdown type might include\nsegment names such as \"under 20\" and \"21-24\", etc. with each being a string that gets translated according\nto the `Accept-Language`` header in the request.\n\nAPI will return metrics of certain segments based on the ad objects settings.\n  1. API will return metrics of only targeted segment names that were selected during creation of ad object\n  2. If no targeted segments were selected then API will return metrics of all segment names of that breakdown type.\n\nSince audience targeting is supported at ad_group layer, the set of segment names for each layer will be as follows.\n1. For a campaign (C) with ad_groups AG1 and AG2 with following targeted audiences\n    AG1: (gender: female, age: under 20)\n    AG2: (gender: female, age: 21-24)\n  and\n    when breakdown_type = gender\n      then set of segment names will be (female)\n    when breakdown_type = age\n      then set of th segment names will be (under 20, 21-24)\n    when breakdown_type = age_and_gender\n      then set of segment names will be (female & under 20, female & 21-24)\n  Basically, we do union of segment names of ad_group.\n2. For a ad_group, the segement names will be same as that of ad_group\n3. For a ad, the segement names will be same as its parent ad_group.\n"
+          period:
+            type: string
+            example: 2023-11-28, 2023-11-28 12:00
+            description: 'It is a string to represent daily or hourly metrics for a requested time range.
+
+              Time is already in Advertiser''s timezone.
+
+              '
+      - $ref: '#/components/schemas/MetricsV3'
+    Format:
+      type: string
+      enum:
+      - IMAGE
+      - VIDEO
+      - CAROUSEL
+      - CATALOG_CAROUSEL
+      - CATALOG_IMAGE
+      description: 'The format of the Creative that defines the view attribution of an Ad.
+
+
+        Note: `CAROUSEL`, `CATALOG_CAROUSEL`, and `CATALOG_IMAGE` are not settable for US region ad accounts.
+
+        '
+    OptimizationEvent:
+      type: string
+      enum:
+      - PURCHASE
+      - ADD_TO_CART
+      - INITIATE_CHECKOUT
+      - SUBMIT_FORM
+      - SUBSCRIBE
+      - COMPLETE_REGISTRATION
+      - CONTACT
+      - SIGN_UP
+      - VIEW_CONTENT
+      - ADD_PAYMENT_INFO
+      - ADD_TO_WISH_LIST
+      - VISIT_CART
+      - CUSTOMIZE_PRODUCT
+      - SEARCH
+      - BOOKING
+      - DOWNLOAD
+      - START_TRIAL
+      - SHARE
+      - LOGIN
+      - DONATE
+      - FIND_LOCATION
+      - TIME_SPENT
+      - LEAD
+      - INSTALL
+      - D1_RETENTION
+      nullable: true
+      description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
+    Layer:
+      type: string
+      enum:
+      - campaigns
+      - ad_groups
+      - ads
+      x-enum-varnames:
+      - CAMPAIGNS
+      - AD_GROUPS
+      - ADS
+    IsMigratedFromV1:
+      type: boolean
+      description: A boolean flag that indicates whether the object is migrated from v1.
+    ModerationStatus:
+      type: string
+      enum:
+      - NOT_REVIEWED
+      - APPROVED
+      - REJECTED
+      description: 'This is the moderation result of current Ad.
+
+        '
+    BadRequestErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BAD_REQUEST
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    MobileAppAttributionMode:
+      type: string
+      enum:
+      - all
+      - mmp_only
+      x-enum-varnames:
+      - ALL
+      - MMP_ONLY
+    AdMetadata:
+      allOf:
+      - $ref: '#/components/schemas/CommonMetadata'
+      - type: object
+        properties:
+          thumbnails:
+            description: 'Image Ad: An array of objects containing the URL & Aspect Ratio Type of the `full` image scale only for each MediaFile contained in the Ad''s creative.\
+
+              Video Ad: An array of a single object containing the URL of the thumbnail of the video Ad''s creative. The `aspect_ratio_type` is always `ASPECT_RATIO_16_9`.
+
+              '
+            type: array
+            items:
+              $ref: '#/components/schemas/AdThumbnail'
+          video:
+            $ref: '#/components/schemas/AdVideo'
+          moderation_status:
+            $ref: '#/components/schemas/ModerationStatus'
+          submission_status:
+            $ref: '#/components/schemas/SubmissionStatus'
+          campaign_id:
+            type: integer
+            format: int64
+          campaign_name:
+            type: string
+          ad_group_id:
+            type: integer
+            format: int64
+          ad_group_name:
+            type: string
+          is_migrated_from_v1:
+            $ref: '#/components/schemas/IsMigratedFromV1'
+          ad_headline:
+            type: string
+          ad_description:
+            type: string
+          ad_creative_format:
+            $ref: '#/components/schemas/Format'
+          ad_landing_page_url:
+            type: string
+          ad_creative_media_file_aspect_ratio:
+            type: string
+            description: 'The aspect ratio of all the media file used in the ad creative.
+
+              If there are multiple media files, the aspect ratio is combined with comma e.g. `1.91:1, 1:1`.
+
+              '
+    EndDateTime:
+      type: string
+      format: date-time
+      example: '2046-02-07T16:02:00Z'
+      nullable: true
+      description: 'The date-time at which the campaign is scheduled to end.
+
+
+        Minimum value: max(`current_date_time`, `start_date_time`)\
+
+        Maximum value: `2099-12-31T23:59:00` (ad account based timezone)
+
+
+        The API rejects the value if seconds / milliseconds are specified except 0.
+
+
+        This field is nullable. When it is set to `null`, it means the campaign runs indefinitely.
+
+        '
+    BreakdownType:
+      type: string
+      example: age
+      enum:
+      - age
+      - gender
+      - age_and_gender
+      - prefecture
+      - city
+      - connection_type
+      - os
+      - device_type
+      - carrier_type
+      - state
+      - county
+      - hyper_location_segment
+      x-enum-varnames:
+      - AGE
+      - GENDER
+      - AGE_AND_GENDER
+      - PREFECTURE
+      - CITY
+      - CONNECTION_TYPE
+      - OS
+      - DEVICE_TYPE
+      - CARRIER_TYPE
+      - STATE
+      - COUNTY
+      - HYPER_LOCATION_SEGMENT
+    VideoSchemas_Url:
+      type: string
+      description: The full url path of the video file.
+    ClickAttributionWindow:
+      type: string
+      enum:
+      - days_30
+      - days_14
+      - days_7
+      - day_1
+      x-enum-varnames:
+      - DAYS_30
+      - DAYS_14
+      - DAYS_7
+      - DAY_1
+    BreakdownPeriod:
+      type: string
+      example: hour
+      enum:
+      - hour
+      - day
+      x-enum-varnames:
+      - HOUR
+      - DAY
+    Url:
+      type: string
+      description: The storage full url path of the image file.
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    VimpAttributionWindow:
+      type: string
+      enum:
+      - day_1
+      - none
+      x-enum-varnames:
+      - DAY_1
+      - NONE
+    MetricsV3:
+      description: 'Each field starting with `metrics_` specified in the `fields` parameter will be included as a field in this object.
+
+
+        Note: fields starting with `count_`, `cvr_`, `cpa_` are the metrics for events received via pixel postbacks.
+
+
+        The value following the prefix is the name of the event. For example, `count_purchase` is the number of Purchase events received.
+
+
+        - `count_*`: The total number of events received.
+
+        - `cvr_*`: The conversion rate for this event (number of events divided by number of clicks)
+
+        - `cpa_*`: The average cost per event (budget spent divided by the number of events)
+
+        '
+      type: object
+      properties:
+        viewable_impression:
+          type: integer
+          format: int64
+          description: The number of times an ad was viewed by a user.
+        click:
+          type: integer
+          format: int64
+          description: The number of times an ad was clicked on by a user.
+        ctr:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '0.03'
+          description: The click through rate (clicks divided by viewable impressions).
+        cpc:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '1.2'
+          description: The cost per click.
+        cpm:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+          description: The cost per 1,000 viewable impressions.
+        count_purchase:
+          type: integer
+          format: int64
+        cvr_purchase:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_purchase:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_add_to_cart:
+          type: integer
+          format: int64
+        cvr_add_to_cart:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_add_to_cart:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_initiate_checkout:
+          type: integer
+          format: int64
+        cvr_initiate_checkout:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_initiate_checkout:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_submit_form:
+          type: integer
+          format: int64
+        cvr_submit_form:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_submit_form:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_subscribe:
+          type: integer
+          format: int64
+        cvr_subscribe:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_subscribe:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_complete_registration:
+          type: integer
+          format: int64
+        cvr_complete_registration:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_complete_registration:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_contact:
+          type: integer
+          format: int64
+        cvr_contact:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_contact:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_sign_up:
+          type: integer
+          format: int64
+        cvr_sign_up:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_sign_up:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_view_content:
+          type: integer
+          format: int64
+        cvr_view_content:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_view_content:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_add_payment_info:
+          type: integer
+          format: int64
+        cvr_add_payment_info:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_add_payment_info:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_add_to_wish_list:
+          type: integer
+          format: int64
+        cvr_add_to_wish_list:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_add_to_wish_list:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_visit_cart:
+          type: integer
+          format: int64
+        cvr_visit_cart:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_visit_cart:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_customize_product:
+          type: integer
+          format: int64
+        cvr_customize_product:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_customize_product:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_search:
+          type: integer
+          format: int64
+        cvr_search:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_search:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_booking:
+          type: integer
+          format: int64
+        cvr_booking:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_booking:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_download:
+          type: integer
+          format: int64
+        cvr_download:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_download:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_start_trial:
+          type: integer
+          format: int64
+        cvr_start_trial:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_start_trial:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_share:
+          type: integer
+          format: int64
+        cvr_share:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_share:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_login:
+          type: integer
+          format: int64
+        cvr_login:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_login:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_donate:
+          type: integer
+          format: int64
+        cvr_donate:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_donate:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_find_location:
+          type: integer
+          format: int64
+        cvr_find_location:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_find_location:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_time_spent:
+          type: integer
+          format: int64
+        cvr_time_spent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_time_spent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_install:
+          type: integer
+          format: int64
+        cvr_install:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_install:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_d1_retention:
+          type: integer
+          format: int64
+        cvr_d1_retention:
+          type: string
+          description: For D1 retention rate, which is a special event for mobile only, it is calculated as (count of D1 retention event) / (count of installs)
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_d1_retention:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        budget_spent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '123.4'
+          description: The estimated total spending of your campaign, ad group, or ad.
+        lifetime_spent:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '123.4'
+          description: The total budget spent for this object since creation regardless of any date/time filters.
+        spent_before_this_month:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '123.4'
+          description: The total budget spent for this object through the end of last month.
+        video_views:
+          type: integer
+          format: int64
+          description: For video format ads, the number of times the video was viewed.
+        video_views_p25:
+          type: integer
+          format: int64
+          description: For video format ads, the number of times the video was viewed (at least 25% completed).
+        video_views_p50:
+          type: integer
+          format: int64
+          description: For video format ads, the number of times the video was viewed (at least 50% completed).
+        video_views_p75:
+          type: integer
+          format: int64
+          description: For video format ads, the number of times the video was viewed (at least 75% completed).
+        video_views_p95:
+          type: integer
+          format: int64
+          description: For video format ads, the number of times the video was viewed (at least 95% completed).
+        video_views_completed:
+          type: integer
+          format: int64
+          description: For video format ads, the number of times the video was viewed (fully completed).
+        reach:
+          description: The number of unique users who saw your ads, defined as number of distinct devices that viewable impressions were delivered.
+          type: integer
+          format: int64
+        frequency:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '0.2'
+          description: The average number of times each user saw your ad. Number of unique users are defined as number of distinct devices that viewable impressions were delivered.
+        count_skan_install:
+          type: integer
+          format: int64
+          description: '[Coming Soon] This feature is not yet available but will be supported soon.
+
+
+            The number of installs tracked by SKAdNetwork.
+
+            '
+        cvr_skan_install:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '0.2'
+          description: '[Coming Soon] This feature is not yet available but will be supported soon.
+
+
+            The conversion rate for SKAdNetwork installs.
+
+            '
+        cpa_skan_install:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '0.2'
+          description: '[Coming Soon] This feature is not yet available but will be supported soon.
+
+
+            The average cost per SKAdNetwork install.
+
+            '
+        count_lead:
+          type: integer
+          format: int64
+        cvr_lead:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_lead:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        count_store_visit:
+          type: integer
+          format: int64
+        cvr_store_visit:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+        cpa_store_visit:
+          type: string
+          pattern: ^\d+(\.\d+)?$
+          example: '2.34'
+    ConfiguredStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - DELETED
+      description: The status of the object configured by an ad operator.
+    SubmissionStatus:
+      type: string
+      enum:
+      - BEFORE_SUBMISSION
+      - SUBMITTED
+      description: 'This is the status of the ad to know whether our customers submit the ad to moderation or not.
+
+        '
+    Parent:
+      type: object
+      required:
+      - id
+      - type
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of the parent object.
+        type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+        name:
+          type: string
+          description: The name of the object.
+        objective:
+          $ref: '#/components/schemas/CampaignObjective'
+        optimization_event:
+          $ref: '#/components/schemas/OptimizationEvent'
+        ready_for_delivery:
+          $ref: '#/components/schemas/ReadyForDelivery'
+        store_set_id:
+          $ref: '#/components/schemas/StoreSetId'
+        parent:
+          type: object
+          description: 'The parent of the parent. The properties are the same as parent (`id`, `name`, `type`, `objective`,
+
+            `optimization_event` ,`ready_for_delivery` ,`store_set_id` ,`parent`)
+
+            '
+    OptimizationGoal:
+      type: string
+      enum:
+      - CLICKS
+      - OFFSITE_CONVERSIONS
+      - VIEWABLE_IMPRESSIONS
+      - INSTALL
+      - INSTALL_WITH_IN_APP_EVENT
+      - ROAS
+      nullable: true
+      description: 'Optimization goal defines how the campaign is optimized.
+
+
+        This is required and configurable unless bidding strategy is `MANUAL`.
+
+
+        | Objective     | Bid Strategy   | Available Optimization Goal         |
+
+        |---------------|----------------|-------------------------------------|
+
+        | TRAFFIC       | HIGHEST_VOLUME | CLICKS                              |
+
+        | TRAFFIC       | MANUAL         | null                                |
+
+        | SALES         | HIGHEST_VOLUME | OFFSITE_CONVERSIONS, ROAS           |
+
+        | SALES         | TARGET_COST    | OFFSITE_CONVERSIONS                 |
+
+        | AWARENESS     | HIGHEST_VOLUME | VIEWABLE_IMPRESSIONS                |
+
+        | AWARENESS     | MANUAL         | null                                |
+
+        | APP_PROMOTION | HIGHEST_VOLUME | INSTALL, INSTALL_WITH_IN_APP_EVENT  |
+
+        | APP_PROMOTION | TARGET_COST    | INSTALL, INSTALL_WITH_IN_APP_EVENT  |
+
+
+        This field is not updatable when `ready_for_delivery` is `true`.
+
+        ROAS is only allowed to Dynamic Ads campaign with SALES Objective.
+
+        '
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    NotAcceptableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/NotAcceptableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AggregatedInsightsBreakdownType:
+      type: string
+      example: age
+      enum:
+      - age
+      - gender
+      - prefecture
+      x-enum-varnames:
+      - AGE
+      - GENDER
+      - PREFECTURE
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    AdVideo:
+      type: object
+      description: Object containing the info of the `high` quality video generated by the uploaded video of an Video Ad. Null if the Ad is not a video ad.
+      required:
+      - aspect_ratio_type
+      - url
+      properties:
+        aspect_ratio_type:
+          $ref: '#/components/schemas/AspectRatioType'
+        url:
+          $ref: '#/components/schemas/VideoSchemas_Url'
+    DeliveryStatusReason:
+      type: string
+      enum:
+      - CAMPAIGN_DELETED
+      - CAMPAIGN_PAUSED
+      - NO_AD_GROUPS
+      - ALL_AD_GROUPS_PAUSED_OR_DELETED
+      - NO_ADS
+      - NO_SUBMITTED_ADS
+      - ALL_ADS_PAUSED_DELETED_OR_REJECTED
+      - NO_APPROVED_ADS
+      - CAMPAIGN_STARTS_IN_FUTURE
+      - CAMPAIGN_ENDED
+      - CAMPAIGN_OUTSIDE_DAILY_SCHEDULE
+      - NO_ACTIVE_APPROVED_ADS
+      - CAMPAIGN_ELIGIBLE
+      - AD_GROUP_DELETED
+      - AD_GROUP_PAUSED
+      - AD_GROUP_ELIGIBLE
+      - AD_DELETED
+      - AD_NOT_SUBMITTED
+      - AD_NOT_REVIEWED
+      - AD_REJECTED
+      - AD_PAUSED
+      - AD_ELIGIBLE
+      - CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT
+      - UNCONFIRMED
+      - BUSINESS_DISABLED
+      - AD_ACCOUNT_OR_BRAND_DISABLED
+      - BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW
+      - BUSINESS_NOT_APPROVED
+      - AD_ACCOUNT_NOT_APPROVED
+      - PAYMENT_METHOD_NOT_VERIFIED
+      - PAYMENT_METHOD_ISSUE
+      - PRODUCT_SET_NOT_READY
+      - STORE_SET_NOT_READY
+      description: 'An enum field for the reason the delivery status was determined.
+
+        | Reason                                    | Layers    |
+
+        |-------------------------------------------|-----------|
+
+        | CAMPAIGN_DELETED                          | Campaign  |
+
+        | CAMPAIGN_PAUSED                           | Campaign, Ad group, Ad |
+
+        | NO_AD_GROUPS                              | Campaign  |
+
+        | ALL_AD_GROUPS_PAUSED_OR_DELETED           | Campaign  |
+
+        | NO_ADS                                    | Campaign, Ad group |
+
+        | NO_SUBMITTED_ADS                          | Campaign, Ad group |
+
+        | ALL_ADS_PAUSED_DELETED_OR_REJECTED        | Campaign, Ad group |
+
+        | NO_APPROVED_ADS                           | Campaign, Ad group |
+
+        | CAMPAIGN_STARTS_IN_FUTURE                 | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_ENDED                            | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_OUTSIDE_DAILY_SCHEDULE           | Campaign |
+
+        | NO_ACTIVE_APPROVED_ADS                    | Campaign, Ad group |
+
+        | CAMPAIGN_ELIGIBLE                         | Campaign  |
+
+        | AD_GROUP_DELETED                          | Ad group  |
+
+        | AD_GROUP_PAUSED                           | Ad group, Ad  |
+
+        | AD_GROUP_ELIGIBLE                         | Ad group  |
+
+        | AD_DELETED                                | Ad        |
+
+        | AD_NOT_SUBMITTED                          | Ad        |
+
+        | AD_NOT_REVIEWED                           | Ad        |
+
+        | AD_REJECTED                               | Ad        |
+
+        | AD_PAUSED                                 | Ad        |
+
+        | AD_ELIGIBLE                               | Ad        |
+
+        | CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT | Campaign, Ad group, Ad|
+
+        | UNCONFIRMED                               | Campaign, Ad group, Ad|
+
+        | BUSINESS_DISABLED                         | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_OR_BRAND_DISABLED              | Campaign, Ad group, Ad |
+
+        | BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW      | Campaign, Ad group, Ad |
+
+        | BUSINESS_NOT_APPROVED                     | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_NOT_APPROVED                   | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_NOT_VERIFIED               | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_ISSUE                      | Campaign, Ad group, Ad |
+
+        | PRODUCT_SET_NOT_READY                     | Campaign, Ad group, Ad |
+
+        | STORE_SET_NOT_READY                       | Campaign, Ad group, Ad |
+
+        '
+    AggregatedInsightsResponseV3:
+      type: object
+      required:
+      - data
+      - total_objects
+      properties:
+        total_objects:
+          type: integer
+          format: int32
+          description: The total number of objects that match this query
+        data:
+          type: object
+          description: Aggregated data of a specific object.
+          properties:
+            metadata:
+              $ref: '#/components/schemas/MetadataV3'
+            metrics:
+              $ref: '#/components/schemas/MetricsV3'
+            metrics_breakdown:
+              description: 'This field is included when `breakdown_period` or `breakdown_type` parameter is specified.
+
+                '
+              type: array
+              items:
+                $ref: '#/components/schemas/MetricsBreakdownV3'
+    NotAcceptableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/NotAcceptableError'
+    ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ResourceNotFoundError'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    ResourceNotFoundErrorExtension:
+      type: object
+      required:
+      - type
+      - resource_type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_FOUND
+          - DELETED
+        resource_type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+          - AD
+          - MEDIA_FILE
+          - AD_ACCOUNT
+          - PIXEL
+          - CUSTOM_AUDIENCE
+          - PIXEL_URL_CONFIGURATION
+          - AM_CONFIGURATION
+          - CATALOG
+          - STORE_SET
+          - RULE
+    CampaignMetadataV3:
+      allOf:
+      - $ref: '#/components/schemas/CommonMetadata'
+      - type: object
+        properties:
+          objective:
+            $ref: '#/components/schemas/CampaignObjective'
+          optimization_event:
+            $ref: '#/components/schemas/OptimizationEvent'
+          optimization_goal:
+            $ref: '#/components/schemas/OptimizationGoal'
+          start_date_time:
+            $ref: '#/components/schemas/StartDateTime'
+          end_date_time:
+            $ref: '#/components/schemas/EndDateTime'
+          daily_budget_amount:
+            type: string
+            pattern: ^\d+(\.\d+)?$
+            example: '123.4'
+            description: 'The campaign''s daily budget, represented in the ad account''s currency.
+
+              '
+          ready_for_delivery:
+            $ref: '#/components/schemas/ReadyForDelivery'
+          has_any_video_ads:
+            $ref: '#/components/schemas/HasAnyVideoAds'
+          is_migrated_from_v1:
+            $ref: '#/components/schemas/IsMigratedFromV1'
+          is_large_unit_ads:
+            $ref: '#/components/schemas/IsLargeUnitAds'
+          spending_limit:
+            type: string
+            pattern: ^\d+(\.\d+)?$
+            example: '123.4'
+            description: 'The campaign''s spending limit, represented in the ad account''s currency.
+
+              '
+    BadRequestErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BadRequestError'
+    MetadataV3:
+      description: 'Each field starting with `metadata_` specified in the fields parameter will be included as a field in this object.
+
+        '
+      oneOf:
+      - $ref: '#/components/schemas/CampaignMetadataV3'
+      - $ref: '#/components/schemas/AdGroupMetadata'
+      - $ref: '#/components/schemas/AdMetadata'
+    ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    FieldV3:
+      type: string
+      enum:
+      - metadata_name
+      - metadata_created_at
+      - metadata_updated_at
+      - metadata_configured_status
+      - metadata_campaign_id
+      - metadata_campaign_name
+      - metadata_ad_group_id
+      - metadata_ad_group_name
+      - metadata_delivery_status
+      - metadata_is_migrated_from_v1
+      - metadata_ad_account_name
+      - metadata_ad_account_id
+      - metadata_has_any_video_ads
+      - metadata_objective
+      - metadata_optimization_event
+      - metadata_optimization_goal
+      - metadata_start_date_time
+      - metadata_end_date_time
+      - metadata_daily_budget_amount
+      - metadata_ready_for_delivery
+      - metadata_is_large_unit_ads
+      - metadata_spending_limit
+      - metadata_thumbnails
+      - metadata_video
+      - metadata_moderation_status
+      - metadata_submission_status
+      - metadata_ad_headline
+      - metadata_ad_description
+      - metadata_ad_creative_format
+      - metadata_ad_landing_page_url
+      - metadata_ad_creative_media_file_aspect_ratio
+      - metrics_viewable_impression
+      - metrics_click
+      - metrics_ctr
+      - metrics_cpc
+      - metrics_cpm
+      - metrics_count_purchase
+      - metrics_cvr_purchase
+      - metrics_cpa_purchase
+      - metrics_count_add_to_cart
+      - metrics_cvr_add_to_cart
+      - metrics_cpa_add_to_cart
+      - metrics_count_initiate_checkout
+      - metrics_cvr_initiate_checkout
+      - metrics_cpa_initiate_checkout
+      - metrics_count_submit_form
+      - metrics_cvr_submit_form
+      - metrics_cpa_submit_form
+      - metrics_count_subscribe
+      - metrics_cvr_subscribe
+      - metrics_cpa_subscribe
+      - metrics_count_complete_registration
+      - metrics_cvr_complete_registration
+      - metrics_cpa_complete_registration
+      - metrics_count_contact
+      - metrics_cvr_contact
+      - metrics_cpa_contact
+      - metrics_count_sign_up
+      - metrics_cvr_sign_up
+      - metrics_cpa_sign_up
+      - metrics_count_view_content
+      - metrics_cvr_view_content
+      - metrics_cpa_view_content
+      - metrics_count_add_payment_info
+      - metrics_cvr_add_payment_info
+      - metrics_cpa_add_payment_info
+      - metrics_count_add_to_wish_list
+      - metrics_cvr_add_to_wish_list
+      - metrics_cpa_add_to_wish_list
+      - metrics_count_visit_cart
+      - metrics_cvr_visit_cart
+      - metrics_cpa_visit_cart
+      - metrics_count_customize_product
+      - metrics_cvr_customize_product
+      - metrics_cpa_customize_product
+      - metrics_count_search
+      - metrics_cvr_search
+      - metrics_cpa_search
+      - metrics_count_booking
+      - metrics_cvr_booking
+      - metrics_cpa_booking
+      - metrics_count_download
+      - metrics_cvr_download
+      - metrics_cpa_download
+      - metrics_count_start_trial
+      - metrics_cvr_start_trial
+      - metrics_cpa_start_trial
+      - metrics_count_share
+      - metrics_cvr_share
+      - metrics_cpa_share
+      - metrics_count_login
+      - metrics_cvr_login
+      - metrics_cpa_login
+      - metrics_count_donate
+      - metrics_cvr_donate
+      - metrics_cpa_donate
+      - metrics_count_find_location
+      - metrics_cvr_find_location
+      - metrics_cpa_find_location
+      - metrics_count_time_spent
+      - metrics_cvr_time_spent
+      - metrics_cpa_time_spent
+      - metrics_count_install
+      - metrics_cvr_install
+      - metrics_cpa_install
+      - metrics_count_d1_retention
+      - metrics_cvr_d1_retention
+      - metrics_cpa_d1_retention
+      - metrics_budget_spent
+      - metrics_lifetime_spent
+      - metrics_spent_before_this_month
+      - metrics_video_views
+      - metrics_video_views_p25
+      - metrics_video_views_p50
+      - metrics_video_views_p75
+      - metrics_video_views_p95
+      - metrics_video_views_completed
+      - metrics_reach
+      - metrics_frequency
+      - metrics_count_skan_install
+      - metrics_cvr_skan_install
+      - metrics_cpa_skan_install
+      - metrics_count_lead
+      - metrics_cvr_lead
+      - metrics_cpa_lead
+      - metrics_count_store_visit
+      - metrics_cvr_store_visit
+      - metrics_cpa_store_visit
+      x-enum-varnames:
+      - METADATA_NAME
+      - METADATA_CREATED_AT
+      - METADATA_UPDATED_AT
+      - METADATA_CONFIGURED_STATUS
+      - METADATA_CAMPAIGN_ID
+      - METADATA_CAMPAIGN_NAME
+      - METADATA_AD_GROUP_ID
+      - METADATA_AD_GROUP_NAME
+      - METADATA_DELIVERY_STATUS
+      - METADATA_IS_MIGRATED_FROM_V1
+      - METADATA_AD_ACCOUNT_NAME
+      - METADATA_AD_ACCOUNT_ID
+      - METADATA_HAS_ANY_VIDEO_ADS
+      - METADATA_OBJECTIVE
+      - METADATA_OPTIMIZATION_EVENT
+      - METADATA_OPTIMIZATION_GOAL
+      - METADATA_START_DATE_TIME
+      - METADATA_END_DATE_TIME
+      - METADATA_DAILY_BUDGET_AMOUNT
+      - METADATA_READY_FOR_DELIVERY
+      - METADATA_IS_LARGE_UNIT_ADS
+      - METADATA_SPENDING_LIMIT
+      - METADATA_THUMBNAILS
+      - METADATA_VIDEO
+      - METADATA_MODERATION_STATUS
+      - METADATA_SUBMISSION_STATUS
+      - METADATA_AD_HEADLINE
+      - METADATA_AD_DESCRIPTION
+      - METADATA_AD_CREATIVE_FORMAT
+      - METADATA_AD_LANDING_PAGE_URL
+      - METADATA_AD_CREATIVE_MEDIA_FILE_ASPECT_RATIO
+      - METRICS_VIEWABLE_IMPRESSION
+      - METRICS_CLICK
+      - METRICS_CTR
+      - METRICS_CPC
+      - METRICS_CPM
+      - METRICS_COUNT_PURCHASE
+      - METRICS_CVR_PURCHASE
+      - METRICS_CPA_PURCHASE
+      - METRICS_COUNT_ADD_TO_CART
+      - METRICS_CVR_ADD_TO_CART
+      - METRICS_CPA_ADD_TO_CART
+      - METRICS_COUNT_INITIATE_CHECKOUT
+      - METRICS_CVR_INITIATE_CHECKOUT
+      - METRICS_CPA_INITIATE_CHECKOUT
+      - METRICS_COUNT_SUBMIT_FORM
+      - METRICS_CVR_SUBMIT_FORM
+      - METRICS_CPA_SUBMIT_FORM
+      - METRICS_COUNT_SUBSCRIBE
+      - METRICS_CVR_SUBSCRIBE
+      - METRICS_CPA_SUBSCRIBE
+      - METRICS_COUNT_COMPLETE_REGISTRATION
+      - METRICS_CVR_COMPLETE_REGISTRATION
+      - METRICS_CPA_COMPLETE_REGISTRATION
+      - METRICS_COUNT_CONTACT
+      - METRICS_CVR_CONTACT
+      - METRICS_CPA_CONTACT
+      - METRICS_COUNT_SIGN_UP
+      - METRICS_CVR_SIGN_UP
+      - METRICS_CPA_SIGN_UP
+      - METRICS_COUNT_VIEW_CONTENT
+      - METRICS_CVR_VIEW_CONTENT
+      - METRICS_CPA_VIEW_CONTENT
+      - METRICS_COUNT_ADD_PAYMENT_INFO
+      - METRICS_CVR_ADD_PAYMENT_INFO
+      - METRICS_CPA_ADD_PAYMENT_INFO
+      - METRICS_COUNT_ADD_TO_WISH_LIST
+      - METRICS_CVR_ADD_TO_WISH_LIST
+      - METRICS_CPA_ADD_TO_WISH_LIST
+      - METRICS_COUNT_VISIT_CART
+      - METRICS_CVR_VISIT_CART
+      - METRICS_CPA_VISIT_CART
+      - METRICS_COUNT_CUSTOMIZE_PRODUCT
+      - METRICS_CVR_CUSTOMIZE_PRODUCT
+      - METRICS_CPA_CUSTOMIZE_PRODUCT
+      - METRICS_COUNT_SEARCH
+      - METRICS_CVR_SEARCH
+      - METRICS_CPA_SEARCH
+      - METRICS_COUNT_BOOKING
+      - METRICS_CVR_BOOKING
+      - METRICS_CPA_BOOKING
+      - METRICS_COUNT_DOWNLOAD
+      - METRICS_CVR_DOWNLOAD
+      - METRICS_CPA_DOWNLOAD
+      - METRICS_COUNT_START_TRIAL
+      - METRICS_CVR_START_TRIAL
+      - METRICS_CPA_START_TRIAL
+      - METRICS_COUNT_SHARE
+      - METRICS_CVR_SHARE
+      - METRICS_CPA_SHARE
+      - METRICS_COUNT_LOGIN
+      - METRICS_CVR_LOGIN
+      - METRICS_CPA_LOGIN
+      - METRICS_COUNT_DONATE
+      - METRICS_CVR_DONATE
+      - METRICS_CPA_DONATE
+      - METRICS_COUNT_FIND_LOCATION
+      - METRICS_CVR_FIND_LOCATION
+      - METRICS_CPA_FIND_LOCATION
+      - METRICS_COUNT_TIME_SPENT
+      - METRICS_CVR_TIME_SPENT
+      - METRICS_CPA_TIME_SPENT
+      - METRICS_COUNT_INSTALL
+      - METRICS_CVR_INSTALL
+      - METRICS_CPA_INSTALL
+      - METRICS_COUNT_D1_RETENTION
+      - METRICS_CVR_D1_RETENTION
+      - METRICS_CPA_D1_RETENTION
+      - METRICS_BUDGET_SPENT
+      - METRICS_LIFETIME_SPENT
+      - METRICS_SPENT_BEFORE_THIS_MONTH
+      - METRICS_VIDEO_VIEWS
+      - METRICS_VIDEO_VIEWS_P25
+      - METRICS_VIDEO_VIEWS_P50
+      - METRICS_VIDEO_VIEWS_P75
+      - METRICS_VIDEO_VIEWS_P95
+      - METRICS_VIDEO_VIEWS_COMPLETED
+      - METRICS_REACH
+      - METRICS_FREQUENCY
+      - METRICS_COUNT_SKAN_INSTALL
+      - METRICS_CVR_SKAN_INSTALL
+      - METRICS_CPA_SKAN_INSTALL
+      - METRICS_COUNT_LEAD
+      - METRICS_CVR_LEAD
+      - METRICS_CPA_LEAD
+      - METRICS_COUNT_STORE_VISIT
+      - METRICS_CVR_STORE_VISIT
+      - METRICS_CPA_STORE_VISIT
+    AdGroupMetadata:
+      allOf:
+      - $ref: '#/components/schemas/CommonMetadata'
+      - type: object
+        properties:
+          campaign_id:
+            type: integer
+            format: int64
+          campaign_name:
+            type: string
+          has_any_video_ads:
+            $ref: '#/components/schemas/HasAnyVideoAds'
+          is_migrated_from_v1:
+            $ref: '#/components/schemas/IsMigratedFromV1'
+    SortParameter:
+      type: string
+      description: 'A sort parameter in the format `{field}:{order}`, where `field` is a value from `SortableField`
+
+        and `order` is a value from `SortOrder`.
+
+        '
+      pattern: ^[a-zA-Z_]+:(asc|desc)$
+      example: metrics_click:desc
+    CampaignObjective:
+      type: string
+      enum:
+      - TRAFFIC
+      - SALES
+      - AWARENESS
+      - APP_PROMOTION
+      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
+
+
+        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
+
+        '
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    DeliveryStatusObject:
+      type: object
+      required:
+      - status
+      - reason
+      - description
+      properties:
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        reason:
+          $ref: '#/components/schemas/DeliveryStatusReason'
+        description:
+          type: string
+          description: A localized human readable description of the reason. The language is controlled by the Accept-Language header in the request.
+      description: An Object that provides information about the delivery status of the campaign.
+    IsLargeUnitAds:
+      type: boolean
+      description: 'A boolean flag that indicates whether ads from this campaign are displayed in the app using the large unit format.
+
+
+        This feature is only available when objective is `AWARENESS`.
+
+
+        For eligible ad accounts, this feature is also available when objective is `TRAFFIC` or `SALES`.
+
+
+        This field''s value cannot be changed if the campaign already has 1 or more ads.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
+    CommonMetadata:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the object.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which the object was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The date-time at which the object was updated.
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        delivery_status:
+          $ref: '#/components/schemas/DeliveryStatusObject'
+        ad_account_name:
+          type: string
+        ad_account_id:
+          type: integer
+          format: int64
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    ReadyForDelivery:
+      type: boolean
+      description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
+
+        When the flag is true, the following fields are not updatable anymore.
+
+        1. `start_date_time`
+
+        2. `billing_event`
+
+        3. `optimization_goal`
+
+        4. `optimization_event`
+
+        5. `website_tracking_tag`
+
+        6. `viewability_measurement`
+
+        7. `app_promotion_info` (PatchAppPromotionInfo)
+
+        '
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    StartDateTime:
+      type: string
+      format: date-time
+      example: '2046-01-07T16:02:00Z'
+      description: 'The date-time at which the campaign is scheduled to start.
+
+
+        Minimum value: ≥ today (ad account based timezone)\
+
+        Maximum value: `2099-12-31T23:58:00` (ad account based timezone)
+
+
+        The API rejects the value if seconds / milliseconds are specified except 0.
+
+
+        This field is not updatable when `ready_for_delivery` is `true`.
+
+        '
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

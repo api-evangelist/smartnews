@@ -1,0 +1,257 @@
+openapi: 3.0.3
+info:
+  version: 3.0.1
+  title: SmartNews Marketing ad interests API
+  description: "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n"
+  contact:
+    name: SmartNews Ads Support
+servers:
+- url: https://ads.smartnews.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: interests
+paths:
+  /api/ma/v3/iab_interest_categories:
+    get:
+      tags:
+      - interests
+      summary: List Interests
+      operationId: getAllIABInterestCategories
+      description: 'Returns an array of IAB interest categories which can be used for AdGroup level interest targeting.
+
+        '
+      responses:
+        '200':
+          description: A successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IABInterestCategory'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+components:
+  schemas:
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    IABInterestCategory:
+      type: object
+      required:
+      - iab_interest_category_id
+      - iab_interest_category_name
+      - display_name
+      - parent_iab_interest_category_id
+      properties:
+        iab_interest_category_id:
+          example: 100
+          type: integer
+          format: int32
+          description: The interest category ID which can be used for AdGroup level interest targeting.
+        iab_interest_category_name:
+          example: Food
+          type: string
+          description: The name of the interest category.
+        display_name:
+          $ref: '#/components/schemas/DisplayName'
+        parent_iab_interest_category_id:
+          example: 1
+          type: integer
+          format: int32
+          description: The parent interest category ID. A value of `0` means there is no parent.
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    DisplayName:
+      type: object
+      required:
+      - en
+      - ja
+      properties:
+        en:
+          type: string
+          example: Food
+          description: The English name of the interest category.
+        ja:
+          type: string
+          example: 食べ物
+          description: The Japanese name of the interest category.
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

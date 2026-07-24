@@ -1,0 +1,2145 @@
+openapi: 3.0.3
+info:
+  version: 3.0.1
+  title: SmartNews Marketing ad API
+  description: "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n"
+  contact:
+    name: SmartNews Ads Support
+servers:
+- url: https://ads.smartnews.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: ad
+paths:
+  /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads:
+    get:
+      tags:
+      - ad
+      description: 'Get a paginated list of ad objects under a specified ad group.
+
+
+        This endpoint returns ads with pagination support, including pagination metadata in the response.
+
+        '
+      summary: List Ads By Ad Group (Paginated)
+      operationId: getAdsByAdGroupPaginated
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: ad_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: include_deleted
+        in: query
+        required: false
+        description: Boolean flag for including deleted ads in the response.
+        schema:
+          $ref: '#/components/schemas/IncludeDeleted'
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageSize'
+      - name: page
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Page'
+      responses:
+        '200':
+          description: A paginated list of ad objects with pagination metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdPaginatedResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: The user doesn't have permission to access the resource or the upper-level item doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    post:
+      tags:
+      - ad
+      summary: Create an Ad
+      description: 'Create an ad object. A single Ad Group can have up to 100 ads.
+
+
+        When the number of ads exceed the limit, the API returns a Business Error.
+
+        '
+      operationId: postAd
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: ad_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        $ref: '#/components/requestBodies/AdsByAdGroupPaginated_post-requestBody'
+      responses:
+        '200':
+          description: Ad creation response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the query is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '409':
+          description: Business Error. The request body is formatted correctly but doesn't pass some ad account/system level restriction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/ma/v3/ad_accounts/{ad_account_id}/ads:
+    get:
+      tags:
+      - ad
+      description: 'Get a paginated list of ad objects by ad account.
+
+
+        This endpoint returns ads with pagination support, including pagination metadata in the response.
+
+        '
+      summary: List Ads By Ad Account (Paginated)
+      operationId: getAdsPaginated
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: include_deleted
+        in: query
+        required: false
+        description: Boolean flag for including deleted ads in the response.
+        schema:
+          $ref: '#/components/schemas/IncludeDeleted'
+      - name: ad_ids
+        in: query
+        required: false
+        description: Filter the response by a target list of ad_id
+        schema:
+          type: array
+          items:
+            type: integer
+            format: int64
+          minItems: 1
+          maxItems: 100
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/PageSize'
+      - name: page
+        in: query
+        required: false
+        schema:
+          $ref: '#/components/schemas/Page'
+      responses:
+        '200':
+          description: A paginated list of ad objects with pagination metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdPaginatedResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: The user doesn't have permission to access the resource or the upper-level item doesn't exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/ma/v3/ad_accounts/{ad_account_id}/ads/{ad_id}:
+    get:
+      tags:
+      - ad
+      description: Get a single ad object.
+      summary: Get an Ad
+      operationId: getAdById
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: ad_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: A single ad object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the path is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    patch:
+      tags:
+      - ad
+      description: 'Update an existing Ad by using the JSON Merge Patch specification, described in [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396).\
+
+        The API returns an business error when a request updates one or more of the following fields when the submission_status before this API call is SUBMITTED\
+
+        - landing_page_url\
+
+        - cta_label\
+
+        - creative.headline\
+
+        - creative.description\
+
+        - creative.sponsored_name\
+
+        - creative.media_file_ids
+
+        '
+      summary: Update an Ad
+      operationId: patchAdById
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: ad_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/merge-patch+json:
+            schema:
+              $ref: '#/components/schemas/AdPatchRequest'
+      responses:
+        '200':
+          description: A single ad object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdResponse'
+        '400':
+          description: Bad Request. The request body must be JSON format. This error response means the JSON body is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the path is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '410':
+          description: The resource specified in the path is deleted and no longer available. If the user doesn't have permission to access the ad account, 404 is returned instead.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    delete:
+      tags:
+      - ad
+      description: 'Delete an existing ad.
+
+        '
+      summary: Delete an Ad
+      operationId: deleteAdById
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: ad_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '204':
+          description: Deletion completed successfully
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the path is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '409':
+          description: Business Error. The request is formatted correctly but doesn't pass business rule validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessErrorResponse'
+        '429':
+          description: Too many requests were made within a short period. Wait a while and try again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateLimitedErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+components:
+  schemas:
+    DeliveryStatus:
+      type: string
+      enum:
+      - DELETED
+      - PAUSED
+      - NOT_ELIGIBLE
+      - PENDING
+      - ENDED
+      - ELIGIBLE
+      - UNKNOWN
+      - DISABLED
+      description: 'The delivery status of the object determined by the system.
+
+
+        | Delivery status | What it means |
+
+        |-----------------|---------------|
+
+        | DELETED         | The object is deleted by an ad operator |
+
+        | PAUSED          | The object is paused by an ad operator  |
+
+        | NOT_ELIGIBLE    | The object is configured to be active but is not delivered due to some conditions. Please check the `reason` or `description` field for more details |
+
+        | PENDING         | The object is configured to be active and will be delivered when certain conditions are met. Please check Please check the `reason` or `description` field for more details |
+
+        | ENDED           | The object is configured to be active but the campaign has ended |
+
+        | ELIGIBLE        | The object is configured to be active and is delivering ads |
+
+        | UNKNOWN         | The object is configured to be active but its delivery status is unknown |
+
+        | DISABLED        | The object is disabled because the business, account, or brand is disabled|
+
+        '
+    PageSize:
+      type: integer
+      minimum: 1
+      maximum: 1000
+      default: 1000
+      example: 100
+      description: 'The number of objects to return per page.
+
+
+        The maximum page size is 1000 and the default is 1000.
+
+        '
+    SponsoredName:
+      type: string
+      minLength: 1
+      maxLength: 22
+      description: 'Name of advertiser/service name/brand name/product name etc which is displayed to users to show the sponsorship of Ad.
+
+
+        Note: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
+
+        '
+    AspectRatioType:
+      type: string
+      enum:
+      - ASPECT_RATIO_1_1
+      - ASPECT_RATIO_6_5
+      - ASPECT_RATIO_16_9
+      - ASPECT_RATIO_191_100
+      description: The predefined enums for the aspect ratio of images and videos.
+    OptimizationEvent:
+      type: string
+      enum:
+      - PURCHASE
+      - ADD_TO_CART
+      - INITIATE_CHECKOUT
+      - SUBMIT_FORM
+      - SUBSCRIBE
+      - COMPLETE_REGISTRATION
+      - CONTACT
+      - SIGN_UP
+      - VIEW_CONTENT
+      - ADD_PAYMENT_INFO
+      - ADD_TO_WISH_LIST
+      - VISIT_CART
+      - CUSTOMIZE_PRODUCT
+      - SEARCH
+      - BOOKING
+      - DOWNLOAD
+      - START_TRIAL
+      - SHARE
+      - LOGIN
+      - DONATE
+      - FIND_LOCATION
+      - TIME_SPENT
+      - LEAD
+      - INSTALL
+      - D1_RETENTION
+      nullable: true
+      description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
+    AdPatchRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/AdSchemas_Name'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        landing_page_url:
+          $ref: '#/components/schemas/LandingPageUrl'
+        cta_label:
+          $ref: '#/components/schemas/CtaLabel'
+        submission_status:
+          $ref: '#/components/schemas/SubmissionStatus'
+        creative:
+          $ref: '#/components/schemas/CreativePatchRequest'
+        impression_measurement:
+          $ref: '#/components/schemas/AdImpressionMeasurement'
+        is_price_label_enabled:
+          $ref: '#/components/schemas/PriceLabelEnabled'
+    VideoSchemas_Url:
+      type: string
+      description: The full url path of the video file.
+    VendorType:
+      type: string
+      enum:
+      - DAR
+      - DCM
+      description: The vendor to use for impression measurement
+    AdRequest:
+      allOf:
+      - $ref: '#/components/schemas/AdCreationParams'
+      - type: object
+        properties:
+          creative:
+            allOf:
+            - $ref: '#/components/schemas/CreativeRequest'
+            description: 'The `creative` to configure for the ad.
+
+
+              Depending on the format, the corresponding `*_info` object is required.
+
+
+              For example, if `format` is `IMAGE`, `image_creative_info` is required. If `format` is `VIDEO`, `video_creative_info` is required, and so on.
+
+              '
+        required:
+        - creative
+    Parent:
+      type: object
+      required:
+      - id
+      - type
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of the parent object.
+        type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+        name:
+          type: string
+          description: The name of the object.
+        objective:
+          $ref: '#/components/schemas/CampaignObjective'
+        optimization_event:
+          $ref: '#/components/schemas/OptimizationEvent'
+        ready_for_delivery:
+          $ref: '#/components/schemas/ReadyForDelivery'
+        store_set_id:
+          $ref: '#/components/schemas/StoreSetId'
+        parent:
+          type: object
+          description: 'The parent of the parent. The properties are the same as parent (`id`, `name`, `type`, `objective`,
+
+            `optimization_event` ,`ready_for_delivery` ,`store_set_id` ,`parent`)
+
+            '
+    CreativeRequest:
+      type: object
+      required:
+      - format
+      properties:
+        format:
+          $ref: '#/components/schemas/Format'
+        image_creative_info:
+          $ref: '#/components/schemas/ImageCreativeInfoRequest'
+        video_creative_info:
+          $ref: '#/components/schemas/VideoCreativeInfoRequest'
+        carousel_creative_info:
+          $ref: '#/components/schemas/CarouselCreativeInfoRequest'
+        catalog_carousel_creative_info:
+          $ref: '#/components/schemas/CatalogCarouselCreativeInfoRequest'
+        catalog_image_creative_info:
+          $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    CatalogCarouselCreativeInfoRequest:
+      type: object
+      description: 'Required when `format` is `CATALOG_CAROUSEL`.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+      required:
+      - headline
+      - sponsored_name
+    CatalogCarouselCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - sponsored_name
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+    BadRequestErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BadRequestError'
+    VideoCreativeInfoPatchRequest:
+      type: object
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_file_ids:
+          $ref: '#/components/schemas/MediaFileIds'
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    ValidationErrorExtension:
+      required:
+      - type
+      - error_fields
+      properties:
+        type:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+        error_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
+              reason:
+                type: string
+    CampaignObjective:
+      type: string
+      enum:
+      - TRAFFIC
+      - SALES
+      - AWARENESS
+      - APP_PROMOTION
+      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
+
+
+        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
+
+        '
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    MediaFileIds:
+      type: array
+      items:
+        type: integer
+        format: int64
+      description: "List of Media File IDs which will be used for a Creative.\n\nMedia Files can be created via the `POST media_files` endpoint.\n\nThe specified Media Files must belong to the same ad account which the ad belongs to, otherwise the API returns a Resource Not Found Error.\n\nOnly 1 image per aspect ratio type can be added per request.\n- When `format` of the creative = `IMAGE`, one of the following combinations of images is accepted:\n  1.  Required: `ASPECT_RATIO_1_1`, `ASPECT_RATIO_191_100`. Optional: `ASPECT_RATIO_6_5`, `ASPECT_RATIO_16_9`\n  2.  Required: `ASPECT_RATIO_1_1`, `ASPECT_RATIO_6_5`, `ASPECT_RATIO_16_9`, Optional: `ASPECT_RATIO_191_100`\n  3.  [When parent campaign's `is_large_unit_square_ads` field is set to `true`] Required: `ASPECT_RATIO_1_1` with at least 600 x 600 resolution\n- When `format` of the creative = `VIDEO`, it requires exactly a pair of `VIDEO` and `IMAGE` `media_file_id`s\n  - VIDEO: (Please check the spec in `POST /api/v1/ad_accounts/{ad_account_id}/media_files`)\\\n  - IMAGE: Must be an `ASPECT_RATIO_16_9` image\n"
+    BusinessError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BusinessErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ValidationErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ValidationError'
+    AdResponse:
+      allOf:
+      - $ref: '#/components/schemas/AdCreationParams'
+      - type: object
+        required:
+        - ad_id
+        - ad_account_id
+        - click_destination_type
+        - moderation_status
+        - submission_status
+        - creative
+        - created_at
+        - updated_at
+        - parent
+        - delivery_status
+        - is_migrated_from_v1
+        properties:
+          ad_id:
+            type: integer
+            format: int64
+            description: The ID of the ad object.
+          click_destination_type:
+            $ref: '#/components/schemas/ClickDestinationType'
+          moderation_status:
+            $ref: '#/components/schemas/ModerationStatus'
+          rejection_reasons:
+            type: array
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/RejectionReason'
+            description: 'The reasons why the ad was rejected.
+
+              This field is only returned when the `moderation_status` is `REJECTED`.
+
+              '
+          submission_status:
+            $ref: '#/components/schemas/SubmissionStatus'
+          creative:
+            $ref: '#/components/schemas/CreativeResponse'
+          created_at:
+            type: string
+            format: date-time
+            description: The date-time at which the ad was created.
+          updated_at:
+            type: string
+            format: date-time
+            description: The date-time at which the ad was last updated.
+          parent:
+            $ref: '#/components/schemas/Parent'
+          delivery_status:
+            $ref: '#/components/schemas/DeliveryStatusObject'
+          impression_measurement:
+            $ref: '#/components/schemas/AdImpressionMeasurement'
+          is_migrated_from_v1:
+            type: boolean
+            description: A boolean flag that, when `true`, indicates that the ad is migrated from v1.
+          is_price_label_enabled:
+            $ref: '#/components/schemas/PriceLabelEnabled'
+    ImageCreativeInfoPatchRequest:
+      type: object
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        description:
+          $ref: '#/components/schemas/Description'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_file_ids:
+          $ref: '#/components/schemas/MediaFileIds'
+    ImageResponse:
+      type: object
+      required:
+      - width
+      - height
+      - url
+      - filesize
+      - aspect_ratio_type
+      - image_scale
+      - created_at
+      properties:
+        width:
+          type: integer
+          description: The width of the ad image in pixels.
+        height:
+          type: integer
+          description: The height of the ad image in pixels.
+        url:
+          $ref: '#/components/schemas/Url'
+        filesize:
+          type: integer
+          description: The file size of image file.
+        aspect_ratio_type:
+          $ref: '#/components/schemas/AspectRatioType'
+        image_scale:
+          type: string
+          enum:
+          - FULL
+          - HALF
+          - ORIGINAL
+          description: The scale of the image according to the delivery spec.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which this record was created.
+    AcceptLanguage:
+      type: string
+      description: 'The language to use for system generated text within API responses.
+
+
+        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
+
+        '
+      example: en-US
+    LandingPageUrl:
+      type: string
+      minLength: 1
+      maxLength: 1024
+      description: "URL of the Website which is opened when an Ad is clicked.\\\nIt is required when the parent campaign's `click_destination_type` is one of the following. It cannot be set if the parent campaign has any other `click_destination_type`.\n  1. WEB_VIEW\n  2. BROWSER\nThe API will return a Validation Error if the field doesn't follow the below rules:\n1. URL format should follow the [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) spec\n2. All characters should be escaped accordingly, except macro parameters.\n3. Only http and https are allowed protocols.\n4. The following macro parameters are supported. The curly brackets characters `{` or `}` can only be used as part of the macro parameters.\n- `{ad_account_id}`\n- `{campaign_id}`\n- `{ad_group_id}`\n- `{ad_id}`\n- `{click_id}`\n"
+    ModerationStatus:
+      type: string
+      enum:
+      - NOT_REVIEWED
+      - APPROVED
+      - REJECTED
+      description: 'This is the moderation result of current Ad.
+
+        '
+    CarouselCardMediaFileId:
+      type: integer
+      format: int64
+      description: 'The Id of the media file. Only image is supported.
+
+        The image for the carousel needs to be 1:1 aspect ratio.
+
+        '
+    VideoResponse:
+      type: object
+      required:
+      - width
+      - height
+      - url
+      - length
+      - filesize
+      - aspect_ratio_type
+      - video_quality
+      - created_at
+      properties:
+        width:
+          type: integer
+          description: The width of the ad video in pixels.
+        height:
+          type: integer
+          description: The height of the ad video in pixels.
+        url:
+          $ref: '#/components/schemas/VideoSchemas_Url'
+        length:
+          type: integer
+          description: The length of the video in ms.
+        filesize:
+          type: integer
+          description: The file size of video file.
+        aspect_ratio_type:
+          $ref: '#/components/schemas/AspectRatioType'
+        video_quality:
+          type: string
+          enum:
+          - ORIGINAL
+          - HIGH
+          - MIDDLE
+          - LOW
+          description: The quality of the video according to the delivery spec.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which this record was created
+    ImageCreativeInfoRequest:
+      type: object
+      description: Required when `format` is `IMAGE`.
+      required:
+      - headline
+      - description
+      - sponsored_name
+      - media_file_ids
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        description:
+          $ref: '#/components/schemas/Description'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_file_ids:
+          $ref: '#/components/schemas/MediaFileIds'
+    SubmissionStatus:
+      type: string
+      enum:
+      - BEFORE_SUBMISSION
+      - SUBMITTED
+      description: 'This is the status of the ad to know whether our customers submit the ad to moderation or not.
+
+        '
+    DeliveryStatusReason:
+      type: string
+      enum:
+      - CAMPAIGN_DELETED
+      - CAMPAIGN_PAUSED
+      - NO_AD_GROUPS
+      - ALL_AD_GROUPS_PAUSED_OR_DELETED
+      - NO_ADS
+      - NO_SUBMITTED_ADS
+      - ALL_ADS_PAUSED_DELETED_OR_REJECTED
+      - NO_APPROVED_ADS
+      - CAMPAIGN_STARTS_IN_FUTURE
+      - CAMPAIGN_ENDED
+      - CAMPAIGN_OUTSIDE_DAILY_SCHEDULE
+      - NO_ACTIVE_APPROVED_ADS
+      - CAMPAIGN_ELIGIBLE
+      - AD_GROUP_DELETED
+      - AD_GROUP_PAUSED
+      - AD_GROUP_ELIGIBLE
+      - AD_DELETED
+      - AD_NOT_SUBMITTED
+      - AD_NOT_REVIEWED
+      - AD_REJECTED
+      - AD_PAUSED
+      - AD_ELIGIBLE
+      - CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT
+      - UNCONFIRMED
+      - BUSINESS_DISABLED
+      - AD_ACCOUNT_OR_BRAND_DISABLED
+      - BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW
+      - BUSINESS_NOT_APPROVED
+      - AD_ACCOUNT_NOT_APPROVED
+      - PAYMENT_METHOD_NOT_VERIFIED
+      - PAYMENT_METHOD_ISSUE
+      - PRODUCT_SET_NOT_READY
+      - STORE_SET_NOT_READY
+      description: 'An enum field for the reason the delivery status was determined.
+
+        | Reason                                    | Layers    |
+
+        |-------------------------------------------|-----------|
+
+        | CAMPAIGN_DELETED                          | Campaign  |
+
+        | CAMPAIGN_PAUSED                           | Campaign, Ad group, Ad |
+
+        | NO_AD_GROUPS                              | Campaign  |
+
+        | ALL_AD_GROUPS_PAUSED_OR_DELETED           | Campaign  |
+
+        | NO_ADS                                    | Campaign, Ad group |
+
+        | NO_SUBMITTED_ADS                          | Campaign, Ad group |
+
+        | ALL_ADS_PAUSED_DELETED_OR_REJECTED        | Campaign, Ad group |
+
+        | NO_APPROVED_ADS                           | Campaign, Ad group |
+
+        | CAMPAIGN_STARTS_IN_FUTURE                 | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_ENDED                            | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_OUTSIDE_DAILY_SCHEDULE           | Campaign |
+
+        | NO_ACTIVE_APPROVED_ADS                    | Campaign, Ad group |
+
+        | CAMPAIGN_ELIGIBLE                         | Campaign  |
+
+        | AD_GROUP_DELETED                          | Ad group  |
+
+        | AD_GROUP_PAUSED                           | Ad group, Ad  |
+
+        | AD_GROUP_ELIGIBLE                         | Ad group  |
+
+        | AD_DELETED                                | Ad        |
+
+        | AD_NOT_SUBMITTED                          | Ad        |
+
+        | AD_NOT_REVIEWED                           | Ad        |
+
+        | AD_REJECTED                               | Ad        |
+
+        | AD_PAUSED                                 | Ad        |
+
+        | AD_ELIGIBLE                               | Ad        |
+
+        | CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT | Campaign, Ad group, Ad|
+
+        | UNCONFIRMED                               | Campaign, Ad group, Ad|
+
+        | BUSINESS_DISABLED                         | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_OR_BRAND_DISABLED              | Campaign, Ad group, Ad |
+
+        | BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW      | Campaign, Ad group, Ad |
+
+        | BUSINESS_NOT_APPROVED                     | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_NOT_APPROVED                   | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_NOT_VERIFIED               | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_ISSUE                      | Campaign, Ad group, Ad |
+
+        | PRODUCT_SET_NOT_READY                     | Campaign, Ad group, Ad |
+
+        | STORE_SET_NOT_READY                       | Campaign, Ad group, Ad |
+
+        '
+    Headline:
+      type: string
+      minLength: 10
+      maxLength: 70
+      description: "Headline text of a Creative.\n\nNote: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)\n\nMaximum length of the headline changes depending on the creative format.\n| Creative Format | Max Length |\n| --------------- | ---------- |\n| IMAGE,CAROUSEL  | 70         |\n| VIDEO           | 56         |\n\nA Validation Error will also be returned if the field contains illegal characters or illegal character sequences.\n\n**Dynamic Tags (controlled by feature flag `AMV2-1031`):**\n\nWhen the feature flag is enabled, the headline supports dynamic tags that are replaced with user location data during ad delivery.\n\nSupported tags (case-insensitive):\n- For US region ad accounts: `{state}`, `{city}`\n- For JP region ad accounts: `{prefecture}`, `{city}`\n\nTag validation rules:\n- Only the supported tags listed above are allowed\n- Tags must use the exact format with curly brackets: `{tag_name}`\n- When the feature flag is disabled, any `{` or `}` characters in the text will be rejected\n- Dynamic Ads (campaigns with `is_dynamic_ads` = `true`) do not support dynamic tags\n\nTag replacement during delivery:\n- Tags are replaced with the user's location based on the ad group's targeting configuration\n- If no user location is available, fallback text is used:\n  - US: `{state}` → \"Your area\", `{city}` → \"Your area\"\n  - JP: `{prefecture}` → \"この地域\", `{city}` → \"この地域\"\n\nPreview mock values:\n- US: `{state}` → \"California\", `{city}` → \"Los Angeles\"\n- JP: `{prefecture}` → \"東京都\", `{city}` → \"新宿区\"\n"
+    AdPaginatedResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdResponse'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoResponse'
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    CreativeResponse:
+      type: object
+      required:
+      - format
+      - creative_id
+      - created_at
+      - updated_at
+      properties:
+        format:
+          $ref: '#/components/schemas/Format'
+        creative_id:
+          type: integer
+          format: int64
+          description: The ID of the creative.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which the adgroup was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The date-time at which the adgroup was last updated.
+        image_creative_info:
+          $ref: '#/components/schemas/ImageCreativeInfoResponse'
+        video_creative_info:
+          $ref: '#/components/schemas/VideoCreativeInfoResponse'
+        carousel_creative_info:
+          $ref: '#/components/schemas/CarouselCreativeInfoResponse'
+        catalog_carousel_creative_info:
+          $ref: '#/components/schemas/CatalogCarouselCreativeInfoResponse'
+        catalog_image_creative_info:
+          $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
+      description: 'The response of the creative resource.
+
+
+        Only one of `image_creative_info`, `video_creative_info`, `carousel_creative_info`, `catalog_carousel_creative_info`, or `catalog_image_creative_info` will be returned based on the format of the creative.
+
+        '
+    Description:
+      type: string
+      minLength: 10
+      maxLength: 180
+      description: "Description text of a Creative. This is used when an Ad is displayed in SmartView.\n- Required if the creative format is `IMAGE`.\n- Must be null for other formats.\n\nNote: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)\n\nA Validation Error will also be returned if the field contains illegal characters or illegal character sequences.\n\n**Dynamic Tags (controlled by feature flag `AMV2-1031`):**\n\nWhen the feature flag is enabled, the description supports dynamic tags that are replaced with user location data during ad delivery.\n\nSupported tags (case-insensitive):\n- For US region ad accounts: `{state}`, `{city}`\n- For JP region ad accounts: `{prefecture}`, `{city}`\n\nTag validation rules:\n- Only the supported tags listed above are allowed\n- Tags must use the exact format with curly brackets: `{tag_name}`\n- When the feature flag is disabled, any `{` or `}` characters in the text will be rejected\n- Dynamic Ads (campaigns with `is_dynamic_ads` = `true`) do not support dynamic tags\n\nTag replacement during delivery:\n- Tags are replaced with the user's location based on the ad group's targeting configuration\n- If no user location is available, fallback text is used:\n  - US: `{state}` → \"Your area\", `{city}` → \"Your area\"\n  - JP: `{prefecture}` → \"この地域\", `{city}` → \"この地域\"\n\nPreview mock values:\n- US: `{state}` → \"California\", `{city}` → \"Los Angeles\"\n- JP: `{prefecture}` → \"東京都\", `{city}` → \"新宿区\"\n"
+    CreativePatchRequest:
+      type: object
+      properties:
+        image_creative_info:
+          $ref: '#/components/schemas/ImageCreativeInfoPatchRequest'
+        video_creative_info:
+          $ref: '#/components/schemas/VideoCreativeInfoPatchRequest'
+        carousel_creative_info:
+          $ref: '#/components/schemas/CarouselCreativeInfoPatchRequest'
+        catalog_carousel_creative_info:
+          $ref: '#/components/schemas/CatalogCarouselCreativeInfoRequest'
+        catalog_image_creative_info:
+          $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
+    CarouselCardRequest:
+      type: object
+      description: 'Combination of image and caption text for carousel format.
+
+        '
+      required:
+      - caption
+      - media_file_id
+      properties:
+        caption:
+          type: string
+          minLength: 5
+          maxLength: 50
+        media_file_id:
+          $ref: '#/components/schemas/CarouselCardMediaFileId'
+    ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    StoreSetId:
+      type: integer
+      format: int64
+      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
+
+        Store sets are managed under Business Management.
+
+        '
+    IncludeDeleted:
+      type: boolean
+      default: false
+    ClickDestinationType:
+      type: string
+      enum:
+      - WEB_VIEW
+      - BROWSER
+      - APP
+      - APP_STORE
+      nullable: true
+      description: "This defines which components SmartNews opens after an ad is clicked.\n\nIf click_destination_type = null when creating campaign then default value is set as below:\n  1. click_destination_type = APP / APP_STORE for APP_PROMOTION objective\n  2. click_destination_type = WEB_VIEW for remaining available objectives\n\n| Objective     | Available click destination types |\n|---------------|-----------------------------------|\n| TRAFFIC       | WEB_VIEW, BROWSER                 |\n| SALES         | WEB_VIEW, BROWSER                 |\n| AWARENESS     | WEB_VIEW, BROWSER                 |\n| APP_PROMOTION | APP, APP_STORE                    |\n\n`BROWSER` is not usable for US region ad accounts.\n"
+    CarouselCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - sponsored_name
+      - carousel_cards
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        carousel_cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselCardResponse'
+    Page:
+      type: integer
+      minimum: 1
+      default: 1
+      example: 2
+      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
+
+
+        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
+
+        '
+    Format:
+      type: string
+      enum:
+      - IMAGE
+      - VIDEO
+      - CAROUSEL
+      - CATALOG_CAROUSEL
+      - CATALOG_IMAGE
+      description: 'The format of the Creative that defines the view attribution of an Ad.
+
+
+        Note: `CAROUSEL`, `CATALOG_CAROUSEL`, and `CATALOG_IMAGE` are not settable for US region ad accounts.
+
+        '
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    BadRequestErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BAD_REQUEST
+    CarouselCardResponse:
+      type: object
+      description: 'Caption and Media file combination for carousel format.
+
+        '
+      required:
+      - caption
+      - media_file
+      properties:
+        caption:
+          type: string
+          minLength: 5
+          maxLength: 50
+        media_file:
+          description: The image for the carousel needs to be 1:1 aspect ratio.
+          $ref: '#/components/schemas/MediaFileResponse'
+    MediaFileResponse:
+      type: object
+      required:
+      - media_file_id
+      - ad_account_id
+      - media_type
+      - file_name
+      - images
+      - created_at
+      - status
+      properties:
+        media_file_id:
+          type: integer
+          format: int64
+          description: ID of the media file.
+        ad_account_id:
+          type: integer
+          format: int64
+          description: ID of the Ad Account that the media file belongs to.
+        media_type:
+          $ref: '#/components/schemas/MediaType'
+        file_name:
+          type: string
+          description: Name of the media file when the file is uploaded.
+        images:
+          type: object
+          required:
+          - full
+          - half
+          - original
+          properties:
+            full:
+              $ref: '#/components/schemas/ImageResponse'
+            half:
+              $ref: '#/components/schemas/ImageResponse'
+            original:
+              $ref: '#/components/schemas/ImageResponse'
+          description: 'The definitions of this field are different depending on the Media Type:
+
+            | Media Type | Definition                                           |
+
+            |------------|------------------------------------------------------|
+
+            | IMAGE      | The image files (Full/Half/Original).                |
+
+            | VIDEO      | The auto-generated thumbnails of the uploaded video. |
+
+            '
+        videos:
+          type: object
+          required:
+          - high
+          - middle
+          - low
+          - original
+          properties:
+            high:
+              $ref: '#/components/schemas/VideoResponse'
+            middle:
+              $ref: '#/components/schemas/VideoResponse'
+            low:
+              $ref: '#/components/schemas/VideoResponse'
+            original:
+              $ref: '#/components/schemas/VideoResponse'
+          description: The video files (High/Middle/Low/Original).
+        thumbnail_media_file_id:
+          type: integer
+          format: int64
+          description: The media_file_id of the auto-generated thumbnail. Only Available for `VIDEO` media file.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which the media file was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The date-time at which the media file was last updated.
+        status:
+          $ref: '#/components/schemas/MediaFileStatus'
+    PriceLabelEnabled:
+      type: boolean
+      nullable: true
+      description: "If `true`, show a price label on the ad. Otherwise, do not show.\n\nThis field is required when the parent campaign has `is_dynamic_ads` set to `true` and ad's creative is of \nCATALOG_CAROUSEL format type. \nOtherwise, this field is not settable.\n"
+      default: null
+    Url:
+      type: string
+      description: The storage full url path of the image file.
+    CatalogImageCreativeInfoRequestResponse:
+      type: object
+      description: 'Required when `format` is `CATALOG_IMAGE`.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - sponsored_name
+      properties:
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+    ConfiguredStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - DELETED
+      description: The status of the object configured by an ad operator.
+    BusinessErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BusinessError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UrlTrackingParameters:
+      type: string
+      minLength: 1
+      maxLength: 256
+      nullable: true
+      example: utm_source=smartnews&utm_medium=display&cp_id={campaign_id}
+      description: 'The parameters added to the landing page URL. This field is only supported for Dynamic Ads.
+
+
+        The API will return a Validation Error if the field doesn''t follow the below rules:
+
+        1. All characters should be escaped accordingly, except macro parameters.
+
+        2. The following macro parameters are supported. The curly brackets characters `{` or `}` can only be used as part of the macro parameters.
+
+        - `{ad_account_id}`
+
+        - `{campaign_id}`
+
+        - `{ad_group_id}`
+
+        - `{ad_id}`
+
+        - `{click_id}`
+
+        '
+    AdSchemas_Name:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: 'Name of an Ad. It is only used by customers to distinguish their Ads on Ads Manager.
+
+
+        Note: Our standard length calculation rules apply to length validation: [See details](https://help-ads.smartnews.com/item-3888/)
+
+        '
+    RejectionReason:
+      type: object
+      required:
+      - policy
+      - description
+      - element_type
+      - element_id
+      properties:
+        policy:
+          type: string
+          description: 'The policy that the ad violated in the specified language
+
+            '
+          example: 医薬品、医薬部外品、医療機器
+        description:
+          type: string
+          description: 'The description of the policy that the ad violated in the specified language
+
+            '
+          example: '[LP]医療関係者等の推薦にあたるためNG'
+        url:
+          type: string
+          description: 'URL to a help page for more details about the policy violation
+
+            '
+          example: https://help-ads.smartnews.com/item-876/#2
+        element_type:
+          $ref: '#/components/schemas/ModerationElementType'
+        element_id:
+          type: integer
+          format: int64
+          description: 'id that uniquely identifies the element that was rejected.
+
+            Currently, `CREATIVE_IMAGE` is the only element type that you cannot uniquely identify the element without `element_id`.
+
+            However, for consistency, `element_id` is also set for other element types.
+
+            The `element_id` is one of the following:
+
+            | Element Type ([object].[field])                                  | value                          |
+
+            |------------------------------------------------------------------|--------------------------------|
+
+            | AD,AD.LANDING_PAGE_URL                                           | ad_id                          |
+
+            | CREATIVE.MEDIA_FILES                                             | media_file_id                  |
+
+            | CREATIVE.HEADLINE, CREATIVE.DESCRIPTION, CREATIVE.SPONSORED_NAME | creative_id                    |
+
+            | CREATIVE.CAROUSEL_CARDS                                          | index position in cards from 0 |
+
+            '
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    DeliveryStatusObject:
+      type: object
+      required:
+      - status
+      - reason
+      - description
+      properties:
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        reason:
+          $ref: '#/components/schemas/DeliveryStatusReason'
+        description:
+          type: string
+          description: A localized human readable description of the reason. The language is controlled by the Accept-Language header in the request.
+      description: An Object that provides information about the delivery status of the campaign.
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    CarouselCreativeInfoRequest:
+      type: object
+      description: 'Required when `format` is `CAROUSEL`.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - headline
+      - sponsored_name
+      - carousel_cards
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        carousel_cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselCardRequest'
+          minItems: 3
+          maxItems: 10
+          description: 'The order in the array represents the order of the cards.
+
+            '
+    BusinessErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BUSINESS_ERROR
+    AdImpressionMeasurement:
+      type: object
+      description: 'Configuration for 3rd party ad impression measurement
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      nullable: true
+      required:
+      - vendor_type
+      - measurement_url
+      properties:
+        vendor_type:
+          $ref: '#/components/schemas/VendorType'
+        measurement_url:
+          type: string
+          example: https://example.com
+          description: 'The URL to use for impression measurement
+
+            '
+    MediaType:
+      type: string
+      description: The type of the media file.
+      enum:
+      - IMAGE
+      - VIDEO
+    PaginationInfoResponse:
+      description: 'An object describing pagination parameters for this response.
+
+        '
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_objects
+      properties:
+        page:
+          type: integer
+          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
+          example: 1
+        page_size:
+          type: integer
+          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
+          example: 100
+        total_pages:
+          type: integer
+          description: The total number of pages for this query.
+          example: 10
+        total_objects:
+          type: integer
+          description: The total number of objects that exist across all pages.
+          example: 987
+    BadRequestError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BadRequestErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    VideoCreativeInfoRequest:
+      type: object
+      description: Required when `format` is `VIDEO`.
+      required:
+      - headline
+      - sponsored_name
+      - media_file_ids
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_file_ids:
+          $ref: '#/components/schemas/MediaFileIds'
+    MediaFileStatus:
+      type: string
+      description: 'The status of the media file.
+
+        - `ACTIVE`: The media file is visible in the Media Library.
+
+        - `INACTIVE`: The media file has been soft-deleted and is no longer visible in the Media Library.
+
+
+        Note: Even if a media file is set to `INACTIVE`, it will still be visible in the creatives where it is used.
+
+        '
+      enum:
+      - ACTIVE
+      - INACTIVE
+    ModerationElementType:
+      type: object
+      required:
+      - object
+      - field
+      properties:
+        object:
+          type: string
+          enum:
+          - AD
+          - CREATIVE
+          description: 'This specifies which object violates the policy
+
+            '
+        field:
+          type: string
+          nullable: true
+          enum:
+          - LANDING_PAGE_URL
+          - HEADLINE
+          - DESCRIPTION
+          - MEDIA_FILES
+          - SPONSORED_NAME
+          - CAROUSEL_CARDS
+          description: 'This specifies the field of the object that violates the policy. This can be null if the object itself violates the policy.
+
+            '
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    CtaLabel:
+      type: string
+      description: If specified, a call to action button with the specified option is displayed on the ad (may not be displayed in all placements).
+      enum:
+      - BOOK_NOW
+      - START_BOOKING
+      - CONTACT_US
+      - CALL_US
+      - REGISTER
+      - SIGN_UP
+      - SHOP_NOW
+      - START_ORDER
+      - SEE_MORE
+      - LEARN_MORE
+      - WATCH_MORE
+      - REPLY
+      - APPLY_NOW
+      - REQUEST_CATALOG
+      - RESPOND_TO_SURVEY
+      - PLAY_GAME
+      - USE_APP
+      - DOWNLOAD
+      - INSTALL
+      - LAUNCH_APP
+      nullable: true
+    VideoCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - sponsored_name
+      - format
+      - media_files
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFileResponse'
+    ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ResourceNotFoundError'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    ResourceNotFoundErrorExtension:
+      type: object
+      required:
+      - type
+      - resource_type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_FOUND
+          - DELETED
+        resource_type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+          - AD
+          - MEDIA_FILE
+          - AD_ACCOUNT
+          - PIXEL
+          - CUSTOM_AUDIENCE
+          - PIXEL_URL_CONFIGURATION
+          - AM_CONFIGURATION
+          - CATALOG
+          - STORE_SET
+          - RULE
+    AdCreationParams:
+      type: object
+      required:
+      - name
+      - configured_status
+      properties:
+        name:
+          $ref: '#/components/schemas/AdSchemas_Name'
+        landing_page_url:
+          $ref: '#/components/schemas/LandingPageUrl'
+        cta_label:
+          $ref: '#/components/schemas/CtaLabel'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+          description: 'Used for Call to Action Button. In the creative, corresponding translated UI text will be displayed in Creative.
+
+
+            No difference for the available Call To Action labels for each region.
+
+
+            This field is set automatically and not configurable if the `click_destination_type` of the Campaign is `APP_STORE` or `APP`.
+
+            '
+        impression_measurement:
+          $ref: '#/components/schemas/AdImpressionMeasurement'
+        url_tracking_parameters:
+          $ref: '#/components/schemas/UrlTrackingParameters'
+        is_price_label_enabled:
+          $ref: '#/components/schemas/PriceLabelEnabled'
+    ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    CarouselCreativeInfoPatchRequest:
+      type: object
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        carousel_cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselCardRequest'
+          minItems: 3
+          maxItems: 10
+          description: 'The order in the array represents the order of the cards.
+
+            '
+    ImageCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - description
+      - sponsored_name
+      - media_files
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        description:
+          $ref: '#/components/schemas/Description'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFileResponse'
+          description: 'Only image media files are returned.
+
+            '
+    ReadyForDelivery:
+      type: boolean
+      description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
+
+        When the flag is true, the following fields are not updatable anymore.
+
+        1. `start_date_time`
+
+        2. `billing_event`
+
+        3. `optimization_goal`
+
+        4. `optimization_event`
+
+        5. `website_tracking_tag`
+
+        6. `viewability_measurement`
+
+        7. `app_promotion_info` (PatchAppPromotionInfo)
+
+        '
+  requestBodies:
+    AdsByAdGroupPaginated_post-requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AdRequest'
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

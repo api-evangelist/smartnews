@@ -1,0 +1,2912 @@
+openapi: 3.0.3
+info:
+  version: 3.0.1
+  title: SmartNews Marketing ad custom-audience API
+  description: "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n"
+  contact:
+    name: SmartNews Ads Support
+servers:
+- url: https://ads.smartnews.com
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: custom-audience
+paths:
+  /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences:
+    get:
+      tags:
+      - custom-audience
+      summary: List custom audiences
+      description: Get a list of Custom Audiences for an ad account ID.
+      operationId: listCustomAudience
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/AdAccountId'
+      responses:
+        '200':
+          description: A list of custom audiences for the specified ad account ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomAudienceArrayResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the query is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    post:
+      tags:
+      - custom-audience
+      summary: Create a Custom Audience
+      description: Create a Custom Audience
+      operationId: createCustomAudience
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/AdAccountId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomAudienceCreationRequest'
+      responses:
+        '200':
+          description: Returns the created custom audience
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomAudienceResponse'
+        '400':
+          description: Bad Request. The request body must be JSON format. This error response means the JSON body is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '409':
+          description: Business Error. The request body is formatted correctly but doesn't pass some ad account/system level restriction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}:
+    get:
+      tags:
+      - custom-audience
+      summary: Get a Custom Audience
+      description: Get a single custom audience by ID.
+      operationId: getCustomAudience
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/AdAccountId'
+      - name: custom_audience_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          description: Unique ID of the custom audience
+      responses:
+        '200':
+          description: The custom audience that matches the ID specified in the path.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomAudienceResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the query is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    patch:
+      tags:
+      - custom-audience
+      summary: Update a Custom Audience
+      description: 'Update a custom audience.
+
+        '
+      operationId: updateCustomAudience
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/AdAccountId'
+      - name: custom_audience_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          description: Unique id of the custom audience
+      requestBody:
+        required: true
+        description: "`_rules` fields are array fields representing different types of rules that are updated using the following logic:\n  - Create a rule: Include a rule object with all required fields specified, and no rule ID.\n  - Update a rule: Include a rule object with the rule ID of the existing rule, and any fields which should be updated.\n  - Keep a rule: Include a rule object with the rule ID of the existing rule, and no other fields specified.\n  - Delete a rule: Omit the object with the rule ID that you want to delete.\n"
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomAudiencePatchRequest'
+      responses:
+        '200':
+          description: Returns the created custom audience
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomAudienceResponse'
+        '400':
+          description: Bad Request. The request body must be JSON format. This error response means the JSON body is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '409':
+          description: Business Error. The request body is formatted correctly but doesn't pass some ad account/system level restriction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessErrorResponse'
+        '422':
+          description: Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+    delete:
+      tags:
+      - custom-audience
+      summary: Delete a Custom Audience
+      description: "Delete a single custom audience by ID. NOTE: the custom audience must not be currently used in any Ad Group targeting.\n\nRemove the custom audience from all Ad Group targeting before attempting to delete it.\n\nUse the `GET ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}/ad_groups` endpoint \nto determine which ad groups are currently using the custom audience.\n"
+      operationId: deleteCustomAudience
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/AdAccountId'
+      - name: custom_audience_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          description: Unique id of the custom audience
+      responses:
+        '204':
+          description: The custom audience was deleted successfully. There is no response body.
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the query is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '409':
+          description: Business Error. The request body is formatted correctly but doesn't pass some ad account/system level restriction.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}/ad_groups:
+    get:
+      tags:
+      - custom-audience
+      summary: Get ad groups by custom audience.
+      description: Get an array of adgroups that use the specified custom audience for targeting.
+      operationId: getAdGroupsByCustomAudience
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          $ref: '#/components/schemas/AcceptLanguage'
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: custom_audience_id
+        in: path
+        required: true
+        description: The ID of the custom audience to retrieve ad groups for.
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: An array of ad group objects that use the specified custom audience for targeting.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdGroupArrayResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '404':
+          description: When the resource specified in the query is not found or the user doesn't have permission to access the resource.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceNotFoundErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+  /api/ma/v3/ad_accounts/{ad_account_id}/audience_id_list_files:
+    post:
+      tags:
+      - custom-audience
+      summary: Create a audience ID list file.
+      operationId: postAudienceIdListFile
+      parameters:
+      - name: Accept-Language
+        in: header
+        schema:
+          type: string
+      - name: ad_account_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AudienceIdListFileRequest'
+      responses:
+        '200':
+          description: Return the created audience id list file.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudienceIdListFileResponse'
+        '401':
+          description: Unauthorized. The access token is either expired or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+              x-examples:
+                expiredToken:
+                  summary: Access token has expired.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token has expired.
+                      retriable: false
+                invalidToken:
+                  summary: Access token is invalid.
+                  value:
+                    error:
+                      type: UNAUTHORIZED
+                      message: Token is invalid.
+                      retriable: false
+        '403':
+          description: Forbidden. Access to the requested resource is denied.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForbiddenErrorResponse'
+              examples:
+                terms_of_service_not_accepted:
+                  summary: User has not accepted the terms of service.
+                  value:
+                    error:
+                      type: TERMS_OF_SERVICE_NOT_ACCEPTED
+                      message: The owner of the assets must accept the Ads terms of service.
+                      terms_of_service_path: /terms/agreement
+                      retriable: false
+                access_denied:
+                  summary: Access is denied due to insufficient permissions.
+                  value:
+                    error:
+                      type: ACCESS_DENIED
+                      message: Access denied.
+                      retriable: false
+        '409':
+          description: Business Error. The request body is formatted correctly but not correct in the business definitions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusinessErrorResponse'
+        '422':
+          description: Validation Error. The request body doesn't pass the format check or some fields contain invalid values. The `error_fields` shows the fields that don't pass the validations.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '500':
+          description: Unexpected error occurred.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnexpectedErrorResponse'
+        '503':
+          description: The service is temporarily unavailable.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
+        '504':
+          description: Upload MediaFile timeout error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GatewayTimeoutErrorResponse'
+components:
+  schemas:
+    CustomAudienceResponse:
+      type: object
+      description: 'In Legacy Custom Audiences (type: LEGACY), only the `name`, `custom_audience_id` and `type` fields are valid.
+
+        Other fields are dummy data.
+
+        '
+      required:
+      - custom_audience_id
+      - name
+      - type
+      - rules_combining_logic
+      - result
+      - configured_status
+      - created_at
+      - updated_at
+      properties:
+        custom_audience_id:
+          type: integer
+          format: int64
+          description: Unique ID of the custom audience.
+        web_activity_rules:
+          type: array
+          description: An array of web activity rules for this custom audience. It is `null` unless `type` is `WEB_ACTIVITY`.
+          nullable: true
+          items:
+            $ref: '#/components/schemas/WebActivityRuleResponse'
+        ads_engagement_rules:
+          type: array
+          description: An array of ads engagement rules for this custom audience. It is `null` unless `type` is `ADS_ENGAGEMENT`.
+          nullable: true
+          items:
+            $ref: '#/components/schemas/AdsEngagementRuleResponse'
+        audience_id_list_rules:
+          type: array
+          description: An array of audience id list rules for this custom audience. It is `null` unless `type` is `AUDIENCE_ID_LIST_FILE`.
+          nullable: true
+          items:
+            $ref: '#/components/schemas/AudienceIdListRuleResponse'
+        keyword_rules:
+          type: array
+          description: An array of keyword rules for this custom audience. It is `null` unless `type` is `KEYWORD`.
+          nullable: true
+          items:
+            $ref: '#/components/schemas/KeywordRuleResponse'
+        name:
+          $ref: '#/components/schemas/CustomAudienceSchemas_Name'
+        type:
+          $ref: '#/components/schemas/Type'
+        rules_combining_logic:
+          $ref: '#/components/schemas/RulesCombiningLogic'
+        result:
+          $ref: '#/components/schemas/CustomAudienceResult'
+        created_at:
+          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CommonSchemas_UpdatedAt'
+        configured_status:
+          $ref: '#/components/schemas/CustomAudienceConfiguredStatus'
+    AdGroupArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdGroupResponse'
+    TargetingType:
+      type: string
+      description: "The type of DA targeting. \n\nRetargeting is for finding existing user; \nProspecting is for finding new user based on existing user log.\n\nThis value is NOT updatable once the campaign is ready for delivery.\n"
+      enum:
+      - RETARGETING
+      - PROSPECTING
+    ReadyForDelivery:
+      type: boolean
+      description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
+
+        When the flag is true, the following fields are not updatable anymore.
+
+        1. `start_date_time`
+
+        2. `billing_event`
+
+        3. `optimization_goal`
+
+        4. `optimization_event`
+
+        5. `website_tracking_tag`
+
+        6. `viewability_measurement`
+
+        7. `app_promotion_info` (PatchAppPromotionInfo)
+
+        '
+    AdGroupID:
+      type: integer
+      format: int64
+      description: The ID of the ad group.
+    DeliveryStatus:
+      type: string
+      enum:
+      - DELETED
+      - PAUSED
+      - NOT_ELIGIBLE
+      - PENDING
+      - ENDED
+      - ELIGIBLE
+      - UNKNOWN
+      - DISABLED
+      description: 'The delivery status of the object determined by the system.
+
+
+        | Delivery status | What it means |
+
+        |-----------------|---------------|
+
+        | DELETED         | The object is deleted by an ad operator |
+
+        | PAUSED          | The object is paused by an ad operator  |
+
+        | NOT_ELIGIBLE    | The object is configured to be active but is not delivered due to some conditions. Please check the `reason` or `description` field for more details |
+
+        | PENDING         | The object is configured to be active and will be delivered when certain conditions are met. Please check Please check the `reason` or `description` field for more details |
+
+        | ENDED           | The object is configured to be active but the campaign has ended |
+
+        | ELIGIBLE        | The object is configured to be active and is delivering ads |
+
+        | UNKNOWN         | The object is configured to be active but its delivery status is unknown |
+
+        | DISABLED        | The object is disabled because the business, account, or brand is disabled|
+
+        '
+    ZipCode:
+      type: string
+      pattern: ^\d{5}$
+      description: 'A ZIP code used for ad group location targeting in the United States.
+
+
+        - Accepts exactly five numeric digits. Leading zeroes must be included where applicable.
+
+        - Only available for ad accounts in the US region.
+
+        - Only valid ZIP codes are accepted.
+
+        '
+      example: '10001'
+    HyperLocationConfigResponse:
+      type: object
+      nullable: true
+      description: 'An object containing hyper location targeting configuration.
+
+        '
+      required:
+      - user_segment
+      - location_segments
+      properties:
+        user_segment:
+          $ref: '#/components/schemas/UserSegment'
+        location_segments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LocationSegmentResponse'
+          description: 'The list of location segments being targeted.
+
+            '
+    KeywordRuleCreationRequest:
+      type: object
+      required:
+      - window
+      - frequency
+      - keywords
+      properties:
+        window:
+          $ref: '#/components/schemas/KeywordWindow'
+        frequency:
+          $ref: '#/components/schemas/KeywordFrequency'
+        keywords:
+          $ref: '#/components/schemas/Keywords'
+    CustomAudienceCreationRequest:
+      type: object
+      required:
+      - name
+      - type
+      - rules_combining_logic
+      - configured_status
+      properties:
+        name:
+          $ref: '#/components/schemas/CustomAudienceSchemas_Name'
+        type:
+          $ref: '#/components/schemas/CustomAudienceRequestType'
+        rules_combining_logic:
+          $ref: '#/components/schemas/RulesCombiningLogic'
+        web_activity_rules:
+          type: array
+          nullable: true
+          description: An array of web activity rules for this custom audience. It can only be specified when `type` is `WEB_ACTIVITY`.
+          items:
+            $ref: '#/components/schemas/WebActivityRuleCreationRequest'
+        ads_engagement_rules:
+          type: array
+          nullable: true
+          description: An array of ads engagement rules for this custom audience. It can only be specified when `type` is `ADS_ENGAGEMENT`.
+          items:
+            $ref: '#/components/schemas/AdsEngagementRuleCreationRequest'
+        audience_id_list_rules:
+          type: array
+          nullable: true
+          description: An array of id list rules for this custom audience. It can only be specified when `type` is `AUDIENCE_ID_LIST`.
+          items:
+            $ref: '#/components/schemas/AudienceIdListRuleCreationRequest'
+        keyword_rules:
+          type: array
+          nullable: true
+          description: An array of keyword rules for this custom audience. It can only be specified when `type` is `KEYWORD`.
+          items:
+            $ref: '#/components/schemas/KeywordRuleCreationRequest'
+        configured_status:
+          $ref: '#/components/schemas/CustomAudienceConfiguredStatus'
+    WebActivityRuleResponse:
+      type: object
+      required:
+      - custom_audience_web_activity_rule_id
+      - pixel_tag_id
+      - events
+      - urls
+      - time_period
+      - created_at
+      - updated_at
+      properties:
+        custom_audience_web_activity_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        pixel_tag_id:
+          $ref: '#/components/schemas/WebActivityRuleSchemas_PixelTagId'
+        events:
+          $ref: '#/components/schemas/Events'
+        urls:
+          $ref: '#/components/schemas/Urls'
+        time_period:
+          $ref: '#/components/schemas/TimePeriod'
+        created_at:
+          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CommonSchemas_UpdatedAt'
+    Events:
+      type: array
+      items:
+        $ref: '#/components/schemas/CustomAudienceEvent'
+      description: The events to target for this rule.
+    OptimizationEvent:
+      type: string
+      enum:
+      - PURCHASE
+      - ADD_TO_CART
+      - INITIATE_CHECKOUT
+      - SUBMIT_FORM
+      - SUBSCRIBE
+      - COMPLETE_REGISTRATION
+      - CONTACT
+      - SIGN_UP
+      - VIEW_CONTENT
+      - ADD_PAYMENT_INFO
+      - ADD_TO_WISH_LIST
+      - VISIT_CART
+      - CUSTOMIZE_PRODUCT
+      - SEARCH
+      - BOOKING
+      - DOWNLOAD
+      - START_TRIAL
+      - SHARE
+      - LOGIN
+      - DONATE
+      - FIND_LOCATION
+      - TIME_SPENT
+      - LEAD
+      - INSTALL
+      - D1_RETENTION
+      nullable: true
+      description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
+    DynamicAdsConfigSchema:
+      type: object
+      required:
+      - targeting_type
+      description: 'The Configuration of the dynamic ads.
+
+        If campaign is for dynamic ads, this object is required.
+
+        '
+      properties:
+        targeting_type:
+          $ref: '#/components/schemas/TargetingType'
+        recency_days:
+          $ref: '#/components/schemas/RecencyDays'
+        product_set_id:
+          $ref: '#/components/schemas/ProductSetID'
+    RulesCombiningLogic:
+      type: string
+      enum:
+      - AND
+      - OR
+      description: How the rules will be combined for this custom audience.
+    SmartViewArticleCategoryTargeting:
+      type: object
+      nullable: true
+      required:
+      - include
+      - exclude
+      description: 'SmartView article category targeting settings for ad delivery.
+
+
+        It contains article category IDs to include or exclude for delivery.
+
+
+        This field is only configurable when `media_types` includes `SMART_VIEW`.
+
+
+        include `[]` means all article categories are included
+
+
+        exclude `[]` means no article categories are excluded
+
+
+        A category ID cannot appear in both the include and exclude lists.
+
+
+        Some example settings:
+
+        | **Case** | **Include**        | **Exclude** | **Behavior**                                                      |
+
+        |----------|--------------------|-------------|-------------------------------------------------------------------|
+
+        | 1        | `[]` (include All) | `[]`        | Deliver to all article categories (Also the default value for UI) |
+
+        | 2        | `[]` (include All) | `[1, 3, 5]` | Deliver to all categories except `1, 3, 5`                        |
+
+        | 3        | `[1, 2, 3]`        | `[]`        | Deliver to only categories `1, 2, 3`                              |
+
+        | 4        | `[1, 2]`           | `[3, 5]`    | Deliver only to categories `1, 2` excluding `3, 5`                |
+
+        | 5        | `[1, 2, 3]`        | `[1, 5]`    | ❌ Validation error - category `1` appears in both lists          |
+
+
+        A list of article category IDs can be obtained via the [article categories](#tag/article-category) endpoint.
+
+        '
+      properties:
+        include:
+          description: An array of article category IDs to include for delivery.
+          type: array
+          nullable: false
+          items:
+            $ref: '#/components/schemas/SmartViewArticleCategoryId'
+        exclude:
+          description: An array of article category IDs to exclude for delivery.
+          type: array
+          nullable: false
+          items:
+            $ref: '#/components/schemas/SmartViewArticleCategoryId'
+    AvailabilityStatus:
+      type: string
+      enum:
+      - IN_PROGRESS
+      - FAILURE
+      - TOO_NARROW
+      - NARROW
+      - AVAILABLE
+      - UNUSED
+      description: The status of the custom audience processing, indicating whether it is ready to be used in AdGroup targeting or not.
+    Parent:
+      type: object
+      required:
+      - id
+      - type
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of the parent object.
+        type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+        name:
+          type: string
+          description: The name of the object.
+        objective:
+          $ref: '#/components/schemas/CampaignObjective'
+        optimization_event:
+          $ref: '#/components/schemas/OptimizationEvent'
+        ready_for_delivery:
+          $ref: '#/components/schemas/ReadyForDelivery'
+        store_set_id:
+          $ref: '#/components/schemas/StoreSetId'
+        parent:
+          type: object
+          description: 'The parent of the parent. The properties are the same as parent (`id`, `name`, `type`, `objective`,
+
+            `optimization_event` ,`ready_for_delivery` ,`store_set_id` ,`parent`)
+
+            '
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    MediaTypes:
+      description: 'An array of media types defining where the ads will be displayed in the SmartNews app.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/PlacementMediaType'
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    CampaignID:
+      type: integer
+      format: int64
+      description: The ID of the campaign.
+    BadRequestErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BadRequestError'
+    Type:
+      type: string
+      enum:
+      - WEB_ACTIVITY
+      - ADS_ENGAGEMENT
+      - AUDIENCE_ID_LIST_FILE
+      - KEYWORD
+      - LEGACY
+      description: The type of the custom audience. `LEGACY` custom audiences are those that were created in AMv1.
+    SmartViewArticleKeywordTargeting:
+      type: object
+      nullable: true
+      required:
+      - include
+      - exclude
+      description: 'SmartView article keyword targeting settings for ad delivery.
+
+
+        Ads will be delivered to SmartView ad placements of articles which include and/or exclude these keywords or a similar topic.
+
+
+        This field is only configurable when `media_types` includes `SMART_VIEW`.
+
+
+        include `[]` means deliver to articles containing any keyword
+
+
+        exclude `[]` means no articles are excluded by keyword
+
+
+        A keyword cannot appear in both the include and exclude lists.
+
+
+        Only system available keywords are allowed. To get the list of available keywords, use the `POST /api/ma/v3/article_keywords/search` endpoint.
+
+
+        Duplicate values in the request payload are ignored; the response returns a unique set of keywords.
+
+
+        Some example settings:
+
+        | **Case** | **Include**                          | **Exclude**                | **Behavior**                                                                                        |
+
+        |----------|--------------------------------------|----------------------------|-----------------------------------------------------------------------------------------------------|
+
+        | 1        | `[]` (include All)                   | `[]`                       | Deliver to articles containing any keyword (Also the default value for UI)                          |
+
+        | 2        | `[]` (include All)                   | `["soccer", "baseball"]`   | Deliver to all articles except those containing `"soccer"` or `"baseball"`                          |
+
+        | 3        | `["restaurant", "tokyo", "travel"]`  | `[]`                       | Deliver only to articles containing `"restaurant"`, `"tokyo"`, or `"travel"`                        |
+
+        | 4        | `["restaurant", "tokyo"]`            | `["soccer", "baseball"]`   | Deliver to articles containing `"restaurant"` or `"tokyo"`, excluding those containing `"soccer"` or `"baseball"` |
+
+        | 5        | `["restaurant", "tokyo", "soccer"]`  | `["soccer", "baseball"]`   | ❌ Validation error - keyword `"soccer"` appears in both lists                                     |
+
+        '
+      properties:
+        include:
+          description: An array of keywords. Ads will be delivered to articles containing these keywords.
+          type: array
+          nullable: false
+          items:
+            type: string
+        exclude:
+          description: An array of keywords. Articles containing these keywords will be excluded from delivery.
+          type: array
+          nullable: false
+          items:
+            type: string
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    ValidationErrorExtension:
+      required:
+      - type
+      - error_fields
+      properties:
+        type:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+        error_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
+              reason:
+                type: string
+    CampaignObjective:
+      type: string
+      enum:
+      - TRAFFIC
+      - SALES
+      - AWARENESS
+      - APP_PROMOTION
+      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
+
+
+        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
+
+        '
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    BusinessError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BusinessErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    Interests:
+      description: 'An array of IAB Interest IDs to target.
+
+
+        A list of IAB Interest IDs can be obtained via the [iab_interest_categories](#tag/interests) endpoint.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/IABInterestId'
+    ValidationErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ValidationError'
+    UniqueAudienceCount:
+      type: integer
+      format: int64
+      description: 'The number of unique users in the custom audience.
+
+        This field is only valid when the `availability_status` is `AVAILABLE/TOO_NARROW/NARROW`.
+
+        '
+      nullable: true
+    FileType:
+      type: string
+      description: The type of the audience ID list file.
+      enum:
+      - ADID_SHA256
+    AutomatedTargeting:
+      type: object
+      nullable: true
+      description: 'Automated targeting settings for the ads to be delivered with SN optimized strategy.
+
+
+        If this field is non-null, automated targeting is enabled (even if the object is empty). Otherwise, it is disabled.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      properties:
+        age_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then age targeting will be strictly followed
+        gender_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then gender targeting will be strictly followed
+        location_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then location targeting will be strictly followed
+        custom_audience_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then custom audience will be strictly followed
+        carrier_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then carrier targeting will be strictly followed
+        connection_type_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then connection type targeting will be strictly followed
+        os_version_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then advertiser's os version targeting will be strictly followed
+    WebActivityRulePatchRequest:
+      type: object
+      properties:
+        custom_audience_web_activity_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        pixel_tag_id:
+          $ref: '#/components/schemas/WebActivityRuleSchemas_PixelTagId'
+        events:
+          $ref: '#/components/schemas/Events'
+        urls:
+          $ref: '#/components/schemas/Urls'
+        time_period:
+          $ref: '#/components/schemas/TimePeriod'
+    KeywordWindow:
+      description: 'Period Window for the keyword mapping of keyword custom audience.
+
+        '
+      type: string
+      enum:
+      - LAST_3_DAYS
+      - LAST_7_DAYS
+      - LAST_14_DAYS
+      - LAST_30_DAYS
+      - LAST_60_DAYS
+      - LAST_90_DAYS
+      - LAST_120_DAYS
+      - LAST_150_DAYS
+      - LAST_180_DAYS
+      - LAST_210_DAYS
+      - LAST_240_DAYS
+      - LAST_270_DAYS
+      - LAST_300_DAYS
+      - LAST_330_DAYS
+      - LAST_360_DAYS
+      - LAST_390_DAYS
+    Age:
+      type: string
+      enum:
+      - AGE_UNDER_20
+      - AGE_21_24
+      - AGE_25_29
+      - AGE_30_34
+      - AGE_35_39
+      - AGE_40_44
+      - AGE_45_49
+      - AGE_50_54
+      - AGE_55_59
+      - AGE_60_64
+      - AGE_65_69
+      - AGE_OVER_70
+    AcceptLanguage:
+      type: string
+      description: 'The language to use for system generated text within API responses.
+
+
+        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
+
+        '
+      example: en-US
+    OriginalFileName:
+      minLength: 1
+      maxLength: 255
+      description: 'Filename of the audience ID list file.
+
+        '
+      type: string
+      example: my_list.csv
+    LocationId:
+      type: integer
+      format: int32
+    HasAnyVideoAds:
+      type: boolean
+      description: Whether the ad object has any video ads, including those that have been deleted.
+    ConnectionType:
+      type: string
+      nullable: true
+      enum:
+      - WIFI
+      - CELLULAR_5G
+      - CELLULAR_4G
+      - CELLULAR_3G
+    TimePeriod:
+      type: string
+      description: 'Past number of days of user activity to consider when creating the uuid list for the rule.
+
+
+        Only certain ad accounts can use `LAST_365_DAYS` and `LAST_540_DAYS`.
+
+        '
+      enum:
+      - LAST_7_DAYS
+      - LAST_14_DAYS
+      - LAST_30_DAYS
+      - LAST_60_DAYS
+      - LAST_90_DAYS
+      - LAST_365_DAYS
+      - LAST_540_DAYS
+    KeywordRuleResponse:
+      type: object
+      required:
+      - custom_audience_keyword_rule_id
+      - window
+      - frequency
+      - keywords
+      - created_at
+      - updated_at
+      properties:
+        custom_audience_keyword_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        window:
+          $ref: '#/components/schemas/KeywordWindow'
+        frequency:
+          $ref: '#/components/schemas/KeywordFrequency'
+        keywords:
+          $ref: '#/components/schemas/Keywords'
+        created_at:
+          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CommonSchemas_UpdatedAt'
+    AdAccountId:
+      type: integer
+      format: int64
+      description: Unique ID of the ad account.
+    CustomAudienceSchemas_Name:
+      type: string
+      minLength: 1
+      maxLength: 255
+      example: My Custom Audience
+      description: 'The name of the custom audience.
+
+        Please check [this document](https://help-ads.smartnews.com/item-3888/) for how the length is calculated.
+
+        '
+    AdGroupSchemas_Name:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: 'The name of the ad group.
+
+
+        Note: The maximum length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
+
+        '
+    ProductSetID:
+      type: integer
+      format: int64
+      description: The ID of the product set.
+    WebActivityRuleCreationRequest:
+      type: object
+      required:
+      - pixel_tag_id
+      - events
+      - urls
+      - time_period
+      properties:
+        pixel_tag_id:
+          $ref: '#/components/schemas/WebActivityRuleSchemas_PixelTagId'
+        events:
+          $ref: '#/components/schemas/Events'
+        urls:
+          $ref: '#/components/schemas/Urls'
+        time_period:
+          $ref: '#/components/schemas/TimePeriod'
+    KeywordFrequency:
+      description: 'Frequency for the keyword mapping of keyword custom audience.
+
+        '
+      type: integer
+      format: int64
+      minimum: 1
+      maximum: 15
+    AudienceIdListFileId:
+      type: integer
+      format: int64
+      description: 'Unique identifier of the audience ID list file.
+
+        '
+    DeliveryStatusReason:
+      type: string
+      enum:
+      - CAMPAIGN_DELETED
+      - CAMPAIGN_PAUSED
+      - NO_AD_GROUPS
+      - ALL_AD_GROUPS_PAUSED_OR_DELETED
+      - NO_ADS
+      - NO_SUBMITTED_ADS
+      - ALL_ADS_PAUSED_DELETED_OR_REJECTED
+      - NO_APPROVED_ADS
+      - CAMPAIGN_STARTS_IN_FUTURE
+      - CAMPAIGN_ENDED
+      - CAMPAIGN_OUTSIDE_DAILY_SCHEDULE
+      - NO_ACTIVE_APPROVED_ADS
+      - CAMPAIGN_ELIGIBLE
+      - AD_GROUP_DELETED
+      - AD_GROUP_PAUSED
+      - AD_GROUP_ELIGIBLE
+      - AD_DELETED
+      - AD_NOT_SUBMITTED
+      - AD_NOT_REVIEWED
+      - AD_REJECTED
+      - AD_PAUSED
+      - AD_ELIGIBLE
+      - CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT
+      - UNCONFIRMED
+      - BUSINESS_DISABLED
+      - AD_ACCOUNT_OR_BRAND_DISABLED
+      - BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW
+      - BUSINESS_NOT_APPROVED
+      - AD_ACCOUNT_NOT_APPROVED
+      - PAYMENT_METHOD_NOT_VERIFIED
+      - PAYMENT_METHOD_ISSUE
+      - PRODUCT_SET_NOT_READY
+      - STORE_SET_NOT_READY
+      description: 'An enum field for the reason the delivery status was determined.
+
+        | Reason                                    | Layers    |
+
+        |-------------------------------------------|-----------|
+
+        | CAMPAIGN_DELETED                          | Campaign  |
+
+        | CAMPAIGN_PAUSED                           | Campaign, Ad group, Ad |
+
+        | NO_AD_GROUPS                              | Campaign  |
+
+        | ALL_AD_GROUPS_PAUSED_OR_DELETED           | Campaign  |
+
+        | NO_ADS                                    | Campaign, Ad group |
+
+        | NO_SUBMITTED_ADS                          | Campaign, Ad group |
+
+        | ALL_ADS_PAUSED_DELETED_OR_REJECTED        | Campaign, Ad group |
+
+        | NO_APPROVED_ADS                           | Campaign, Ad group |
+
+        | CAMPAIGN_STARTS_IN_FUTURE                 | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_ENDED                            | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_OUTSIDE_DAILY_SCHEDULE           | Campaign |
+
+        | NO_ACTIVE_APPROVED_ADS                    | Campaign, Ad group |
+
+        | CAMPAIGN_ELIGIBLE                         | Campaign  |
+
+        | AD_GROUP_DELETED                          | Ad group  |
+
+        | AD_GROUP_PAUSED                           | Ad group, Ad  |
+
+        | AD_GROUP_ELIGIBLE                         | Ad group  |
+
+        | AD_DELETED                                | Ad        |
+
+        | AD_NOT_SUBMITTED                          | Ad        |
+
+        | AD_NOT_REVIEWED                           | Ad        |
+
+        | AD_REJECTED                               | Ad        |
+
+        | AD_PAUSED                                 | Ad        |
+
+        | AD_ELIGIBLE                               | Ad        |
+
+        | CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT | Campaign, Ad group, Ad|
+
+        | UNCONFIRMED                               | Campaign, Ad group, Ad|
+
+        | BUSINESS_DISABLED                         | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_OR_BRAND_DISABLED              | Campaign, Ad group, Ad |
+
+        | BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW      | Campaign, Ad group, Ad |
+
+        | BUSINESS_NOT_APPROVED                     | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_NOT_APPROVED                   | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_NOT_VERIFIED               | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_ISSUE                      | Campaign, Ad group, Ad |
+
+        | PRODUCT_SET_NOT_READY                     | Campaign, Ad group, Ad |
+
+        | STORE_SET_NOT_READY                       | Campaign, Ad group, Ad |
+
+        '
+    Interval:
+      type: string
+      description: The time interval which frequency will be calculated.
+      enum:
+      - LAST_1_DAY
+      - LAST_7_DAYS
+    AdGroupResponse:
+      allOf:
+      - $ref: '#/components/schemas/AdGroupRequest'
+      - type: object
+        required:
+        - ad_group_id
+        - campaign_id
+        - created_at
+        - updated_at
+        - parent
+        - audience
+        - delivery_status
+        - has_any_video_ads
+        - is_migrated_from_v1
+        properties:
+          campaign_id:
+            $ref: '#/components/schemas/CampaignID'
+          ad_group_id:
+            $ref: '#/components/schemas/AdGroupID'
+          created_at:
+            $ref: '#/components/schemas/AdGroupSchemas_CreatedAt'
+          updated_at:
+            $ref: '#/components/schemas/AdGroupSchemas_UpdatedAt'
+          parent:
+            $ref: '#/components/schemas/Parent'
+          audience:
+            $ref: '#/components/schemas/AudienceResponse'
+          frequency_control:
+            $ref: '#/components/schemas/FrequencyControl'
+          delivery_status:
+            $ref: '#/components/schemas/DeliveryStatusObject'
+          has_any_video_ads:
+            $ref: '#/components/schemas/HasAnyVideoAds'
+          is_migrated_from_v1:
+            $ref: '#/components/schemas/IsMigratedFromV1'
+          dynamic_ads_config:
+            $ref: '#/components/schemas/DynamicAdsConfigSchema'
+    CustomAudienceConfiguredStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - DELETED
+      description: '- `ACTIVE`: The audience will be updated periodically based on the latest data.
+
+        - `PAUSED`: The audience will not be updated until reactivated.
+
+        - `DELETED`: The audience is deleted and cannot be used in Ad Group targeting.
+
+        '
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    HyperLocationSchemas_LocationId:
+      type: integer
+      description: 'The unique identifier of the location.
+
+
+        A list of location IDs can be obtained via the [locations](#tag/locations) endpoint.
+
+        '
+      format: int32
+    WebActivityRuleSchemas_PixelTagId:
+      type: string
+      example: 71ccbe033ff6837c48e6c3c6
+      description: The pixel_tag_id of the pixel to target for this rule
+    ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ConnectionTypes:
+      description: An array of connection types to target.
+      type: array
+      items:
+        $ref: '#/components/schemas/ConnectionType'
+    Gender:
+      type: string
+      description: Selected genders of users for the ads to be delivered.
+      enum:
+      - MALE
+      - FEMALE
+      - UNKNOWN
+    StoreSetId:
+      type: integer
+      format: int64
+      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
+
+        Store sets are managed under Business Management.
+
+        '
+    AdGroupSchemas_UpdatedAt:
+      type: string
+      format: date-time
+      description: The date-time at which the ad group was last updated.
+    CustomAudienceEvent:
+      type: string
+      enum:
+      - PURCHASE
+      - ADD_TO_CART
+      - INITIATE_CHECKOUT
+      - SUBMIT_FORM
+      - SUBSCRIBE
+      - COMPLETE_REGISTRATION
+      - CONTACT
+      - SIGN_UP
+      - VIEW_CONTENT
+      - ADD_PAYMENT_INFO
+      - ADD_TO_WISH_LIST
+      - VISIT_CART
+      - CUSTOMIZE_PRODUCT
+      - SEARCH
+      - BOOKING
+      - DOWNLOAD
+      - START_TRIAL
+      - SHARE
+      - LOGIN
+      - DONATE
+      - FIND_LOCATION
+      - TIME_SPENT
+      - PAGE_VIEW
+      nullable: true
+      description: Conversion event for custom audience to target.
+    HyperLocationConfigRequest:
+      type: object
+      nullable: true
+      description: 'An object containing hyper location targeting configuration.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - user_segment
+      - location_segments
+      properties:
+        user_segment:
+          $ref: '#/components/schemas/UserSegment'
+        location_segments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LocationSegmentRequest'
+          description: 'The list of location segments to target.
+
+
+            The list must contain all the segments to target. If a segment is not included in the list, it will be removed from the targeting configuration in a PATCH request.
+
+
+            Exactly one of `pin_with_radius_info` or `fixed_area_info` must be set based on the `segment_area_type` value.
+
+            '
+      example:
+        user_segment: RESIDENT_AND_VISITOR
+        location_segments:
+        - segment_area_type: FIXED_AREA
+          fixed_area_info:
+            location_id: 70196
+        - segment_area_type: FIXED_AREA
+          fixed_area_info:
+            location_id: 70150
+        - segment_area_type: PIN_WITH_RADIUS
+          pin_with_radius_info:
+            address: 福島県伊達郡川俣町山木屋キトウスズ山２
+            latitude: '37.59268044952155'
+            longitude: '140.63639730916015'
+            radius_in_meters: 3000
+            label: My Label
+    LocationSegmentFixedAreaInfo:
+      type: object
+      description: 'The configuration for the Fixed Area location segment. Required and only settable when `segment_area_type` is `FIXED_AREA`.
+
+        '
+      required:
+      - location_id
+      properties:
+        location_id:
+          $ref: '#/components/schemas/HyperLocationSchemas_LocationId'
+    Genders:
+      description: 'An array of genders to target.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/Gender'
+    IsMigratedFromV1:
+      type: boolean
+      description: A boolean flag that indicates whether the object is migrated from v1.
+    Urls:
+      type: array
+      items:
+        type: string
+        example: http://example.com
+        description: A list of URLs to be used for the custom audience rule."
+    BadRequestErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BAD_REQUEST
+    KeywordRulePatchRequest:
+      type: object
+      properties:
+        custom_audience_keyword_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        window:
+          $ref: '#/components/schemas/KeywordWindow'
+        frequency:
+          $ref: '#/components/schemas/KeywordFrequency'
+        keywords:
+          $ref: '#/components/schemas/Keywords'
+    LocationSegmentId:
+      type: integer
+      description: 'The unique identifier of the location segment.
+
+
+        If this property is set, the specified location segment will be updated (PATCH request only).
+
+
+        If this property is not set, a new location segment will be created.
+
+
+        This property is not allowed in POST requests.
+
+        '
+      format: int64
+    PlacementMediaType:
+      type: string
+      enum:
+      - SMART_VIEW
+      - CHANNEL_VIEW
+    RecencyDays:
+      type: string
+      nullable: true
+      enum:
+      - LAST_1_DAY
+      - LAST_3_DAYS
+      - LAST_7_DAYS
+      - LAST_14_DAYS
+      - LAST_30_DAYS
+      - LAST_60_DAYS
+      - LAST_90_DAYS
+      description: 'The lookback window (in days) for user logs can be used for retargeting.
+
+
+        - Required when targeting_type is `RETARGETING`
+
+        - Set to null when targeting_type is `PROSPECTING`
+
+
+        This value is updatable when the campaign is ready for delivery.
+
+        '
+    AudienceIdListFileResponse:
+      type: object
+      required:
+      - audience_id_list_file_id
+      - ad_account_id
+      - original_file_name
+      - file_type
+      - created_at
+      properties:
+        audience_id_list_file_id:
+          $ref: '#/components/schemas/AudienceIdListFileId'
+        ad_account_id:
+          type: integer
+          format: int64
+          description: ID of the Ad Account that the file belongs to.
+        original_file_name:
+          $ref: '#/components/schemas/OriginalFileName'
+        file_type:
+          $ref: '#/components/schemas/FileType'
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which the audience ID list file was created.
+    FrequencyControl:
+      type: object
+      nullable: true
+      description: 'Frequency control settings for the ads to be delivered. Only available for Awareness campaign.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - interval
+      - threshold
+      properties:
+        interval:
+          $ref: '#/components/schemas/Interval'
+        threshold:
+          type: integer
+          description: The maximum number of times the ad can be shown to a user within a given time period. Min 1, Max 15.
+    CommonSchemas_UpdatedAt:
+      type: string
+      format: date-time
+      description: The DateTime when the object was last updated.
+    ConfiguredStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - DELETED
+      description: The status of the object configured by an ad operator.
+    BusinessErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BusinessError'
+    LocationSegmentPinWithRadiusInfo:
+      type: object
+      description: 'The configuration for the Pin with Radius location segment. Required and only settable when `segment_area_type` is `PIN_WITH_RADIUS`.
+
+        '
+      required:
+      - address
+      - latitude
+      - longitude
+      - radius_in_meters
+      properties:
+        address:
+          type: string
+          description: 'The address of the location.
+
+            '
+        label:
+          type: string
+          description: 'The label of the location.
+
+            '
+        latitude:
+          type: string
+          description: 'The latitude of the location.
+
+            '
+        longitude:
+          type: string
+          description: 'The longitude of the location.
+
+            '
+        radius_in_meters:
+          type: integer
+          format: int32
+          description: 'The radius in meters from the central point of the location.
+
+            '
+    AudienceRequest:
+      type: object
+      description: "In Patch Request, if you omit the property, the data will remain unchanged.\n\nIf you want to remove the current settings, set individual fields to either `null` or an empty array.\n\ne.g. This will remove the current settings of ages and genders, while keeping the locations and other audience fields unchanged:\n```\n{\n  ages: [],\n  genders: null,\n}\n```\n"
+      properties:
+        ages:
+          $ref: '#/components/schemas/Ages'
+        genders:
+          $ref: '#/components/schemas/Genders'
+        locations:
+          $ref: '#/components/schemas/AdGroupLocations'
+        zip_codes:
+          $ref: '#/components/schemas/ZipCodes'
+        hyper_location_config:
+          $ref: '#/components/schemas/HyperLocationConfigRequest'
+        operating_system:
+          $ref: '#/components/schemas/OperatingSystem'
+        custom_audiences:
+          $ref: '#/components/schemas/CustomAudiences'
+        connection_types:
+          $ref: '#/components/schemas/ConnectionTypes'
+        carrier_types:
+          $ref: '#/components/schemas/CarrierTypes'
+        interests:
+          $ref: '#/components/schemas/Interests'
+        media_types:
+          $ref: '#/components/schemas/MediaTypes'
+        channel_alias_labels:
+          $ref: '#/components/schemas/ChannelAliasLabels'
+        smart_view_article_category_targeting:
+          $ref: '#/components/schemas/SmartViewArticleCategoryTargeting'
+        smart_view_article_keyword_targeting:
+          $ref: '#/components/schemas/SmartViewArticleKeywordTargeting'
+        automated_targeting:
+          $ref: '#/components/schemas/AutomatedTargeting'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    Action:
+      type: string
+      description: The user action to consider as engagement.
+      enum:
+      - CLICK
+      - VIEWABLE_IMPRESSION
+      - CONVERSION
+    AdGroupLocations:
+      description: 'An array of location IDs to target.
+
+
+        A list of location IDs can be obtained via the [locations](#tag/locations) endpoint.
+
+
+        Note: Only available for US accounts. For JP accounts, please use `hyper_location_config`.
+
+
+        When both `locations` and `zip_codes` are provided, the delivery condition is satisfied if the user matches any of the given states/counties or any of the ZIP codes.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/LocationId'
+    AudienceIdListRulePatchRequest:
+      type: object
+      properties:
+        custom_audience_audience_id_list_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        audience_id_list_file_id:
+          $ref: '#/components/schemas/AudienceIdListFileId'
+    LocationSegmentRequest:
+      type: object
+      required:
+      - segment_area_type
+      properties:
+        location_segment_id:
+          $ref: '#/components/schemas/LocationSegmentId'
+        segment_area_type:
+          $ref: '#/components/schemas/SegmentAreaType'
+        pin_with_radius_info:
+          $ref: '#/components/schemas/LocationSegmentPinWithRadiusInfo'
+        fixed_area_info:
+          $ref: '#/components/schemas/LocationSegmentFixedAreaInfo'
+    Keywords:
+      description: 'Keywords for keyword custom audience. If there is a duplicated keyword, it will return an error.
+
+
+        Empty strings are not allowed.
+
+
+        The following characters are not allowed:
+
+        - single JP Character including あ、い.. ア、イ.. (but allow single Kanji)
+
+        - punctuation including ,、“、(、%、&…
+
+        - spaces (single-width and double-width)
+
+        '
+      type: array
+      items:
+        type: string
+        maxLength: 128
+        minLength: 1
+      minItems: 3
+      maxItems: 120
+      uniqueItems: true
+    AudienceIdListFileRequest:
+      type: object
+      required:
+      - original_file_name
+      - file_type
+      - audience_id_list_file
+      properties:
+        original_file_name:
+          $ref: '#/components/schemas/OriginalFileName'
+        file_type:
+          $ref: '#/components/schemas/FileType'
+        audience_id_list_file:
+          type: string
+          format: binary
+          description: 'The file that contains the audience ID list. The file should be in CSV/TXT format.
+
+
+            The filesize must be ≥ 5KB and ≤ 100MB.
+
+
+            Please visit this [help page](https://help-ads.smartnews.com/item-3060/) for more details about the file contents.
+
+            '
+    SmartViewArticleCategoryId:
+      type: integer
+      format: int32
+    ChannelAliasLabel:
+      type: string
+      enum:
+      - CR_JA_TOP
+      - CR_JA_LOCAL
+      - CR_JA_ENTERTAINMENT
+      - CR_JA_SPORTS
+      - CR_JA_NATIONAL
+      - CR_JA_POLITICS
+      - CR_JA_HUMOR
+      - CR_JA_ECONOMY
+      - CR_JA_INTERNATIONAL
+      - CR_JA_EXTRA_ANIMAL
+      - CR_JA_COLUMN_CAREER
+      - CR_JA_COLUMN_LOVE
+      - CR_JA_FOOD
+      - CR_JA_COLUMN2
+      - CR_JA_INFECTION
+      - CR_JA_TECHNOLOGY
+      - CR_JA_ECONOMY_CAR
+      - CR_JA_COLUMN_FAMILY
+      - CR_JA_VIDEO
+      - CR_JA_SPORTS_SOCCER
+      - CR_JA_ENTERTAINMENT_MOVIE
+      - CR_JA_SPORTS_BASEBALL
+      - CR_JA_COLUMN_BEAUTY
+      - CR_JA_EXTRA_ANIMAL_DOG
+      - CR_JA_EXTRA_ANIMAL_CAT
+      - CR_JA_COLUMN_LIVING
+      - CR_JA_COLUMN_FASHION
+      - CR_JA_ENTERTAINMENT_GAME
+      - CR_JA_EXTRA_MENSSTYLE
+      - CR_JA_SPORTS_TENNIS
+      - CR_JA_SPORTS_GOLF
+      - CR_JA_ECONOMY_MONEY
+      - CR_JA_ECONOMY_MARKET
+      - CR_JA_TECHNOLOGY_INNOVATION
+      - CR_JA_COUPON
+      - CR_JA_FOOD_RECIPE
+      - CR_JA_EXTRA_BEER
+      - CR_JA_EXTRA_RAMEN
+      - CR_JA_FOOD_BACKORDER
+      - CR_JA_FOOD_FASTFOOD
+      - CR_JA_FOOD_CAFE
+      - CR_JA_FOOD_GOURMET_KOREANFOOD
+      - CR_JA_FOOD_SPICY
+      - CR_JA_FOOD_SWEETS
+      - CR_JA_FOOD_BREAD
+      - CR_JA_EXTRA_RANKING
+      - CR_JA_FOOD_FINGERFOOD
+      - CR_JA_EXTRA_COFFEE
+      - CR_JA_EXTRA_CHOCOLATE
+      - CR_JA_EXTRA_WINE
+      - CR_JA_EXTRA_ICECREAM
+      - CR_JA_EXTRA_CURRY
+      - CR_JA_FOOD_GOURMET_JAPANESEFOOD
+      - CR_JA_FOOD_MEAT
+      - CR_JA_FOOD_TAKEOUT
+      - CR_JA_FOOD_GOURMET_CHINESE
+      - CR_JA_FOOD_TEA
+      - CR_JA_FOOD_GOURMET_FRENCH
+      - CR_JA_EXTRA_POINT
+      - CR_JA_COLUMN_SALE
+      - CR_JA_COLUMN_100YEN
+      - CR_JA_EXTRA_SAVING
+      - CR_JA_EXTRA_CONVENIENTSTORE
+      - CR_JA_BOUSAI
+      - CR_JA_LIFE_CONSUMERELECTRONICS
+      - CR_JA_COLUMN_INTERIOR
+      - CR_JA_SPECIAL_STAYHOME
+      - CR_JA_EXTRA_RESIDENCE
+      - CR_JA_EXTRA_CLEANING
+      - CR_JA_EXTRA_EDUCATION
+      - CR_JA_COLUMN_CHILDCARE
+      - CR_JA_EXTRA_GIFT
+      - CR_JA_COLUMN_PRIZEGIVING
+      - CR_JA_COLUMN_TRAVEL
+      - CR_JA_EXTRA_GOTO
+      - CR_JA_EXTRA_HOTSPRING
+      - CR_JA_EXTRA_MUSEUM
+      - CR_JA_SPORTS_SOCCER_OVERSEA
+      - CR_JA_SPORTS_BASKETBALL
+      - CR_JA_SPORTS_RUGBY
+      - CR_JA_SPORTS_VOLLEYBALL
+      - CR_JA_SPORTS_ATHLETICSPORTS
+      - CR_JA_SPORTS_TABLETENNIS
+      - CR_JA_SPORTS_JUDO
+      - CR_JA_SPORTS_BOATRACE
+      - CR_JA_SPORTS_HORSERACING
+      - CR_JA_SPORTS_SHOHEIOHTANI
+      - CR_JA_SPORTS_BASEBALL_HIGHSCHOOL
+      - CR_JA_SPORTS_MARTIALARTS
+      - CR_JA_SPORTS_SUMO
+      - CR_JA_SPORTS_BOXING
+      - CR_JA_SPORTS_PROWRESTLING
+      - CR_JA_SPORTS_FIGURESKATE
+      - CR_JA_SPORTS_CURLING
+      - CR_JA_SPORTS_XSPORTS
+      - CR_JA_SPORTS_PARASPORTS
+      - CR_JA_SPORTS_WRESTLING
+      - CR_JA_SPORTS_BICYCLERACING
+      - CR_JA_COLUMN_FISHING
+      - CR_JA_EXTRA_ESPORTS
+      - CR_JA_EXTRA_RUNNING
+      - CR_JA_EXTRA_MOUNTAINCLIMBING
+      - CR_JA_EXTRA_FITNESS
+      - CR_JA_SPORTS_MOTORSPORTS
+      - CR_JA_ECONOMY_INVESTMENT
+      - CR_JA_EXTRA_ECONOMY_INVESTMENT_NISA
+      - CR_JA_ECONOMY_INVESTMENT_BEGINNER
+      - CR_JA_SPECIAL_TRUMP_ADMINISTRATION
+      - CR_JA_INTERNATIONAL_USA
+      - CR_JA_ECONOMY_CROWDFUNDING
+      - CR_JA_ECONOMY_MOBILECARRIERS
+      - CR_JA_ECONOMY_BANK
+      - CR_JA_EXTRA_AGRICULTURE
+      - CR_JA_LIFE_NURSING
+      - CR_JA_ECONOMY_FOODSERVICE
+      - CR_JA_EXTRA_SDGS
+      - CR_JA_EXTRA_SCIENCE
+      - CR_JA_APPS_ANDROID_ALL
+      - CR_JA_TECHNOLOGY_ARTIFICIAL_INTELLIGENCE
+      - CR_JA_TECHNOLOGY_PROGRAMMING
+      - CR_JA_EXTRA_MARKETING
+      - CR_JA_COLUMN_SIDEBUSINESS
+      - CR_JA_EXTRA_JOBHUNTING
+      - CR_JA_EXTRA_LEARNING_ENGLISH
+      - CR_JA_EXTRA_OUTDOOR
+      - CR_JA_EXTRA_GARDENING
+      - CR_JA_EXTRA_NORIMONO
+      - CR_JA_ECONOMY_BIKE
+      - CR_JA_EXTRA_BOOK
+      - CR_JA_ENTERTAINMENT_ART
+      - CR_JA_COLUMN_FASHION_SNEAKERS
+      - CR_JA_ENTERTAINMENT_HOBBY
+      - CR_JA_LIFE_STATIONERY
+      - CR_JA_EXTRA_HANDMADE
+      - CR_JA_NATIONAL_TRAIN
+      - CR_JA_NATIONAL_SHOGI
+      - CR_JA_EXTRA_ASTRONOMY
+      - CR_JA_EXTRA_HISTORY
+      - CR_JA_TECHNOLOGY_VR
+      - CR_JA_EXTRA_GADGET
+      - CR_JA_TECHNOLOGY_CAMERA
+      - CR_JA_TECHNOLOGY_AUDIOVISUAL
+      - CR_JA_EXTRA_DIY
+      - CR_JA_LIFE_TRIVIA_MAIN
+      - CR_JA_EXTRA_ART_MUSEUM
+      - CR_JA_EXTRA_RETRO
+      - CR_JA_EXTRA_CERAMICART
+      - CR_JA_EXTRA_LIFE_KIMONO
+      - CR_JA_ENTERTAINMENT_IDOL
+      - CR_JA_EXTRA_OWARAI
+      - CR_JA_ENTERTAINMENT_GRAVIA
+      - CR_JA_ENTERTAINMENT_MUSIC
+      - CR_JA_ENTERTAINMENT_KPOP
+      - CR_JA_ENTERTAINMENT_FOREIGNMUSIC
+      - CR_JA_ENTERTAINMENT_KOREANDORAMA
+      - CR_JA_ENTERTAINMENT_KOREA
+      - CR_JA_ENTERTAINMENT_STAGE
+      - CR_JA_ENTERTAINMENT_TV
+      - CR_JA_ENTERTAINMENT_RADIO
+      - CR_JA_EXTRA_MANGA
+      - CR_JA_ENTERTAINMENT_ANIME_VOICEACTOR
+      - CR_JA_ENTERTAINMENT_HYPNOSISMIC
+      - CR_JA_COLUMN_FORTUNETELLING
+      - CR_JA_COLUMN_COSME
+      - CR_JA_EXTRA_SKINCARE
+      - CR_JA_EXTRA_COLUMN_BODYCARE
+      - CR_JA_EXTRA_COLUMN_SHAPEUP
+      - CR_JA_EXTRA_COLUMN_HAIRCARE
+      - CR_JA_COSME_KCOSME
+      - CR_JA_EXTRA_YOGA
+      - CR_JA_EXTRA_WALKING
+      - CR_JA_EXTRA_STRETCH
+      - CR_JA_COLUMN_MENSBEAUTY
+      - CR_JA_COLUMN_MUSCLETRAINING
+      - CR_JA_EXTRA_SELFCARE
+      - CR_JA_EXTRA_HOKKAIDO_INFO
+      - CR_JA_EXTRA_OSAKA_INFO
+      - CR_JA_EXTRA_KANAGAWA_INFO
+      - CR_JA_EXTRA_FUKUOKA2_INFO
+      - CR_JA_EXTRA_AICHI_INFO
+      - CR_JA_EXTRA_SAITAMA_INFO
+      - CR_JA_EXTRA_HIROSHIMA_INFO
+      - CR_JA_EXTRA_IBARAKI_INFO
+      - CR_JA_EXTRA_CHIBA_INFO
+      - CR_JA_EXTRA_NAGANO_INFO
+      - CR_JA_EXTRA_HYOGO_INFO
+      - CR_JA_EXTRA_MIYAGI_INFO
+      - CR_JA_EXTRA_NIIGATA_INFO
+      - CR_JA_EXTRA_FUKUSHIMA_INFO
+      - CR_JA_EXTRA_SHIZUOKA_INFO
+      - CR_JA_EXTRA_GUNMA_INFO
+      - CR_JA_EXTRA_AOMORI_INFO
+      - CR_JA_EXTRA_EHIME_INFO
+      - CR_JA_EXTRA_OKAYAMA_INFO
+      - CR_JA_EXTRA_TOKYO_INFO
+      - CR_JA_EXTRA_YAMAGATA_INFO
+      - CR_JA_EXTRA_IWATE_INFO
+      - CR_JA_EXTRA_OKINAWA2_INFO
+      - CR_JA_EXTRA_GIFU_INFO
+      - CR_JA_EXTRA_KUMAMOTO_INFO
+      - CR_JA_EXTRA_KAGOSHIMA_INFO
+      - CR_JA_EXTRA_ISHIKAWA_INFO
+      - CR_JA_EXTRA_KYOTO_INFO
+      - CR_JA_EXTRA_SHIGA_INFO
+      - CR_JA_EXTRA_AKITA_INFO
+      - CR_JA_EXTRA_TOCHIGI_INFO
+      - CR_JA_EXTRA_NARA_INFO
+      - CR_JA_EXTRA_OITA_INFO
+      - CR_JA_EXTRA_TOYAMA_INFO
+      - CR_JA_EXTRA_SHIMANE_INFO
+      - CR_JA_EXTRA_FUKUI_INFO
+      - CR_JA_EXTRA_NAGASAKI_INFO
+      - CR_JA_EXTRA_WAKAYAMA_INFO
+      - CR_JA_EXTRA_KAGAWA_INFO
+      - CR_JA_EXTRA_YAMAGUCHI_INFO
+      - CR_JA_EXTRA_TOTTORI_INFO
+      - CR_JA_EXTRA_MIE_INFO
+      - CR_JA_EXTRA_TOKUSHIMA_INFO
+      - CR_JA_EXTRA_YAMANASHI_INFO
+      - CR_JA_EXTRA_KOUCHI_INFO
+      - CR_JA_EXTRA_SAGA_INFO
+      - CR_JA_EXTRA_MIYAZAKI_INFO
+      - CR_JA_REGION_HOKKAIDO_SAPPORO_INFO
+      - CR_JA_REGION_MIYAGI_SENDAI_INFO
+      - CR_JA_REGION_CHIBA_KASHIWA_INFO
+      - CR_JA_REGION_SAITAMA_SAITAMA_INFO
+      - CR_JA_REGION_KANAGAWA_YOKOHAMA_INFO
+      - CR_JA_REGION_AICHI_NAGOYA_INFO
+      - CR_JA_REGION_HYOGO_KOBE_INFO
+      - CR_JA_REGION_KYOTO_KYOTO_INFO
+      - CR_JA_REGION_OSAKA_OSAKA_INFO
+      - CR_JA_REGION_MIE_ISE_INFO
+      - CR_JA_REGION_HIROSHIMA_HIROSHIMA_INFO
+      - CR_JA_REGION_FUKUOKA_FUKUOKA_INFO
+      - CR_JA_REGION_OITA_OITA_INFO
+      - CR_JA_REGION_TOKYO_SETAGAYA_INFO
+      - CR_JA_REGION_TOKYO_NERIMA_INFO
+      - CR_JA_REGION_TOKYO_SUGINAMI_INFO
+      - CR_JA_REGION_TOKYO_ITABASHI_INFO
+      - CR_JA_REGION_TOKYO_OOTA_INFO
+      - CR_JA_REGION_TOKYO_KOUTOU_INFO
+      - CR_JA_REGION_TOKYO_KATSUSHIKA_INFO
+      - CR_JA_REGION_TOKYO_SHINAGAWA_INFO
+      - CR_JA_REGION_TOKYO_EDOGAWA_INFO
+      - CR_JA_REGION_TOKYO_SUMIDA_INFO
+      - CR_JA_REGION_TOKYO_SHINJYUKU_INFO
+      - CR_JA_REGION_SHIBUYA_INFO
+      - CR_JA_REGION_TOKYO_NAKANO_INFO
+      - CR_JA_REGION_TOKYO_ARAKAWA_INFO
+      - CR_JA_REGION_TOKYO_CHUO_INFO
+      - CR_JA_REGION_TOKYO_KITA_INFO
+      - CR_JA_REGION_TOKYO_MINATO_INFO
+      - CR_JA_REGION_TOKYO_TOSHIMA_INFO
+      - CR_JA_REGION_TOKYO_TAITO_INFO
+      - CR_JA_REGION_TOKYO_BUNKYO_INFO
+      - CR_JA_REGION_TOKYO_CHIYODA_INFO
+      - CR_JA_REGION_TOKYO_MEGURO_INFO
+      - CR_JA_REGION_TOKYO_ADACHI_INFO
+      - OTHERS
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    DeliveryStatusObject:
+      type: object
+      required:
+      - status
+      - reason
+      - description
+      properties:
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        reason:
+          $ref: '#/components/schemas/DeliveryStatusReason'
+        description:
+          type: string
+          description: A localized human readable description of the reason. The language is controlled by the Accept-Language header in the request.
+      description: An Object that provides information about the delivery status of the campaign.
+    AdsEngagementRulePatchRequest:
+      type: object
+      properties:
+        custom_audience_ads_engagement_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        ad_group_ids:
+          $ref: '#/components/schemas/AdGroupIds'
+        action:
+          $ref: '#/components/schemas/Action'
+        time_period:
+          $ref: '#/components/schemas/TimePeriod'
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    AdGroupRequest:
+      type: object
+      required:
+      - name
+      - configured_status
+      properties:
+        name:
+          $ref: '#/components/schemas/AdGroupSchemas_Name'
+        audience:
+          $ref: '#/components/schemas/AudienceRequest'
+        frequency_control:
+          $ref: '#/components/schemas/FrequencyControl'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        dynamic_ads_config:
+          $ref: '#/components/schemas/DynamicAdsConfigSchema'
+    CustomAudienceResult:
+      type: object
+      description: The result of the custom audience backend processing.
+      required:
+      - availability_status
+      - uniqueAudienceCount
+      - created_at
+      - updated_at
+      properties:
+        availability_status:
+          $ref: '#/components/schemas/AvailabilityStatus'
+        created_at:
+          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CommonSchemas_UpdatedAt'
+        unique_audience_count:
+          $ref: '#/components/schemas/UniqueAudienceCount'
+    ChannelAliasLabels:
+      description: 'An array of target channels to display the ads in the SmartNews app. If it is `null` or `[]`, all channels will be targeted.
+
+
+        This value can only be set when `media_type` contains `CHANNEL_VIEW`.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+
+        In PATCH request, if you set this field to `null` or `[]`, it will change the setting to target all channels. If you omit this field, it will retain the current setting.
+
+
+        To get the list of available channel identifiers and their names, use the `GET /api/cm/v1/channel_alias_labels` endpoint.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/ChannelAliasLabel'
+    CarrierTypes:
+      description: 'An array of mobile network carriers to target.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/CarrierType'
+    BusinessErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BUSINESS_ERROR
+    LocationSegmentResponse:
+      type: object
+      description: 'The response of the hyper location segment resource.
+
+
+        Only one of `location_segment_pin_with_radius_info` or `location_segment_fixed_area_info` will be returned based on the segment_area_type value.
+
+        '
+      required:
+      - location_segment_id
+      - segment_area_type
+      properties:
+        location_segment_id:
+          $ref: '#/components/schemas/LocationSegmentId'
+        segment_area_type:
+          $ref: '#/components/schemas/SegmentAreaType'
+        pin_with_radius_info:
+          $ref: '#/components/schemas/LocationSegmentPinWithRadiusInfo'
+        fixed_area_info:
+          $ref: '#/components/schemas/LocationSegmentFixedAreaInfo'
+    CommonSchemas_CreatedAt:
+      type: string
+      format: date-time
+      description: The DateTime when the object was created.
+    AudienceIdListRuleResponse:
+      type: object
+      required:
+      - custom_audience_audience_id_list_rule_id
+      - audience_id_list_file_id
+      - file_type
+      - original_file_name
+      - created_at
+      - updated_at
+      properties:
+        custom_audience_audience_id_list_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        audience_id_list_file_id:
+          $ref: '#/components/schemas/AudienceIdListFileId'
+        file_type:
+          $ref: '#/components/schemas/FileType'
+        original_file_name:
+          $ref: '#/components/schemas/OriginalFileName'
+        created_at:
+          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CommonSchemas_UpdatedAt'
+    CustomAudiencePatchRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/CustomAudienceSchemas_Name'
+        rules_combining_logic:
+          $ref: '#/components/schemas/RulesCombiningLogic'
+        web_activity_rules:
+          type: array
+          nullable: true
+          description: 'An array of web activity rules for this custom audience. It can only be specified when `type` is `WEB_ACTIVITY`.
+
+
+            See the CustomAudiencePatchRequest description for how to update rules.
+
+            '
+          items:
+            $ref: '#/components/schemas/WebActivityRulePatchRequest'
+        ads_engagement_rules:
+          type: array
+          nullable: true
+          description: 'An array of ads engagement rules for this custom audience. It can only be specified when `type` is `ADS_ENGAGEMENT`.
+
+
+            See the CustomAudiencePatchRequest description for how to update rules.
+
+            '
+          items:
+            $ref: '#/components/schemas/AdsEngagementRulePatchRequest'
+        audience_id_list_rules:
+          type: array
+          nullable: true
+          description: 'An array of id list rules for this custom audience. It can only be specified when `type` is `AUDIENCE_ID_LIST`.
+
+            See the CustomAudiencePatchRequest description for how to update rules.
+
+            '
+          items:
+            $ref: '#/components/schemas/AudienceIdListRulePatchRequest'
+        keyword_rules:
+          type: array
+          nullable: true
+          description: 'An array of keyword rules for this custom audience. It can only be specified when `type` is `KEYWORD`.
+
+            See the CustomAudiencePatchRequest description for how to update rules.
+
+            '
+          items:
+            $ref: '#/components/schemas/KeywordRulePatchRequest'
+        configured_status:
+          $ref: '#/components/schemas/CustomAudienceConfiguredStatus'
+    BadRequestError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BadRequestErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    SegmentAreaType:
+      type: string
+      description: 'The area type of the segment.
+
+        '
+      enum:
+      - PIN_WITH_RADIUS
+      - FIXED_AREA
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    Ages:
+      description: 'An array of age buckets to target.
+
+
+        Note:
+
+        - This field is not settable for US region ad accounts.
+
+        - `AGE_UNDER_20` option is deprecated and can no longer be used for new ad groups and when updating an existing ad group.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/Age'
+    AdGroupIds:
+      description: An array of Ad Group IDs to target engagement for.
+      type: array
+      minItems: 1
+      items:
+        type: number
+        format: int64
+    UserSegment:
+      type: string
+      description: 'The type of users to target.
+
+        '
+      enum:
+      - RESIDENT_ONLY
+      - RESIDENT_AND_VISITOR
+    ZipCodes:
+      description: "An array of ZIP codes to target.\n\nThe values are combined with `locations` (states and counties) using OR logic during delivery.\n\nThe response returns ZIP codes in ascending numeric order while keeping their 5-digit string form.\n\n- Submit an empty array `[]` or `null` in a PATCH request to remove all ZIP codes.\n- Duplicate values in the request payload are ignored; the response returns a unique set of ZIP codes.\n- Supports up to 40,000 ZIP codes per request.\n\n* e.g. This targets Washington state, Pierce County, and ZIP codes `12345` / `67890`:\n  ```\n  {\n    ...\n    \"audience\": {\n      \"locations\": [2, 3],\n      \"zip_codes\": [\"12345\", \"67890\"]\n    }\n  }\n  ```\n"
+      type: array
+      items:
+        $ref: '#/components/schemas/ZipCode'
+      maxItems: 1000
+      example:
+      - '10001'
+      - '10002'
+    CustomAudiences:
+      type: object
+      description: "Custom audiences to include or exclude for ad delivery.\n\nIt contains the custom audience IDs to include or exclude for ad delivery.\n\nIf it's empty, it will be delivered to all users.\n\n* e.g. This will target all users\n  ```\n  {\n    ...\n    \"custom_audiences\": {\n      \"include\": [],\n      \"exclude\": []\n    }\n  }\n  ```\n* e.g. This will target users who are in custom audience `123`\n  ```\n  {\n    \"custom_audiences\": {\n        \"include\": [123],\n        \"exclude\": []\n      }\n  }\n  ```\n"
+      properties:
+        include:
+          type: array
+          description: An array of `custom_audience_id` to include for delivery.
+          items:
+            type: integer
+            format: int64
+        exclude:
+          type: array
+          description: An array of `custom_audience_id` to exclude for delivery.
+          items:
+            type: integer
+            format: int64
+    OperatingSystem:
+      type: object
+      nullable: true
+      description: Target OS and optionally a specific OS version. If it is not specified, all OS and OS versions are targeted.
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          description: 'The OS to target.
+
+            '
+          enum:
+          - IOS
+          - ANDROID
+        since_version:
+          type: string
+          description: 'Selected OS version of users for the ads to be delivered.
+
+            Ex: `13.0.0` means iOS 13.0.0 or later. Empty mean all version.
+
+            '
+    CarrierType:
+      type: string
+      enum:
+      - DOCOMO
+      - AU
+      - SOFTBANK
+      - ATNT
+      - VERIZON
+      - TMOBILE
+      - BOOST
+      - SPRINT
+      - USCELLULAR
+      - XFINITY
+      - RAKUTEN
+      - OTHERS
+      - UNKNOWN
+    IABInterestId:
+      type: integer
+      format: int32
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AdsEngagementRuleCreationRequest:
+      type: object
+      required:
+      - ad_group_ids
+      - action
+      - time_period
+      properties:
+        ad_group_ids:
+          $ref: '#/components/schemas/AdGroupIds'
+        action:
+          $ref: '#/components/schemas/Action'
+        time_period:
+          $ref: '#/components/schemas/TimePeriod'
+    AudienceIdListRuleCreationRequest:
+      type: object
+      required:
+      - audience_id_list_file_id
+      properties:
+        audience_id_list_file_id:
+          type: integer
+          format: int64
+          description: 'ID of the audience ID list file. The file itself can be uploaded via the endpoint [POST /ad_accounts/{ad_account_id}/audience_id_list_files](#tag/custom-audience/operation/postAudienceIdListFile).
+
+            '
+    ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ResourceNotFoundError'
+    GatewayTimeoutErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBase'
+    ResourceNotFoundErrorExtension:
+      type: object
+      required:
+      - type
+      - resource_type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_FOUND
+          - DELETED
+        resource_type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+          - AD
+          - MEDIA_FILE
+          - AD_ACCOUNT
+          - PIXEL
+          - CUSTOM_AUDIENCE
+          - PIXEL_URL_CONFIGURATION
+          - AM_CONFIGURATION
+          - CATALOG
+          - STORE_SET
+          - RULE
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AdGroupSchemas_CreatedAt:
+      type: string
+      format: date-time
+      description: The date-time at which the ad group was created.
+    CustomAudienceArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomAudienceResponse'
+    CustomAudienceRequestType:
+      type: string
+      enum:
+      - WEB_ACTIVITY
+      - ADS_ENGAGEMENT
+      - AUDIENCE_ID_LIST_FILE
+      - KEYWORD
+      description: 'The type of the custom audience.
+
+
+        Note: `KEYWORD` type is not available for US ad accounts.
+
+        '
+    AudienceResponse:
+      type: object
+      required:
+      - ages
+      - genders
+      - custom_audiences
+      - locations
+      properties:
+        ages:
+          $ref: '#/components/schemas/Ages'
+        genders:
+          $ref: '#/components/schemas/Genders'
+        locations:
+          $ref: '#/components/schemas/AdGroupLocations'
+        zip_codes:
+          $ref: '#/components/schemas/ZipCodes'
+        hyper_location_config:
+          $ref: '#/components/schemas/HyperLocationConfigResponse'
+        custom_audiences:
+          $ref: '#/components/schemas/CustomAudiences'
+        operating_system:
+          $ref: '#/components/schemas/OperatingSystem'
+        connection_types:
+          $ref: '#/components/schemas/ConnectionTypes'
+        carrier_types:
+          $ref: '#/components/schemas/CarrierTypes'
+        interests:
+          $ref: '#/components/schemas/Interests'
+        media_types:
+          $ref: '#/components/schemas/MediaTypes'
+        channel_alias_labels:
+          $ref: '#/components/schemas/ChannelAliasLabels'
+        smart_view_article_category_targeting:
+          $ref: '#/components/schemas/SmartViewArticleCategoryTargeting'
+        smart_view_article_keyword_targeting:
+          $ref: '#/components/schemas/SmartViewArticleKeywordTargeting'
+        automated_targeting:
+          $ref: '#/components/schemas/AutomatedTargeting'
+    AdsEngagementRuleResponse:
+      type: object
+      required:
+      - custom_audience_ads_engagement_rule_id
+      - ad_group_ids
+      - action
+      - time_period
+      - created_at
+      - updated_at
+      properties:
+        custom_audience_ads_engagement_rule_id:
+          type: integer
+          format: int64
+          description: Unique ID of the rule.
+        ad_group_ids:
+          $ref: '#/components/schemas/AdGroupIds'
+        action:
+          $ref: '#/components/schemas/Action'
+        time_period:
+          $ref: '#/components/schemas/TimePeriod'
+        created_at:
+          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
+        updated_at:
+          $ref: '#/components/schemas/CommonSchemas_UpdatedAt'
+  securitySchemes:
+    ApiKeyAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

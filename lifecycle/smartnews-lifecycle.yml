@@ -1,0 +1,16 @@
+generated: '2026-07-21'
+method: searched
+source: https://ads.smartnews.com/developers/
+versioning:
+  scheme: uri-path
+  current: v3
+  previous: v2
+  deprecated_docs: https://ads.smartnews.com/developers/deprecated/v2/index.html
+deprecation:
+  policy: 'v2 Marketing API is deprecated; v3 (3.0.1) is current. Deprecated docs retained.'
+  header_support: unknown
+sla:
+  note: 'No public SLA published for the Ads Marketing API.'
+status_page: null
+changelog: https://ads.smartnews.com/developers/
+deprecated_operations: []

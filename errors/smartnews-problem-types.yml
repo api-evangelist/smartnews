@@ -1,0 +1,74 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/smartnews-marketing-openapi.json
+format: 'json (envelope: error object with type, message, retriable)'
+envelope:
+  wrapper: error
+  fields: [type, message, retriable]
+  notes: |
+    Errors return an `error` object with a machine-readable `type` (enum),
+    a human `message`, and a boolean `retriable` flag. Validation errors add
+    an `error_fields[]` array (field_name + reason) using JSON-path dot notation.
+problems:
+  - status: 400
+    title: Bad Request
+    type: BAD_REQUEST
+    retriable: false
+    occurrences: 15
+    example_operation: openapi/smartnews-marketing-openapi.json#generateAccessToken
+  - status: 401
+    title: Unauthorized
+    retriable: false
+    occurrences: 46
+    example_operation: openapi/smartnews-marketing-openapi.json#generateAccessToken
+  - status: 403
+    title: Forbidden
+    retriable: false
+    occurrences: 44
+    example_operation: openapi/smartnews-marketing-openapi.json#getInsightsV3
+  - status: 404
+    title: Resource Not Found
+    retriable: false
+    occurrences: 34
+    example_operation: openapi/smartnews-marketing-openapi.json#getInsightsV3
+  - status: 406
+    title: Not Acceptable
+    retriable: false
+    occurrences: 2
+    example_operation: openapi/smartnews-marketing-openapi.json#getInsightsV3
+  - status: 409
+    title: Conflict
+    retriable: false
+    occurrences: 11
+    example_operation: openapi/smartnews-marketing-openapi.json#postCampaigns
+  - status: 410
+    title: Gone
+    retriable: false
+    occurrences: 4
+    example_operation: openapi/smartnews-marketing-openapi.json#patchCampaignById
+  - status: 422
+    title: Validation Error
+    type: VALIDATION_ERROR
+    retriable: false
+    occurrences: 14
+    example_operation: openapi/smartnews-marketing-openapi.json#postCampaigns
+  - status: 429
+    title: Rate Limited
+    retriable: true
+    occurrences: 26
+    example_operation: openapi/smartnews-marketing-openapi.json#getInsightsV3
+  - status: 500
+    title: Internal Server Error
+    retriable: true
+    occurrences: 44
+    example_operation: openapi/smartnews-marketing-openapi.json#getInsightsV3
+  - status: 503
+    title: Service Unavailable
+    retriable: true
+    occurrences: 40
+    example_operation: openapi/smartnews-marketing-openapi.json#getInsightsV3
+  - status: 504
+    title: Gateway Timeout
+    retriable: true
+    occurrences: 2
+    example_operation: openapi/smartnews-marketing-openapi.json#postMedia

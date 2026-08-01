@@ -1,0 +1,149 @@
+generated: '2026-07-21'
+method: derived
+status: candidate
+source: openapi/smartnews-marketing-openapi.json
+notes: |
+  No official SmartNews-hosted MCP server found. Candidate tool list derived
+  one-per-operation from the v3 Marketing API OpenAPI. Not an endorsed server.
+server:
+  name: smartnews-marketing
+  transport: stdio
+tools:
+  - name: generateAccessToken
+    description: "Generate an access token"
+    source_operation: openapi/smartnews-marketing-openapi.json#generateAccessToken
+  - name: revokeAccessToken
+    description: "Revoke all active access tokens for the developer application"
+    source_operation: openapi/smartnews-marketing-openapi.json#revokeAccessToken
+  - name: getInsightsV3
+    description: "Insights"
+    source_operation: openapi/smartnews-marketing-openapi.json#getInsightsV3
+  - name: getAggregatedInsightsV3
+    description: "Aggregated Insights"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAggregatedInsightsV3
+  - name: getCampaignsPaginated
+    description: "List Campaigns (Paginated)"
+    source_operation: openapi/smartnews-marketing-openapi.json#getCampaignsPaginated
+  - name: postCampaigns
+    description: "Create a Campaign"
+    source_operation: openapi/smartnews-marketing-openapi.json#postCampaigns
+  - name: getCampaignById
+    description: "Get a Campaign"
+    source_operation: openapi/smartnews-marketing-openapi.json#getCampaignById
+  - name: patchCampaignById
+    description: "Update a Campaign"
+    source_operation: openapi/smartnews-marketing-openapi.json#patchCampaignById
+  - name: deleteCampaignById
+    description: "Delete a Campaign"
+    source_operation: openapi/smartnews-marketing-openapi.json#deleteCampaignById
+  - name: getAdGroupsByCampaignPaginated
+    description: "List Ad Groups By Campaign (Paginated)"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdGroupsByCampaignPaginated
+  - name: postAdGroup
+    description: "Create an Ad Group"
+    source_operation: openapi/smartnews-marketing-openapi.json#postAdGroup
+  - name: getAdGroupsPaginated
+    description: "List Ad Groups By Ad Account (Paginated)"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdGroupsPaginated
+  - name: getAdGroupById
+    description: "Get an Ad Group"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdGroupById
+  - name: patchAdGroupById
+    description: "Update an Ad Group"
+    source_operation: openapi/smartnews-marketing-openapi.json#patchAdGroupById
+  - name: deleteAdGroupById
+    description: "Delete an Ad Group"
+    source_operation: openapi/smartnews-marketing-openapi.json#deleteAdGroupById
+  - name: getAdsByAdGroupPaginated
+    description: "List Ads By Ad Group (Paginated)"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdsByAdGroupPaginated
+  - name: postAd
+    description: "Create an Ad"
+    source_operation: openapi/smartnews-marketing-openapi.json#postAd
+  - name: getAdsPaginated
+    description: "List Ads By Ad Account (Paginated)"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdsPaginated
+  - name: getAdById
+    description: "Get an Ad"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdById
+  - name: patchAdById
+    description: "Update an Ad"
+    source_operation: openapi/smartnews-marketing-openapi.json#patchAdById
+  - name: deleteAdById
+    description: "Delete an Ad"
+    source_operation: openapi/smartnews-marketing-openapi.json#deleteAdById
+  - name: getMediaFiles
+    description: "List Media Files"
+    source_operation: openapi/smartnews-marketing-openapi.json#getMediaFiles
+  - name: postMedia
+    description: "Create a Media File"
+    source_operation: openapi/smartnews-marketing-openapi.json#postMedia
+  - name: getLocations
+    description: "List Locations"
+    source_operation: openapi/smartnews-marketing-openapi.json#getLocations
+  - name: getAllArticleCategories
+    description: "List article categories"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAllArticleCategories
+  - name: postSearchSmartViewArticleKeywords
+    description: "Batch search SmartView article keyword suggestions"
+    source_operation: openapi/smartnews-marketing-openapi.json#postSearchSmartViewArticleKeywords
+  - name: getAllChannelAliasLabels
+    description: "List channel alias labels"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAllChannelAliasLabels
+  - name: getAllIABInterestCategories
+    description: "List Interests"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAllIABInterestCategories
+  - name: getPixelList
+    description: "Get list of pixels which are linked to the ad_account_id."
+    source_operation: openapi/smartnews-marketing-openapi.json#getPixelList
+  - name: getPixelDetail
+    description: "Get the details of the pixel_tag_id linked to the ad_account_id."
+    source_operation: openapi/smartnews-marketing-openapi.json#getPixelDetail
+  - name: listCustomAudience
+    description: "List custom audiences"
+    source_operation: openapi/smartnews-marketing-openapi.json#listCustomAudience
+  - name: createCustomAudience
+    description: "Create a Custom Audience"
+    source_operation: openapi/smartnews-marketing-openapi.json#createCustomAudience
+  - name: getCustomAudience
+    description: "Get a Custom Audience"
+    source_operation: openapi/smartnews-marketing-openapi.json#getCustomAudience
+  - name: updateCustomAudience
+    description: "Update a Custom Audience"
+    source_operation: openapi/smartnews-marketing-openapi.json#updateCustomAudience
+  - name: deleteCustomAudience
+    description: "Delete a Custom Audience"
+    source_operation: openapi/smartnews-marketing-openapi.json#deleteCustomAudience
+  - name: getAdGroupsByCustomAudience
+    description: "Get ad groups by custom audience."
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdGroupsByCustomAudience
+  - name: postAudienceIdListFile
+    description: "Create a audience ID list file."
+    source_operation: openapi/smartnews-marketing-openapi.json#postAudienceIdListFile
+  - name: getAdAccountsByDeveloperAppId
+    description: "Get a list of ad accounts associated with a specific developer app"
+    source_operation: openapi/smartnews-marketing-openapi.json#getAdAccountsByDeveloperAppId
+  - name: listBusinessCatalogs
+    description: "GET /api/bm-external/v1/businesses/{business_id}/catalogs"
+    source_operation: openapi/smartnews-marketing-openapi.json#listBusinessCatalogs
+  - name: createBusinessCatalog
+    description: "POST /api/bm-external/v1/businesses/{business_id}/catalogs"
+    source_operation: openapi/smartnews-marketing-openapi.json#createBusinessCatalog
+  - name: getBusinessCatalog
+    description: "GET /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}"
+    source_operation: openapi/smartnews-marketing-openapi.json#getBusinessCatalog
+  - name: updateBusinessCatalog
+    description: "PATCH /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}"
+    source_operation: openapi/smartnews-marketing-openapi.json#updateBusinessCatalog
+  - name: listCatalogProductSets
+    description: "GET /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_s"
+    source_operation: openapi/smartnews-marketing-openapi.json#listCatalogProductSets
+  - name: createCatalogProductSet
+    description: "POST /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_"
+    source_operation: openapi/smartnews-marketing-openapi.json#createCatalogProductSet
+  - name: getCatalogProductSet
+    description: "GET /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_s"
+    source_operation: openapi/smartnews-marketing-openapi.json#getCatalogProductSet
+  - name: updateCatalogProductSet
+    description: "PATCH /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product"
+    source_operation: openapi/smartnews-marketing-openapi.json#updateCatalogProductSet

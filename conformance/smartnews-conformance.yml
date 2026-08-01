@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/smartnews-marketing-openapi.json
+standards:
+  - id: oauth2-bearer
+    conforms: true
+    evidence: OAuth 2.0 access-token flow via POST /api/oauth/v1/access_tokens; Bearer JWT in Authorization header
+  - id: jwt
+    conforms: true
+    evidence: securityScheme http bearer with bearerFormat JWT
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: errors use a custom {error:{type,message,retriable}} envelope, not application/problem+json
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: no Sunset/Deprecation header documented
+  - id: pagination
+    conforms: true
+    evidence: page/page_size params with a pagination wrapper on list responses
+  - id: idempotency
+    conforms: false
+    evidence: no Idempotency-Key header documented for writes
+  - id: openapi-3.0
+    conforms: true
+    evidence: openapi 3.0.3 document published at /developers/

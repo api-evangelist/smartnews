@@ -1,0 +1,27 @@
+generated: '2026-07-21'
+method: searched
+source: https://ads.smartnews.com/developers/
+scheme: uri-path major version (v2 -> v3)
+current_version: '3.0.1'
+notes: |
+  SmartNews publishes the Marketing API changelog inline in the Redoc developer
+  reference and the Ads Help Center. v3 is the current major; v2 is deprecated.
+entries:
+  - version: '3.0.1'
+    date: null
+    breaking: false
+    highlights:
+      - Current published OpenAPI version (info.version 3.0.1) for the v3 Marketing API.
+  - version: 'v3'
+    date: null
+    breaking: true
+    highlights:
+      - New major version of the Marketing API under /api/ma/v3.
+      - Adds Business Manager catalog + product-set endpoints (/api/bm-external/v1).
+      - OAuth token issuance rate limit added (5 req/min per developer app).
+  - version: 'v2'
+    date: null
+    breaking: false
+    deprecated: true
+    highlights:
+      - Prior major, now deprecated (docs retained at /developers/deprecated/v2/).

@@ -1,0 +1,42 @@
+{
+  "provider": "smartnews",
+  "sources": [
+    "smartnews-ad-api-openapi.yml",
+    "smartnews-ad-group-api-openapi.yml",
+    "smartnews-article-category-api-openapi.yml",
+    "smartnews-campaign-api-openapi.yml",
+    "smartnews-catalog-api-openapi.yml",
+    "smartnews-channel-alias-label-api-openapi.yml",
+    "smartnews-custom-audience-api-openapi.yml",
+    "smartnews-developer-app-api-openapi.yml",
+    "smartnews-insights-api-openapi.yml",
+    "smartnews-interests-api-openapi.yml",
+    "smartnews-locations-api-openapi.yml",
+    "smartnews-media-file-api-openapi.yml",
+    "smartnews-oauth-api-openapi.yml",
+    "smartnews-pixel-api-openapi.yml",
+    "smartnews-smart-view-article-keyword-api-openapi.yml"
+  ],
+  "outputs": [
+    "smartnews-ad-api-openapi.yml",
+    "smartnews-ad-group-api-openapi.yml",
+    "smartnews-article-category-api-openapi.yml",
+    "smartnews-campaign-api-openapi.yml",
+    "smartnews-catalog-api-openapi.yml",
+    "smartnews-channel-alias-label-api-openapi.yml",
+    "smartnews-custom-audience-api-openapi.yml",
+    "smartnews-developer-app-api-openapi.yml",
+    "smartnews-insights-api-openapi.yml",
+    "smartnews-interests-api-openapi.yml",
+    "smartnews-locations-api-openapi.yml",
+    "smartnews-media-file-api-openapi.yml",
+    "smartnews-oauth-api-openapi.yml",
+    "smartnews-pixel-api-openapi.yml",
+    "smartnews-smart-view-article-keyword-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

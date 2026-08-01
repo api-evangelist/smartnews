@@ -1,0 +1,15 @@
+generated: '2026-07-21'
+method: searched
+source: https://github.com/smartnews , https://ads.smartnews.com/developers/
+notes: |
+  No first-party SmartNews Ads Marketing API client SDK was found on npm, PyPI,
+  Maven Central, RubyGems, or the smartnews GitHub org (which publishes infra
+  forks + a spec repo, but no advertising-API SDK). The published spec repo below
+  is the closest official developer artifact.
+packages: []
+related:
+  - kind: api-spec
+    name: smartnews-ads-advertising-api-spec
+    url: https://github.com/smartnews/smartnews-ads-advertising-api-spec
+    official: true
+    note: Official API Blueprint + markdown reference for the Ads Advertising API (v1.0 tag).

@@ -1,0 +1,46 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/smartnews-marketing-openapi.json
+docs: https://ads.smartnews.com/developers/
+authentication:
+  style: oauth2-bearer
+  scheme: Bearer JWT access token
+  header: 'Authorization: Bearer <access_token>'
+  token_endpoint: POST /api/oauth/v1/access_tokens
+  token_ttl: 24h (reuse the token across requests within its validity)
+  revoke_endpoint: POST /api/oauth/v1/access_tokens/revoke
+  ref: authentication/smartnews-authentication.yml
+idempotency:
+  supported: false
+  notes: |
+    The v3 Marketing API does not document an idempotency-key header. Writes
+    (POST/PATCH/DELETE) are not idempotent; use GET-before-write and 409 Conflict
+    handling to avoid duplicates.
+pagination:
+  style: page-number
+  request_params: [page, page_size]
+  response_wrapper: { data: [...], pagination: PaginationInfoResponse }
+  ref: openapi PaginationInfoResponse schema
+filtering:
+  common_params: [include_deleted, campaign_ids, ad_group_ids, ad_ids]
+localization:
+  header: Accept-Language
+versioning:
+  scheme: uri-path
+  current: v3
+  surfaces:
+    marketing_api: /api/ma/v3
+    oauth: /api/oauth/v1
+    business_manager: /api/bm/v1, /api/bm-external/v1
+  deprecated: v2 (docs at /developers/deprecated/v2/)
+  ref: lifecycle/smartnews-lifecycle.yml
+error_envelope:
+  wrapper: error
+  fields: [type, message, retriable]
+  validation_detail: error_fields[] (field_name, reason)
+  ref: errors/smartnews-problem-types.yml
+rate_limiting:
+  signal: HTTP 429
+  token_endpoint_limit: 5 requests/minute per developer app (generateAccessToken)
+  guidance: implement retry/backoff on 429; documented limits are not guaranteed
+  ref: https://ads.smartnews.com/developers/

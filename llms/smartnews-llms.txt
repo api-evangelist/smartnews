@@ -1,0 +1,30 @@
+# SmartNews
+
+> SmartNews operates the SmartNews Ads platform and the SmartNews Marketing API
+> (v3), a REST API for programmatically managing advertising campaigns, ad groups,
+> ads, media, custom audiences, conversion pixels and Business Manager catalogs,
+> with an Insights API for reporting. Auth is OAuth 2.0 bearer (JWT).
+
+## APIs
+- [SmartNews Marketing API — developer portal](https://ads.smartnews.com/developers/): OpenAPI 3.0 reference (v3.0.1)
+- [Getting started](https://help-ads.smartnews.com/en/item-4207/): first campaign via the Marketing API
+- [Ads API Terms of Service](https://ads.smartnews.com/developers/tos-en.html)
+
+## Specs
+- [OpenAPI (verbatim)](openapi/smartnews-marketing-openapi.json): 46 operations, base https://ads.smartnews.com
+- [API Blueprint + markdown reference](https://github.com/smartnews/smartnews-ads-advertising-api-spec)
+
+## Artifacts
+- [Authentication profile](authentication/smartnews-authentication.yml)
+- [API conventions](conventions/smartnews-conventions.yml): pagination, error envelope, rate limits
+- [Error catalog](errors/smartnews-problem-types.yml)
+- [Data model / ERD](data-model/smartnews-data-model.yml)
+- [Lifecycle & versioning](lifecycle/smartnews-lifecycle.yml)
+- [Changelog](changelog/smartnews-changelog.yml)
+- [Conformance](conformance/smartnews-conformance.yml)
+- [Candidate MCP tools](mcp/smartnews-mcp.yml)
+- [Agent skills](skills/_index.yml)
+
+## Docs
+- [SmartNews Ads Help Center](https://help-ads.smartnews.com/en/)
+- [Conversion API](https://help-ads.smartnews.com/en/item-5499/)

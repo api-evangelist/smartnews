@@ -1,0 +1,19 @@
+generated: '2026-07-21'
+method: searched
+source: https://ads.smartnews.com/developers/
+signal: HTTP 429
+notes: |
+  SmartNews documents a hard limit on OAuth token issuance and advises retry/backoff
+  on 429 for all other endpoints; general per-endpoint limits are not guaranteed and
+  are subject to change.
+limits:
+  - scope: oauth-token-issuance
+    operation: generateAccessToken
+    limit_count: 5
+    window: 1m
+    per: developer app
+  - scope: general
+    limit_count: null
+    window: null
+    per: developer app id
+    note: not guaranteed; implement retry logic on 429

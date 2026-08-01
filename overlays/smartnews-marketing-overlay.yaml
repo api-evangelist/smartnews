@@ -1,0 +1,17 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for SmartNews Marketing API
+  version: 1.0.0
+extends: openapi/smartnews-marketing-openapi.json
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-07-21'
+      x-apievangelist-provider: smartnews
+      x-apievangelist-product: SmartNews Ads Marketing API
+  - target: $.info
+    update:
+      x-agent-readiness-notes: >-
+        OAuth2 bearer (JWT) auth; page/page_size pagination; custom error
+        envelope (error.type/message/retriable); no idempotency-key; 429 rate
+        limiting with retry guidance.

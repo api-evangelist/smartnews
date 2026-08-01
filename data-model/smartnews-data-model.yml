@@ -1,0 +1,54 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/smartnews-marketing-openapi.json
+notes: |
+  Entity graph derived from the v3 Marketing API path hierarchy and id-reference
+  fields. Everything is scoped under an ad_account (Business Manager scopes
+  catalogs/product_sets under a business).
+entities:
+  - name: ad_account
+    id: ad_account_id
+    root: true
+  - name: campaign
+    id: campaign_id
+    belongs_to: ad_account (via ad_account_id)
+    has_many: ad_group
+  - name: ad_group
+    id: ad_group_id
+    belongs_to: campaign (via campaign_id)
+    has_many: ad
+    references: custom_audience (via custom_audience_id)
+  - name: ad
+    id: ad_id
+    belongs_to: ad_group (via ad_group_id)
+    references: media_file
+  - name: media_file
+    id: media_file_id
+    belongs_to: ad_account
+  - name: custom_audience
+    id: custom_audience_id
+    belongs_to: ad_account
+    has_many: ad_group (targeting)
+  - name: pixel
+    id: pixel_tag_id
+    belongs_to: ad_account
+  - name: business
+    id: business_id
+    has_many: catalog
+  - name: catalog
+    id: catalog_id
+    belongs_to: business
+    has_many: product_set
+  - name: product_set
+    id: product_set_id
+    belongs_to: catalog
+  - name: developer_app
+    id: developer_app_id
+    has_many: ad_account (access grant)
+relationships:
+  - {from: campaign, to: ad_account, kind: belongs_to, via: ad_account_id}
+  - {from: ad_group, to: campaign, kind: belongs_to, via: campaign_id}
+  - {from: ad, to: ad_group, kind: belongs_to, via: ad_group_id}
+  - {from: ad_group, to: custom_audience, kind: references, via: custom_audience_id}
+  - {from: product_set, to: catalog, kind: belongs_to, via: catalog_id}
+  - {from: catalog, to: business, kind: belongs_to, via: business_id}

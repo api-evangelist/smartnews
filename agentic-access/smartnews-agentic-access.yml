@@ -1,0 +1,603 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/smartnews-marketing-openapi.json
+description: Recommended x-agentic-access execution contracts, classified heuristically from
+  the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
+  audience per deployment. See research/curity/agentic-governance/.
+summary:
+  operations: 46
+  by_action_class:
+    acting: 21
+    connected: 25
+  by_consequence:
+    write: 20
+    safety-critical: 1
+    read: 25
+  human_in_the_loop_required: 1
+operations:
+- path: /api/oauth/v1/access_tokens
+  method: post
+  operationId: generateAccessToken
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/oauth/v1/access_tokens/revoke
+  method: post
+  operationId: revokeAccessToken
+  x-agentic-access:
+    action-class: acting
+    consequence: safety-critical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 120
+      exchange: true
+      purpose-required: true
+      proof-of-possession: true
+    escalation:
+      human-in-the-loop: required
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}
+  method: get
+  operationId: getInsightsV3
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/aggregated_insights/{layer}
+  method: get
+  operationId: getAggregatedInsightsV3
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/campaigns
+  method: get
+  operationId: getCampaignsPaginated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/campaigns
+  method: post
+  operationId: postCampaigns
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}
+  method: get
+  operationId: getCampaignById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}
+  method: patch
+  operationId: patchCampaignById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}
+  method: delete
+  operationId: deleteCampaignById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups
+  method: get
+  operationId: getAdGroupsByCampaignPaginated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups
+  method: post
+  operationId: postAdGroup
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups
+  method: get
+  operationId: getAdGroupsPaginated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}
+  method: get
+  operationId: getAdGroupById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}
+  method: patch
+  operationId: patchAdGroupById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}
+  method: delete
+  operationId: deleteAdGroupById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads
+  method: get
+  operationId: getAdsByAdGroupPaginated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads
+  method: post
+  operationId: postAd
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ads
+  method: get
+  operationId: getAdsPaginated
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ads/{ad_id}
+  method: get
+  operationId: getAdById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ads/{ad_id}
+  method: patch
+  operationId: patchAdById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/ads/{ad_id}
+  method: delete
+  operationId: deleteAdById
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/media_files
+  method: get
+  operationId: getMediaFiles
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/media_files
+  method: post
+  operationId: postMedia
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/locations
+  method: get
+  operationId: getLocations
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/article_categories
+  method: get
+  operationId: getAllArticleCategories
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/article_keywords/search
+  method: post
+  operationId: postSearchSmartViewArticleKeywords
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/channel_alias_labels
+  method: get
+  operationId: getAllChannelAliasLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/iab_interest_categories
+  method: get
+  operationId: getAllIABInterestCategories
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/pixels
+  method: get
+  operationId: getPixelList
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/pixels/{pixel_tag_id}
+  method: get
+  operationId: getPixelDetail
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences
+  method: get
+  operationId: listCustomAudience
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences
+  method: post
+  operationId: createCustomAudience
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}
+  method: get
+  operationId: getCustomAudience
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}
+  method: patch
+  operationId: updateCustomAudience
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}
+  method: delete
+  operationId: deleteCustomAudience
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}/ad_groups
+  method: get
+  operationId: getAdGroupsByCustomAudience
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/ma/v3/ad_accounts/{ad_account_id}/audience_id_list_files
+  method: post
+  operationId: postAudienceIdListFile
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/bm/v1/developer_apps/me/ad_accounts
+  method: get
+  operationId: getAdAccountsByDeveloperAppId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs
+  method: get
+  operationId: listBusinessCatalogs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs
+  method: post
+  operationId: createBusinessCatalog
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}
+  method: get
+  operationId: getBusinessCatalog
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}
+  method: patch
+  operationId: updateBusinessCatalog
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_sets
+  method: get
+  operationId: listCatalogProductSets
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_sets
+  method: post
+  operationId: createCatalogProductSet
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_sets/{product_set_id}
+  method: get
+  operationId: getCatalogProductSet
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/bm-external/v1/businesses/{business_id}/catalogs/{catalog_id}/product_sets/{product_set_id}
+  method: patch
+  operationId: updateCatalogProductSet
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required

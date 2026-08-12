@@ -259,6 +259,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/smartnews-marketing-overlay.yaml
 - type: RateLimits
   url: rate-limits/smartnews-rate-limits.yml
 - type: Security
@@ -294,7 +296,7 @@ common:
 - type: SignUp
   url: https://ads.smartnews.com/
 - type: OpenAPI
-  url: openapi/smartnews-marketing-openapi.json
+  url: openapi/_original/smartnews-marketing-openapi.json
 - type: Conventions
   url: conventions/smartnews-conventions.yml
 - type: ErrorCatalog

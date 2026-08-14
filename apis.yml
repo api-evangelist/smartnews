@@ -31,7 +31,7 @@ x-tier: enriched
 x-tier-reason: has-public-api
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-13'
 tags:
 - Company
 - Consumer
@@ -238,6 +238,32 @@ apis:
     url: https://ads.smartnews.com/developers/
   - type: APIReference
     url: https://ads.smartnews.com/developers/
+- aid: smartnews:smartnews-conversion-api
+  name: SmartNews Ads Conversion API
+  description: >-
+    Server-to-server conversion event ingestion for SmartNews Ads. Advertisers
+    POST self-attributed web and app conversions (35 event names including
+    Purchase, AddToCart, Lead, Install and SignUp) to SmartNews for attribution
+    and optimization, either singly or in batches of up to 1,000 events. Auth is
+    a token in the Authorization header; a published staging host is available for
+    testing before switching to production. Documented in the official SmartNews
+    Ads API spec repository and the Ads Help Center — no OpenAPI is published for
+    this surface.
+  humanURL: https://help-ads.smartnews.com/en/item-5499/
+  baseURL: https://log.smartnews-ads.com
+  tags:
+  - conversion
+  - events
+  - attribution
+  properties:
+  - type: Documentation
+    url: https://help-ads.smartnews.com/en/item-5499/
+  - type: APIReference
+    url: https://github.com/smartnews/smartnews-ads-advertising-api-spec/blob/v1.0/smartnews-ads-conversion-api.md
+  - type: Vocabulary
+    url: vocabulary/smartnews-conversion-events.yml
+  - type: Sandbox
+    url: sandbox/smartnews-sandbox.yml
 - aid: smartnews:smartnews-smart-view-article-keyword-api
   name: SmartNews smart view article keyword API
   description: >-
@@ -317,8 +343,22 @@ common:
   url: llms/smartnews-llms.txt
 - type: AgentSkill
   url: skills/_index.yml
+- type: Sandbox
+  url: sandbox/smartnews-sandbox.yml
+- type: Plans
+  url: plans/smartnews-plans-pricing.yml
+- type: Vocabulary
+  url: vocabulary/smartnews-conversion-events.yml
+- type: Deprecation
+  url: https://ads.smartnews.com/developers/#section/How-to-Upgrade-From-Marketing-API-v2-to-v3
+- type: PrivacyPolicy
+  url: https://www.smartnews.com/privacy/
+- type: Blog
+  url: https://developer.smartnews.com/blog/
+- type: BlogRSS
+  url: https://developer.smartnews.com/blog/feed
 x-enrichment:
-  date: 2026-07-21
+  date: '2026-08-13'
   status: enriched
-  artifacts_added: 22
+  artifacts_added: 3
   pass: local-v1

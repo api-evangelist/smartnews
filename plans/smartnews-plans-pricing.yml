@@ -1,0 +1,32 @@
+generated: '2026-08-13'
+method: searched
+source: https://ads.smartnews.com/home/us/en/
+docs:
+  - https://ads.smartnews.com/home/us/en/
+  - https://ads.smartnews.com/home/us/en/faqs/
+  - https://help-ads.smartnews.com/en/item-4207/
+  - https://ads.smartnews.com/developers/tos-en.html
+plan_count: 0
+plans: []
+note: >-
+  SmartNews publishes no plans, tiers or price list for the SmartNews Ads
+  Marketing API. The API itself is not sold as a product — it is a free control
+  plane over a SmartNews Ads account, and access is granted per organization only
+  after a reviewed Developer Application Form. Spend is auction-based advertising
+  media cost (daily/lifetime campaign budgets set by the advertiser, with Max
+  Conversion and Max Click bid strategies), not an API subscription, so there is
+  no per-call price, no included quota and no overage schedule to record.
+  Searched the ads site, the advertising FAQs, the developer portal and the API
+  Terms of Service on 2026-08-13; none names a price, a tier or a minimum spend.
+pricing_model: auction-based advertising spend (no API fee, no published rate card)
+quota_model: none published (see rate-limits/smartnews-rate-limits.yml for the one published limit)
+evidence:
+  - url: https://ads.smartnews.com/home/us/en/
+    status: 200
+    finding: No pricing page or pricing nav item; primary CTA is "Book a Demo".
+  - url: https://ads.smartnews.com/developers/tos-en.html
+    status: 200
+    finding: API Terms of Service; no fees, no rate card.
+  - url: https://help-ads.smartnews.com/en/item-4207/
+    status: 200
+    finding: Getting-started guide names no pricing tier or plan requirement.

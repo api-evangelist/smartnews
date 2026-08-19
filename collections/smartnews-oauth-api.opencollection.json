@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad oauth API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "oauth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate an access token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/oauth/v1/access_tokens",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Generate an access token for the developer application"
+        },
+        {
+          "info": {
+            "name": "Revoke all active access tokens for the developer application",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/oauth/v1/access_tokens/revoke",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Revoke all active access tokens for the developer application"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

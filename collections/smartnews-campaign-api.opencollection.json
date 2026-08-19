@@ -1,0 +1,189 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad campaign API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "campaign",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Campaigns (Paginated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/campaigns",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Boolean flag for including deleted campaigns in the response."
+              },
+              {
+                "name": "campaign_ids",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Filter the response by a target list of campaign_ids"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of campaign objects.\n\nThis endpoint returns campaigns with pagination support, including pagination metadata in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Create a Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/campaigns",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a campaign object. An ad account can only have up to 1,000 campaigns.\n\nWhen the number of campaigns exceed the limit, the API returns a Business Error.\n"
+        },
+        {
+          "info": {
+            "name": "Get a Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/campaigns/:campaign_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single campaign object."
+        },
+        {
+          "info": {
+            "name": "Update a Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/campaigns/:campaign_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing campaign by using the JSON Merge Patch specification, described in [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396)."
+        },
+        {
+          "info": {
+            "name": "Delete a Campaign",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/campaigns/:campaign_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete an existing campaign and all of its ad-groups and ads. The API returns a business error if the campaign cannot be deleted due to business logic constraints.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

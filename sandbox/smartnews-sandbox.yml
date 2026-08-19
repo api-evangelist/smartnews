@@ -1,0 +1,52 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/smartnews/smartnews-ads-advertising-api-spec/blob/v1.0/smartnews-ads-conversion-api.md
+docs:
+  - https://github.com/smartnews/smartnews-ads-advertising-api-spec/blob/v1.0/smartnews-ads-conversion-api.md
+  - https://help-ads.smartnews.com/en/item-5499/
+  - https://help-ads.smartnews.com/en/item-4207/
+summary: >-
+  SmartNews publishes a staging environment for the Ads Conversion API only. The
+  v3 Marketing API (ads.smartnews.com/api/ma/v3) has no sandbox, no test mode and
+  no test-vs-live key separation — access is granted per organization after a
+  reviewed developer application, and every call runs against live ad accounts.
+environments:
+  - name: production
+    api: conversion-api
+    base_url: https://log.smartnews-ads.com/conversion_api/{api_version}/{partner_name}
+    batch_base_url: https://log.smartnews-ads.com/conversion_api/conversions/{api_version}/{partner_name}
+    live: true
+  - name: staging
+    api: conversion-api
+    base_url: https://stg-log.smartnews-ads.com/conversion_api/{api_version}/{partner_name}
+    batch_base_url: https://stg-log.smartnews-ads.com/conversion_api/conversions/{api_version}/{partner_name}
+    live: false
+    note: Published staging host for testing conversion event delivery before switching to production.
+  - name: production
+    api: marketing-api-v3
+    base_url: https://ads.smartnews.com/api/ma/v3
+    live: true
+    note: No staging or sandbox host is published for the Marketing API.
+test_credentials:
+  separation: none
+  key_prefixes: []
+  note: >-
+    Credentials are a single client secret per developer app (one developer app
+    per organization). SmartNews does not publish test-mode keys, test card
+    numbers, magic identifiers or fixture/trigger tooling.
+test_clocks: false
+fixtures: []
+access:
+  process: >-
+    An existing SmartNews Ads account is required, then a Developer Application
+    Form is submitted and reviewed by SmartNews before an app can be registered
+    in Business Manager (Developer Apps > App Registration). The client secret is
+    displayed once.
+  application_form: https://docs.google.com/forms/d/e/1FAIpQLSdoK26WFfQz2rDw1E7CX067moe79PGAe6uLPOzLdGmvReRnhg/viewform
+  limit: One developer app per organization.
+  getting_started: https://help-ads.smartnews.com/en/item-4207/
+gaps:
+  - No sandbox/test mode for the Marketing API — campaign, ad group, ad, audience
+    and catalog writes execute against production ad accounts.
+  - No published test values (no test creatives, no test audience files, no test
+    pixel ids).

@@ -1,15 +1,48 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 source: https://github.com/smartnews , https://ads.smartnews.com/developers/
 notes: |
-  No first-party SmartNews Ads Marketing API client SDK was found on npm, PyPI,
-  Maven Central, RubyGems, or the smartnews GitHub org (which publishes infra
-  forks + a spec repo, but no advertising-API SDK). The published spec repo below
-  is the closest official developer artifact.
+  No first-party SmartNews Ads Marketing API client SDK exists. Re-probed every
+  major registry on 2026-08-13: npm full-text search returns only third-party
+  SmartFormat feed generators (nuxt-smartnews, feed-smartnews — both last
+  published 2019) and unrelated packages; PyPI has no smartnews / smartnews-ads /
+  smartnews-api project; RubyGems, Packagist and crates.io return nothing
+  first-party. The smartnews GitHub org (100+ repos) is almost entirely infra
+  forks (Spinnaker, Fluentd, Airflow, Presto) plus the API spec repo below — no
+  advertising-API client library. Developers integrate against raw HTTP.
 packages: []
+package_count: 0
+registries_checked:
+  - {registry: npm, endpoint: 'https://registry.npmjs.org/-/v1/search?text=smartnews', checked: '2026-08-13', first_party_hits: 0}
+  - {registry: pypi, endpoint: 'https://pypi.org/pypi/{smartnews,smartnews-ads,smartnews-api}/json', checked: '2026-08-13', first_party_hits: 0, note: all 404}
+  - {registry: rubygems, endpoint: 'https://rubygems.org/api/v1/search.json?query=smartnews', checked: '2026-08-13', first_party_hits: 0}
+  - {registry: packagist, endpoint: 'https://packagist.org/search.json?q=smartnews', checked: '2026-08-13', first_party_hits: 0}
+  - {registry: maven-central, checked: '2026-08-13', first_party_hits: 0}
+  - {registry: nuget, checked: '2026-08-13', first_party_hits: 0}
+  - {registry: crates.io, checked: '2026-08-13', first_party_hits: 0}
+  - {registry: pkg.go.dev, checked: '2026-08-13', first_party_hits: 0}
 related:
   - kind: api-spec
     name: smartnews-ads-advertising-api-spec
     url: https://github.com/smartnews/smartnews-ads-advertising-api-spec
+    registry: github
     official: true
-    note: Official API Blueprint + markdown reference for the Ads Advertising API (v1.0 tag).
+    version: v1.0
+    published: '2025-09-11'
+    published_note: >-
+      No tags or releases are published on the repo; `v1.0` is the branch the
+      documentation is served from and the date is the repo's last push
+      (GitHub API pushed_at, read 2026-08-13). Not a package — API Blueprint
+      (apiary.apib) plus markdown references for the Advertising, Insights,
+      Management and Conversion APIs.
+  - kind: mirror
+    name: smartnews/claude-skills
+    url: https://github.com/smartnews/claude-skills
+    official: false
+    version: null
+    published: '2026-07-01'
+    published_note: >-
+      Checked and REJECTED as a provider-published Agent Skill source: this is a
+      mirror of Anthropic's public example skills (algorithmic-art,
+      artifacts-builder, brand-guidelines, canvas-design). It contains nothing
+      about the SmartNews Ads API.

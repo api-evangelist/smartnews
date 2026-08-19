@@ -1,0 +1,239 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ad",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Ads By Ad Group (Paginated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ad_groups/:ad_group_id/ads",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_group_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Boolean flag for including deleted ads in the response."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of ad objects under a specified ad group.\n\nThis endpoint returns ads with pagination support, including pagination metadata in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Create an Ad",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ad_groups/:ad_group_id/ads",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_group_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an ad object. A single Ad Group can have up to 100 ads.\n\nWhen the number of ads exceed the limit, the API returns a Business Error.\n"
+        },
+        {
+          "info": {
+            "name": "List Ads By Ad Account (Paginated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ads",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Boolean flag for including deleted ads in the response."
+              },
+              {
+                "name": "ad_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by a target list of ad_id"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of ad objects by ad account.\n\nThis endpoint returns ads with pagination support, including pagination metadata in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Get an Ad",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ads/:ad_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single ad object."
+        },
+        {
+          "info": {
+            "name": "Update an Ad",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ads/:ad_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing Ad by using the JSON Merge Patch specification, described in [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396).\\\nThe API returns an business error when a request updates one or more of the following fields when the submission_status before this API call is SUBMITTED\\\n- landing_page_url\\\n- cta_label\\\n- creative.headline\\\n- creative.description\\\n- creative.sponsored_name\\\n- creative.media_file_ids\n"
+        },
+        {
+          "info": {
+            "name": "Delete an Ad",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ads/:ad_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete an existing ad.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

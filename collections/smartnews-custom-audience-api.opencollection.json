@@ -1,0 +1,225 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad custom-audience API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "custom-audience",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List custom audiences",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/custom_audiences",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a list of Custom Audiences for an ad account ID."
+        },
+        {
+          "info": {
+            "name": "Create a Custom Audience",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/custom_audiences",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a Custom Audience"
+        },
+        {
+          "info": {
+            "name": "Get a Custom Audience",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/custom_audiences/:custom_audience_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "custom_audience_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single custom audience by ID."
+        },
+        {
+          "info": {
+            "name": "Update a Custom Audience",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/custom_audiences/:custom_audience_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "custom_audience_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a custom audience.\n"
+        },
+        {
+          "info": {
+            "name": "Delete a Custom Audience",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/custom_audiences/:custom_audience_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "custom_audience_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a single custom audience by ID. NOTE: the custom audience must not be currently used in any Ad Group targeting.\n\nRemove the custom audience from all Ad Group targeting before attempting to delete it.\n\nUse the `GET ad_accounts/{ad_account_id}/custom_audiences/{custom_audience_id}/ad_groups` endpoint \nto determine which ad groups are currently using the custom audience.\n"
+        },
+        {
+          "info": {
+            "name": "Get ad groups by custom audience.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/custom_audiences/:custom_audience_id/ad_groups",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "custom_audience_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the custom audience to retrieve ad groups for."
+              }
+            ]
+          },
+          "docs": "Get an array of adgroups that use the specified custom audience for targeting."
+        },
+        {
+          "info": {
+            "name": "Create a audience ID list file.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/audience_id_list_files",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Create a audience ID list file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

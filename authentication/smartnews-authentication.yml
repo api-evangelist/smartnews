@@ -1,6 +1,10 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: derived
-source: openapi/smartnews-marketing-openapi.json
+source: openapi/smartnews-ad-api-openapi.yml, openapi/smartnews-ad-group-api-openapi.yml, openapi/smartnews-article-category-api-openapi.yml,
+  openapi/smartnews-campaign-api-openapi.yml, openapi/smartnews-catalog-api-openapi.yml, openapi/smartnews-channel-alias-label-api-openapi.yml,
+  openapi/smartnews-custom-audience-api-openapi.yml, openapi/smartnews-developer-app-api-openapi.yml,
+  openapi/smartnews-insights-api-openapi.yml, openapi/smartnews-interests-api-openapi.yml, openapi/smartnews-locations-api-openapi.yml,
+  openapi/smartnews-media-file-api-openapi.yml ...
 summary:
   types:
   - http
@@ -10,4 +14,18 @@ schemes:
   scheme: bearer
   bearerFormat: JWT
   sources:
-  - openapi/smartnews-marketing-openapi.json
+  - openapi/smartnews-ad-api-openapi.yml
+  - openapi/smartnews-ad-group-api-openapi.yml
+  - openapi/smartnews-article-category-api-openapi.yml
+  - openapi/smartnews-campaign-api-openapi.yml
+  - openapi/smartnews-catalog-api-openapi.yml
+  - openapi/smartnews-channel-alias-label-api-openapi.yml
+  - openapi/smartnews-custom-audience-api-openapi.yml
+  - openapi/smartnews-developer-app-api-openapi.yml
+  - openapi/smartnews-insights-api-openapi.yml
+  - openapi/smartnews-interests-api-openapi.yml
+  - openapi/smartnews-locations-api-openapi.yml
+  - openapi/smartnews-media-file-api-openapi.yml
+  - openapi/smartnews-oauth-api-openapi.yml
+  - openapi/smartnews-pixel-api-openapi.yml
+  - openapi/smartnews-smart-view-article-keyword-api-openapi.yml

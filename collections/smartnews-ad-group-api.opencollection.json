@@ -1,0 +1,269 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad ad-group API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ad-group",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Ad Groups By Campaign (Paginated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/campaigns/:campaign_id/ad_groups",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, deleted Ad Groups are included in the response."
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of ad group objects under a specified campaign.\n\nThis endpoint returns ad groups with pagination support, including pagination metadata in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Create an Ad Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/campaigns/:campaign_id/ad_groups",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "campaign_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an ad group object. A campaign can only have up to 1,000 ad groups.\n\nWhen the number of ad groups exceed the limit, the API returns a Business Error.\n"
+        },
+        {
+          "info": {
+            "name": "List Ad Groups By Ad Account (Paginated)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ad_groups",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "If `true`, deleted Ad Groups are included in the response."
+              },
+              {
+                "name": "ad_group_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by a target list of ad_group_ids"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of ad group objects by ad account.\n\nThis endpoint returns ad groups with pagination support, including pagination metadata in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Get an Ad Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ad_groups/:ad_group_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_group_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Get a single Ad Group object.\n"
+        },
+        {
+          "info": {
+            "name": "Update an Ad Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ad_groups/:ad_group_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_group_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing ad group by using the JSON Merge Patch specification, described in [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396)."
+        },
+        {
+          "info": {
+            "name": "Delete an Ad Group",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/ad_groups/:ad_group_id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ad_group_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete an existing ad-group and its children(ad). The API returns a business error if the ad-group has any ads that cannot be deleted.\n"
+        },
+        {
+          "info": {
+            "name": "Get ad groups by custom audience.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/custom_audiences/:custom_audience_id/ad_groups",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "custom_audience_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the custom audience to retrieve ad groups for."
+              }
+            ]
+          },
+          "docs": "Get an array of adgroups that use the specified custom audience for targeting."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

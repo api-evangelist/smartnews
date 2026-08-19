@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad media-file API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "media-file",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Media Files",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/media_files",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "query",
+                "value": "",
+                "type": "query",
+                "description": "Search query string. Filters media files whose `file_name` contains this value (case-insensitive).\n"
+              },
+              {
+                "name": "media_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by media type."
+              },
+              {
+                "name": "min_width",
+                "value": "",
+                "type": "query",
+                "description": "Minimum width in pixels. Only media files with `width >= min_width` will be returned.\n"
+              },
+              {
+                "name": "min_height",
+                "value": "",
+                "type": "query",
+                "description": "Minimum height in pixels. Only media files with `height >= min_height` will be returned.\n"
+              },
+              {
+                "name": "aspect_ratio_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter media files by the predefined aspect ratio. Applies to IMAGE media files.\nOnly assets whose primary image has the specified `aspect_ratio_type` are returned.\n"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Specify the sort order for the results. The format is `{field}:{order}` (e.g. `created_at:desc`).\nSupported fields: `created_at`, `updated_at`. Defaults to `created_at:desc`.\n"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a paginated list of media files under the specified ad account.\nNote: Soft-deleted (inactive) media files are not returned by this endpoint.\n"
+        },
+        {
+          "info": {
+            "name": "Create a Media File",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/media_files",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": []
+            }
+          },
+          "docs": "Create a Media File which can be used in Ad Creatives."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

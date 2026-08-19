@@ -1,0 +1,1724 @@
+{
+  "item": [
+    {
+      "id": "83943751-a0cd-4d86-b0ac-8e1cb1221ca7",
+      "name": "media-file",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "21f3246e-9671-4ebe-9cb9-7b02c3b87c80",
+          "name": "List Media Files",
+          "request": {
+            "name": "List Media Files",
+            "description": {
+              "content": "Get a paginated list of media files under the specified ad account.\nNote: Soft-deleted (inactive) media files are not returned by this endpoint.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "media_files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "query",
+                  "value": "<string>",
+                  "description": "Search query string. Filters media files whose `file_name` contains this value (case-insensitive).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "media_type",
+                  "value": "<string>",
+                  "description": "(Required) Filter by media type."
+                },
+                {
+                  "disabled": false,
+                  "key": "min_width",
+                  "value": "<integer>",
+                  "description": "Minimum width in pixels. Only media files with `width >= min_width` will be returned.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "min_height",
+                  "value": "<integer>",
+                  "description": "Minimum height in pixels. Only media files with `height >= min_height` will be returned.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "aspect_ratio_type",
+                  "value": "<string>",
+                  "description": "Filter media files by the predefined aspect ratio. Applies to IMAGE media files.\nOnly assets whose primary image has the specified `aspect_ratio_type` are returned.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "created_at:desc",
+                  "description": "Specify the sort order for the results. The format is `{field}:{order}` (e.g. `created_at:desc`).\nSupported fields: `created_at`, `updated_at`. Defaults to `created_at:desc`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "100"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f321b04d-f859-4d5a-b02d-8ea622c7f73a",
+              "name": "A paginated list of media file objects with pagination metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "media_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_width",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "min_height",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "aspect_ratio_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "created_at:desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"media_file_id\": 992,\n      \"ad_account_id\": 4969,\n      \"media_type\": \"<string>\",\n      \"file_name\": \"string\",\n      \"images\": {\n        \"full\": {\n          \"width\": 7583,\n          \"height\": 3144,\n          \"url\": \"string\",\n          \"filesize\": 7722,\n          \"aspect_ratio_type\": \"<string>\",\n          \"image_scale\": \"HALF\",\n          \"created_at\": \"1982-01-03T17:29:49.254Z\"\n        },\n        \"half\": {\n          \"width\": 339,\n          \"height\": 6023,\n          \"url\": \"string\",\n          \"filesize\": 6896,\n          \"aspect_ratio_type\": \"<string>\",\n          \"image_scale\": \"ORIGINAL\",\n          \"created_at\": \"1996-09-16T00:36:30.810Z\"\n        },\n        \"original\": {\n          \"width\": 4089,\n          \"height\": 1506,\n          \"url\": \"string\",\n          \"filesize\": 4775,\n          \"aspect_ratio_type\": \"<string>\",\n          \"image_scale\": \"FULL\",\n          \"created_at\": \"2010-03-27T19:18:09.039Z\"\n        }\n      },\n      \"created_at\": \"1959-07-11T19:01:05.502Z\",\n      \"status\": \"ACTIVE\",\n      \"videos\": {\n        \"high\": {\n          \"width\": 7237,\n          \"height\": 5229,\n          \"url\": \"string\",\n          \"length\": 3088,\n          \"filesize\": 9827,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"HIGH\",\n          \"created_at\": \"2022-08-03T16:15:28.671Z\"\n        },\n        \"middle\": {\n          \"width\": 4401,\n          \"height\": 1401,\n          \"url\": \"string\",\n          \"length\": 5304,\n          \"filesize\": 3336,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"HIGH\",\n          \"created_at\": \"1949-12-03T20:58:18.379Z\"\n        },\n        \"low\": {\n          \"width\": 4599,\n          \"height\": 7220,\n          \"url\": \"string\",\n          \"length\": 5990,\n          \"filesize\": 9257,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"ORIGINAL\",\n          \"created_at\": \"1994-02-14T19:18:30.136Z\"\n        },\n        \"original\": {\n          \"width\": 6604,\n          \"height\": 9815,\n          \"url\": \"string\",\n          \"length\": 3575,\n          \"filesize\": 7689,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"HIGH\",\n          \"created_at\": \"1985-05-26T10:15:00.623Z\"\n        }\n      },\n      \"thumbnail_media_file_id\": 1209,\n      \"updated_at\": \"1965-11-24T18:18:39.214Z\"\n    },\n    {\n      \"media_file_id\": 9190,\n      \"ad_account_id\": 4096,\n      \"media_type\": \"<string>\",\n      \"file_name\": \"string\",\n      \"images\": {\n        \"full\": {\n          \"width\": 7311,\n          \"height\": 6604,\n          \"url\": \"string\",\n          \"filesize\": 7772,\n          \"aspect_ratio_type\": \"<string>\",\n          \"image_scale\": \"ORIGINAL\",\n          \"created_at\": \"1982-11-07T09:58:54.581Z\"\n        },\n        \"half\": {\n          \"width\": 4744,\n          \"height\": 8579,\n          \"url\": \"string\",\n          \"filesize\": 8762,\n          \"aspect_ratio_type\": \"<string>\",\n          \"image_scale\": \"ORIGINAL\",\n          \"created_at\": \"1993-10-31T07:30:44.302Z\"\n        },\n        \"original\": {\n          \"width\": 9920,\n          \"height\": 3542,\n          \"url\": \"string\",\n          \"filesize\": 1403,\n          \"aspect_ratio_type\": \"<string>\",\n          \"image_scale\": \"ORIGINAL\",\n          \"created_at\": \"1957-02-13T17:00:37.613Z\"\n        }\n      },\n      \"created_at\": \"2010-06-23T19:26:58.403Z\",\n      \"status\": \"INACTIVE\",\n      \"videos\": {\n        \"high\": {\n          \"width\": 2780,\n          \"height\": 1689,\n          \"url\": \"string\",\n          \"length\": 6985,\n          \"filesize\": 2260,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"LOW\",\n          \"created_at\": \"1986-01-08T15:52:00.512Z\"\n        },\n        \"middle\": {\n          \"width\": 2790,\n          \"height\": 1683,\n          \"url\": \"string\",\n          \"length\": 9091,\n          \"filesize\": 8571,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"MIDDLE\",\n          \"created_at\": \"1979-07-30T10:10:30.025Z\"\n        },\n        \"low\": {\n          \"width\": 2680,\n          \"height\": 5740,\n          \"url\": \"string\",\n          \"length\": 7285,\n          \"filesize\": 3627,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"HIGH\",\n          \"created_at\": \"1973-11-22T16:31:32.053Z\"\n        },\n        \"original\": {\n          \"width\": 6060,\n          \"height\": 1501,\n          \"url\": \"string\",\n          \"length\": 1470,\n          \"filesize\": 1180,\n          \"aspect_ratio_type\": \"<string>\",\n          \"video_quality\": \"ORIGINAL\",\n          \"created_at\": \"1949-02-27T21:41:54.710Z\"\n        }\n      },\n      \"thumbnail_media_file_id\": 1025,\n      \"updated_at\": \"2010-08-11T03:36:42.821Z\"\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 100,\n    \"total_pages\": 10,\n    \"total_objects\": 987\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9579a036-5c14-42d2-bf83-0d38d16495f0",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "media_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_width",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "min_height",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "aspect_ratio_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "created_at:desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e07f6f01-0567-4efb-af20-59240ec7ff09",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "media_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_width",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "min_height",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "aspect_ratio_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "created_at:desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48752bb1-8f3e-41da-9096-67ac756cf7fd",
+              "name": "The user doesn't have permission to access the resource or the ad account doesn't exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "media_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_width",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "min_height",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "aspect_ratio_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "created_at:desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_GROUP\",\n    \"retriable\": true,\n    \"type\": \"NOT_FOUND\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a69cdc5-248a-4076-abe3-0454fac3a0fb",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "media_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_width",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "min_height",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "aspect_ratio_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "created_at:desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f879f1db-ece5-41b0-9397-3cb340ca0a30",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "media_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_width",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "min_height",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "aspect_ratio_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "created_at:desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d9d01b6-0be8-4b4a-9dfb-1578b46d09bf",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "query",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "media_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "min_width",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "min_height",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "aspect_ratio_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "created_at:desc"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "31425f60-f444-477e-9637-b9232e59b95e",
+          "name": "Create a Media File",
+          "request": {
+            "name": "Create a Media File",
+            "description": {
+              "content": "Create a Media File which can be used in Ad Creatives.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "media_files"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "multipart/form-data"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file_name",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) The filename of the uploaded file.\n"
+                },
+                {
+                  "key": "media_type",
+                  "value": "<string>",
+                  "type": "text",
+                  "description": "(Required) "
+                },
+                {
+                  "key": "media_file",
+                  "type": "file",
+                  "description": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "af5c785e-5b6e-4714-9ac9-336443f696dc",
+              "name": "`images` and `videos` fields are required in the response by following the rules:\n| Media Type | Required Fields       |\n|------------|-----------------------|\n| IMAGE      | `images`              |\n| VIDEO      | `images`, `videos`    |\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"media_file_id\": 7674,\n  \"ad_account_id\": 943,\n  \"media_type\": \"<string>\",\n  \"file_name\": \"string\",\n  \"images\": {\n    \"full\": {\n      \"width\": 7520,\n      \"height\": 1938,\n      \"url\": \"string\",\n      \"filesize\": 4367,\n      \"aspect_ratio_type\": \"<string>\",\n      \"image_scale\": \"HALF\",\n      \"created_at\": \"1959-01-29T14:29:04.582Z\"\n    },\n    \"half\": {\n      \"width\": 5941,\n      \"height\": 3873,\n      \"url\": \"string\",\n      \"filesize\": 7177,\n      \"aspect_ratio_type\": \"<string>\",\n      \"image_scale\": \"ORIGINAL\",\n      \"created_at\": \"2025-10-05T23:49:56.667Z\"\n    },\n    \"original\": {\n      \"width\": 5434,\n      \"height\": 9738,\n      \"url\": \"string\",\n      \"filesize\": 4351,\n      \"aspect_ratio_type\": \"<string>\",\n      \"image_scale\": \"ORIGINAL\",\n      \"created_at\": \"1960-06-30T08:11:22.968Z\"\n    }\n  },\n  \"created_at\": \"1959-11-22T13:33:03.019Z\",\n  \"status\": \"INACTIVE\",\n  \"videos\": {\n    \"high\": {\n      \"width\": 2670,\n      \"height\": 1767,\n      \"url\": \"string\",\n      \"length\": 5924,\n      \"filesize\": 1820,\n      \"aspect_ratio_type\": \"<string>\",\n      \"video_quality\": \"HIGH\",\n      \"created_at\": \"1998-05-06T06:09:42.703Z\"\n    },\n    \"middle\": {\n      \"width\": 7061,\n      \"height\": 4216,\n      \"url\": \"string\",\n      \"length\": 3456,\n      \"filesize\": 6827,\n      \"aspect_ratio_type\": \"<string>\",\n      \"video_quality\": \"LOW\",\n      \"created_at\": \"1978-01-22T14:36:31.785Z\"\n    },\n    \"low\": {\n      \"width\": 4558,\n      \"height\": 1525,\n      \"url\": \"string\",\n      \"length\": 9195,\n      \"filesize\": 9049,\n      \"aspect_ratio_type\": \"<string>\",\n      \"video_quality\": \"HIGH\",\n      \"created_at\": \"1990-05-01T20:24:21.710Z\"\n    },\n    \"original\": {\n      \"width\": 769,\n      \"height\": 8671,\n      \"url\": \"string\",\n      \"length\": 4806,\n      \"filesize\": 3915,\n      \"aspect_ratio_type\": \"<string>\",\n      \"video_quality\": \"LOW\",\n      \"created_at\": \"1951-10-17T20:42:23.347Z\"\n    }\n  },\n  \"thumbnail_media_file_id\": 7252,\n  \"updated_at\": \"2003-05-08T02:49:14.907Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4fe54951-2568-4119-a599-b270e48d1775",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7a0e3a93-39c0-4a74-acf5-6a7d15540f4d",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7d81c9c-af77-4e1c-8d19-8f3bec92e581",
+              "name": "Business Error. The request body is formatted correctly but not correct in the business definitions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"BUSINESS_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2db3ee1-3dfc-4f84-9950-744bf518b137",
+              "name": "Validation Error. The request body doesn't pass the format check or some fields contain invalid values. The `error_fields` shows the fields that don't pass the validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"error_fields\": [\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      },\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      }\n    ],\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"VALIDATION_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95cca99f-f52a-4c16-80ba-9411ada5c5b3",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7affc5d6-f41f-4092-b1ed-0f7941d51295",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce495241-c93e-4867-bb5a-27b7c0d5d103",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5cbbf741-3e99-4af9-9eaa-e522c99f00b2",
+              "name": "Upload MediaFile timeout error.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "media_files"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "description": {
+                        "content": "(Required) The filename of the uploaded file.\n",
+                        "type": "text/plain"
+                      },
+                      "key": "file_name",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "media_type",
+                      "value": "<string>",
+                      "type": "text"
+                    },
+                    {
+                      "description": {
+                        "content": "(Required) If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n",
+                        "type": "text/plain"
+                      },
+                      "key": "media_file",
+                      "value": "<binary>",
+                      "type": "text"
+                    }
+                  ]
+                }
+              },
+              "status": "Gateway Timeout",
+              "code": 504,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ads.smartnews.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "afbe29d2-177c-4203-9703-2cd8f36257be",
+    "name": "SmartNews Marketing ad media-file API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n\n\nContact Support:\n Name: SmartNews Ads Support",
+      "type": "text/plain"
+    }
+  }
+}

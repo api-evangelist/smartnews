@@ -1,16 +1,50 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 source: https://ads.smartnews.com/developers/
 versioning:
   scheme: uri-path
   current: v3
   previous: v2
+  spec_version: '3.0.1'
+  surfaces:
+    marketing_api: /api/ma/v3
+    oauth: /api/oauth/v1
+    business_manager: /api/bm/v1, /api/bm-external/v1
+    conversion_api: https://log.smartnews-ads.com/conversion_api/{api_version}/{partner_name}
   deprecated_docs: https://ads.smartnews.com/developers/deprecated/v2/index.html
 deprecation:
-  policy: 'v2 Marketing API is deprecated; v3 (3.0.1) is current. Deprecated docs retained.'
-  header_support: unknown
+  policy_url: https://ads.smartnews.com/developers/
+  migration_guide: https://ads.smartnews.com/developers/#section/How-to-Upgrade-From-Marketing-API-v2-to-v3
+  policy: >-
+    SmartNews publishes a deprecation notice and a migration guide in the v3
+    Marketing API reference. Marketing API v2 is fully disabled — every request to
+    /api/ma/v2/* now returns 410 Gone — and the v2 reference is retained at
+    /developers/deprecated/v2/index.html for reference. Announced in the January
+    2026 change log entry alongside the v3 release.
+  retired_versions:
+    - version: v2
+      status: disabled
+      response_on_call: 410 Gone
+      docs_retained: https://ads.smartnews.com/developers/deprecated/v2/index.html
+  header_support: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No RFC 8594 Sunset or Deprecation response headers are documented; retirement
+    is communicated in the reference and enforced with 410 Gone.
 sla:
-  note: 'No public SLA published for the Ads Marketing API.'
+  url: null
+  uptime_target: null
+  note: No public SLA or uptime commitment is published for the Ads Marketing API.
 status_page: null
-changelog: https://ads.smartnews.com/developers/
+status_page_probe:
+  - {url: 'https://status.smartnews.com', status: 200, accepted: false, reason: 'Wildcard-DNS soft-200 serving the SmartNews consumer news app (Next.js /news/ bundle), not a status page.'}
+  - {url: 'https://ads.smartnews.com/developers/', status: 200, accepted: false, reason: 'Reference page; carries no status/uptime component.'}
+changelog: changelog/smartnews-changelog.yml
+changelog_url: https://ads.smartnews.com/developers/
+support:
+  help_center: https://help-ads.smartnews.com/en/
+  getting_started: https://help-ads.smartnews.com/en/item-4207/
+  us_contact: https://ads.smartnews.com/home/us/en/get-started-ads/
+  jp_contact: https://smartnews-ads.zendesk.com/hc/ja/requests/new
 deprecated_operations: []

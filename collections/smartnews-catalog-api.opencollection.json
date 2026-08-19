@@ -1,0 +1,240 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad catalog API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "listBusinessCatalogs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business whose catalogs will be listed."
+              }
+            ]
+          },
+          "docs": "Retrieve all catalogs associated with the specified business.\n"
+        },
+        {
+          "info": {
+            "name": "createBusinessCatalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business that will own the catalog."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new catalog for the specified business.\nOnly business admins can create catalogs.\nThe catalog will be created with the provided configuration and linked to the specified ad accounts.\n"
+        },
+        {
+          "info": {
+            "name": "getBusinessCatalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs/:catalog_id",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business that owns the catalog."
+              },
+              {
+                "name": "catalog_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the catalog to retrieve."
+              }
+            ]
+          },
+          "docs": "Retrieve metadata of a specific catalog under the specified business.\n"
+        },
+        {
+          "info": {
+            "name": "updateBusinessCatalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs/:catalog_id",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business that owns the catalog."
+              },
+              {
+                "name": "catalog_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the catalog to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update metadata of an existing catalog under the specified business.\nOnly the catalog-level fields are editable here; product source fields are\nmanaged via the product source endpoint and no connection validation is\ntriggered by this operation.\n"
+        },
+        {
+          "info": {
+            "name": "listCatalogProductSets",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs/:catalog_id/product_sets",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business that owns the catalog."
+              },
+              {
+                "name": "catalog_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the catalog whose product sets will be listed."
+              }
+            ]
+          },
+          "docs": "Retrieve all product sets configured under the specified catalog.\n"
+        },
+        {
+          "info": {
+            "name": "createCatalogProductSet",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs/:catalog_id/product_sets",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business that owns the catalog."
+              },
+              {
+                "name": "catalog_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the catalog under which to create the product set."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new product set under the specified catalog.\nUsers can configure name, rule_match_type, and filter_rules.\nEach filter rule must specify a valid field, condition, and values combination.\n"
+        },
+        {
+          "info": {
+            "name": "getCatalogProductSet",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs/:catalog_id/product_sets/:product_set_id",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business that owns the catalog."
+              },
+              {
+                "name": "catalog_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the catalog that contains the product set."
+              },
+              {
+                "name": "product_set_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the product set to retrieve."
+              }
+            ]
+          },
+          "docs": "Retrieve details of a specific product set under the specified catalog.\n"
+        },
+        {
+          "info": {
+            "name": "updateCatalogProductSet",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://ads.smartnews.com/api/bm-external/v1/businesses/:business_id/catalogs/:catalog_id/product_sets/:product_set_id",
+            "params": [
+              {
+                "name": "business_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the business that owns the catalog."
+              },
+              {
+                "name": "catalog_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the catalog that contains the product set."
+              },
+              {
+                "name": "product_set_id",
+                "value": "",
+                "type": "path",
+                "description": "Identifier of the product set to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update an existing product set under the specified catalog.\nUsers can update name, rule_match_type, and filter_rules.\nEach filter rule must specify a valid field, condition, and values combination.\nAt least one field must be provided in the request body.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

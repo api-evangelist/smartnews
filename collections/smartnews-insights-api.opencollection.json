@@ -1,0 +1,237 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad insights API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "insights",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Insights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/insights/:layer",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "layer",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "since",
+                "value": "2024-08-15T15:00:00Z",
+                "type": "query",
+                "description": "Only include metrics from this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+              },
+              {
+                "name": "until",
+                "value": "2024-08-15T15:00:00Z",
+                "type": "query",
+                "description": "Only include metrics until this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "The fields to include in the response. For a detailed description of each field, see the response section under `metadata` or `metrics`.\n\nThe prefix indicates whether the field will be present in the `metadata` or `metrics` object of the response.\n\n- Starts with `metadata_`: Is a `metadata` field.\n- Starts with `metrics_`: Is a `metrics` field.\n\n* `metrics_reach` and `metrics_frequency` are not currently supported\n\n### Layer Specific Metadata fields\n\n#### Campaign\n- `metadata_objective`\n- `metadata_daily_budget_amount`\n- `metadata_start_date_time`\n- `metadata_end_date_time`\n- `metadata_optimization_event`\n- `metadata_optimization_goal`\n- `metadata_spending_limit`\n\n#### Ad Group\n- `metadata_campaign_id`\n- `metadata_campaign_name`\n\n#### Ad\n- `metadata_campaign_id`\n- `metadata_campaign_name`\n- `metadata_ad_group_id`\n- `metadata_ad_group_name`\n- `metadata_submission_status`\n- `metadata_moderation_status`\n- `metadata_thumbnails`\n- `metadata_video`\n- `metadata_ad_headline`\n- `metadata_ad_description`\n- `metadata_ad_creative_format`\n"
+              },
+              {
+                "name": "breakdown_type",
+                "value": "",
+                "type": "query",
+                "description": "When specified, the report is broken down by the specified audience breakdown type. The breakdown can be found inside the `metrics_breakdown` field in the response. \n\n**When included in a JSON request, the following restrictions apply:**\n- cannot use the `city`, `county`, `os`, `device_type` or `hyper_location_segment` breakdowns.\n- cannot use `breakdown_type` together with `breakdown_period`.\n"
+              },
+              {
+                "name": "breakdown_period",
+                "value": "",
+                "type": "query",
+                "description": "The time period to breakdown the report by. The breakdown can be found inside the `metrics_breakdown` field in the response. \n\nThis option combines with the `breakdown_type` param. For example `breakdown_type=age&breakdown_period=day` \nresults in one breakdown row for each day and age combination within the specified date range.\n\n**When included in a JSON request, the following restrictions apply:**\n- When using `hour` breakdown period, 1-5 object IDs must be specified using the `target_ids` parameter.\n- cannot use `breakdown_type` together with `breakdown_period`.\n"
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Boolean flag for including deleted objects in the response."
+              },
+              {
+                "name": "mobile_app_attribution_mode",
+                "value": "",
+                "type": "query",
+                "description": "The mobile app attribution mode for counting conversions of app campaigns only. The mobile app attribution mode will not be applied for web campaigns.\n\nThere are two modes: `all` and `mmp_only`.\n\n`all` mode counts all app campaigns' conversions including those attributed by a Mobile Measurement Partner and SmartNews attribution.\n`mmp_only` mode only counts app campaigns' conversions attributed by a Mobile Measurement Partner.\n"
+              },
+              {
+                "name": "click_attribution_window",
+                "value": "",
+                "type": "query",
+                "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a click.\n\nThe default value is 30 days.\n"
+              },
+              {
+                "name": "vimp_attribution_window",
+                "value": "",
+                "type": "query",
+                "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a viewable impression.\n\nThe default value is 1 day.\n"
+              },
+              {
+                "name": "target_ids",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Filter by target id(s) (campaign_id for Campaign, ad_group_id for AdGroup, ad_id for Ad)\nOnly the ad object id of the specified layer (determined by the `layer` in the path) is supported.\n\n**When included in a JSON request, this field is required when either of  the following parameters is specified:**\n- breakdown_type\n- breakdown_period\n\nNote: when `breakdown_period` is `hour`, the maximum size of `target_ids` is 5, not 100.\n"
+              },
+              {
+                "name": "page_size",
+                "value": "",
+                "type": "query",
+                "description": "The number of objects to return per page.\n\nThe maximum page size is 100.\n"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "sort",
+                "value": "metrics_click:desc,metadata_name:asc",
+                "type": "query",
+                "description": "Specify an array of fields and orders to sort the response by. The format of each item is `{field}:{order}`.\n\nIf not specified, the default sort order is by `id` descending.\n\nOrder must be either `asc` or `desc`.\n\nFor available values of `field`, see the `SortableField` enum, which includes:\n\n- Sortable Metadata fields:\n  - `metadata_configured_status`\n  - `metadata_name`\n  - `metadata_start_date_time`\n  - `metadata_end_date_time`\n  - `metadata_objective`\n  - `metadata_daily_budget_amount`\n  - `metadata_spending_limit`\n  - `metadata_submission_status`\n  - `metadata_moderation_status`\n  - `metadata_campaign_name`\n  - `metadata_ad_group_name`\n- Sortable Metrics fields:\n  - All fields starting with `metrics_` are available for sorting, except for:\n    - `metrics_reach`\n    - `metrics_frequency`\n    - `metrics_spent_before_this_month`\n    - `metrics_lifetime_spent`\n"
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter by objects in the specified layer whose name or ID contains the search query.\n"
+              },
+              {
+                "name": "parent_ids",
+                "value": "1,2,3",
+                "type": "query",
+                "description": "Only available when `layer` is `ad_groups` or `ads`.\n\nA comma separated list of parent IDs to filter the result by.\n\nIn `ad_groups` layer, it represents the `campaign_id` of the campaign(s) which own the ad groups.\nIn `ads` layer, it represents the `ad_group_id` of the ad group(s) which own the ads.\n"
+              },
+              {
+                "name": "remove_csv_header",
+                "value": "",
+                "type": "query",
+                "description": "Only applicable when the `Accept` header is `text/csv`.\n\nWhen set to `true`, the CSV header row is omitted from the response.\n\nThis is recommended when joining multiple CSV responses together, to avoid duplicate header rows.\n"
+              }
+            ]
+          },
+          "docs": "Get a list of metadata and metrics information for objects matching the query for the specified layer (Campaign/AdGroup/Ad).\n\nThe fields to include in the response must be specified by the API caller, using the `fields` parameter.\n\nNote: Only Ads Manager v2 objects can be retrieved by this API.\n\nBoth JSON (`application/json`) and CSV (`text/csv`) response formats are supported. Use the `Accept` header to specify the desired format.\n"
+        },
+        {
+          "info": {
+            "name": "Aggregated Insights",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/ad_accounts/:ad_account_id/aggregated_insights/:layer",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "ad_account_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "layer",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "since",
+                "value": "2024-08-15T15:00:00Z",
+                "type": "query",
+                "description": "Only include metrics from this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+              },
+              {
+                "name": "until",
+                "value": "2024-08-15T15:00:00Z",
+                "type": "query",
+                "description": "Only include metrics until this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+              },
+              {
+                "name": "fields",
+                "value": "",
+                "type": "query",
+                "description": "The fields to include in the response. For a detailed description of each field, see the response section under `metrics`.\n\nNote: only fields beginning with `metrics_` are supported for aggregated insights.\n"
+              },
+              {
+                "name": "include_deleted",
+                "value": "",
+                "type": "query",
+                "description": "Boolean flag for including deleted objects in the response."
+              },
+              {
+                "name": "mobile_app_attribution_mode",
+                "value": "",
+                "type": "query",
+                "description": "The mobile app attribution mode for counting conversions of app campaigns only. The mobile app attribution mode will not be applied for web campaigns.\n\nThere are two modes: `all` and `mmp_only`:\n\n- `all` mode counts all app campaigns' conversions including those attributed by a Mobile Measurement Partner and SmartNews attribution.\n- `mmp_only` mode only counts app campaigns' conversions attributed by a Mobile Measurement Partner.\n"
+              },
+              {
+                "name": "click_attribution_window",
+                "value": "",
+                "type": "query",
+                "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a click.\n\nThe default value is 30 days.\n"
+              },
+              {
+                "name": "vimp_attribution_window",
+                "value": "",
+                "type": "query",
+                "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a viewable impression.\n\nThe default value is 1 day.\n"
+              },
+              {
+                "name": "target_ids",
+                "value": "",
+                "type": "query",
+                "description": "Filter by target id(s) (campaign_id for Campaign, ad_group_id for AdGroup, ad_id for Ad)\nOnly the ad object id of the specified layer (determined by the `layer` in the path) is supported.\n"
+              },
+              {
+                "name": "breakdown_period",
+                "value": "",
+                "type": "query",
+                "description": "The time period to breakdown the report by. The breakdown can be found inside the `metrics_breakdown` field in the response.\n"
+              },
+              {
+                "name": "breakdown_type",
+                "value": "",
+                "type": "query",
+                "description": "When specified, the report is broken down by the specified audience breakdown type. The breakdown can be found inside the `metrics_breakdown` field in the response.\n"
+              }
+            ]
+          },
+          "docs": "Get aggregated metrics information for objects matching the query for the specified layer (Campaign/AdGroup/Ad).\n\nThe fields to include in the response must be specified by the API caller, using the `fields` parameter.\n\nNote: Only Ads Manager v2 metrics can be retrieved by this API.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

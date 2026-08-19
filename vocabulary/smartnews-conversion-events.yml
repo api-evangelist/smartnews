@@ -1,0 +1,84 @@
+generated: '2026-08-13'
+method: searched
+source: https://github.com/smartnews/smartnews-ads-advertising-api-spec/blob/v1.0/smartnews-ads-conversion-api.md
+docs: https://help-ads.smartnews.com/en/item-5499/
+name: SmartNews Ads Conversion API event vocabulary
+description: >-
+  The controlled list of `event_name` values the SmartNews Ads Conversion API
+  accepts on server-to-server conversion posts, plus the envelope fields that
+  carry them. This is an inbound event-ingestion vocabulary — the advertiser
+  posts these events to SmartNews. SmartNews does not send webhooks or callbacks
+  to the advertiser, so this is deliberately NOT recorded as a webhook or
+  AsyncAPI surface.
+surface:
+  api: SmartNews Ads Conversion API
+  direction: advertiser -> SmartNews (server-to-server)
+  methods: [POST, GET]
+  production: https://log.smartnews-ads.com/conversion_api/{api_version}/{partner_name}
+  staging: https://stg-log.smartnews-ads.com/conversion_api/{api_version}/{partner_name}
+  batch: https://log.smartnews-ads.com/conversion_api/conversions/{api_version}/{partner_name}
+  batch_max_events: 1000
+  batch_note: If any invalid events are included in the batch, the entire batch will be rejected.
+  auth:
+    header: Authorization
+    note: >-
+      Token passed in the Authorization header. The docs state the auth token is
+      not strictly enforced on GET requests but is strongly recommended.
+envelope:
+  required_web: [action_source, event_name]
+  required_app: [action_source, event_name, store_id, mobile_platform]
+  identity_requirement: >-
+    Either `click_id`, or the triple `client_ip_address` + `client_user_agent` +
+    `client_os_version`, must be provided.
+  optional_common: [event_value, event_time, referrer, properties]
+  optional_web: [pixel_tag_id, event_source_url]
+  optional_app: [ad_id]
+  success_response: '{"message": "OK", "request_id": "<unique_id>"}'
+  error_response_fields: [message, request_id, error.issue, error.detail]
+terms:
+  - term: action_source
+    values: [web, app]
+    description: Whether the conversion happened on the web or in a mobile app.
+  - term: event_name
+    description: The conversion event type being reported.
+    values:
+      - AddPaymentInfo
+      - AddToCart
+      - AddToWishList
+      - Booking
+      - CompleteRegistration
+      - Contact
+      - CustomizeProduct
+      - Donate
+      - Download
+      - FindLocation
+      - InitiateCheckout
+      - Install
+      - Invite
+      - Launch
+      - Lead
+      - LevelAchieve
+      - Like
+      - Login
+      - OpenPushNotification
+      - Purchase
+      - PurchaseHistory
+      - Rate
+      - Reengage
+      - Schedule
+      - Search
+      - Share
+      - SignUp
+      - StartTrial
+      - SubmitApplication
+      - SubmitForm
+      - Subscribe
+      - TimeSpent
+      - TutorialCompletion
+      - ViewContent
+      - VisitCart
+term_count: 35
+related:
+  - errors/smartnews-problem-types.yml
+  - sandbox/smartnews-sandbox.yml
+  - openapi/smartnews-pixel-api-openapi.yml

@@ -1,0 +1,35 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad article category API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "article category",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List article categories",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/article_categories"
+          },
+          "docs": "Returns article category master data for contextual targeting.\n\nThe response is a nested category tree to simplify frontend implementation.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

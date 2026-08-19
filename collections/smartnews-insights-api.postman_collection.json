@@ -1,0 +1,2662 @@
+{
+  "item": [
+    {
+      "id": "f9b60cf1-a49d-4baf-addc-b12bae680132",
+      "name": "insights",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "700edaf6-e2ee-48d9-b666-ff958267881f",
+          "name": "Insights",
+          "request": {
+            "name": "Insights",
+            "description": {
+              "content": "Get a list of metadata and metrics information for objects matching the query for the specified layer (Campaign/AdGroup/Ad).\n\nThe fields to include in the response must be specified by the API caller, using the `fields` parameter.\n\nNote: Only Ads Manager v2 objects can be retrieved by this API.\n\nBoth JSON (`application/json`) and CSV (`text/csv`) response formats are supported. Use the `Accept` header to specify the desired format.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "insights",
+                ":layer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<dateTime>",
+                  "description": "(Required) Only include metrics from this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "until",
+                  "value": "<dateTime>",
+                  "description": "Only include metrics until this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "(Required) The fields to include in the response. For a detailed description of each field, see the response section under `metadata` or `metrics`.\n\nThe prefix indicates whether the field will be present in the `metadata` or `metrics` object of the response.\n\n- Starts with `metadata_`: Is a `metadata` field.\n- Starts with `metrics_`: Is a `metrics` field.\n\n* `metrics_reach` and `metrics_frequency` are not currently supported\n\n### Layer Specific Metadata fields\n\n#### Campaign\n- `metadata_objective`\n- `metadata_daily_budget_amount`\n- `metadata_start_date_time`\n- `metadata_end_date_time`\n- `metadata_optimization_event`\n- `metadata_optimization_goal`\n- `metadata_spending_limit`\n\n#### Ad Group\n- `metadata_campaign_id`\n- `metadata_campaign_name`\n\n#### Ad\n- `metadata_campaign_id`\n- `metadata_campaign_name`\n- `metadata_ad_group_id`\n- `metadata_ad_group_name`\n- `metadata_submission_status`\n- `metadata_moderation_status`\n- `metadata_thumbnails`\n- `metadata_video`\n- `metadata_ad_headline`\n- `metadata_ad_description`\n- `metadata_ad_creative_format`\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "(Required) The fields to include in the response. For a detailed description of each field, see the response section under `metadata` or `metrics`.\n\nThe prefix indicates whether the field will be present in the `metadata` or `metrics` object of the response.\n\n- Starts with `metadata_`: Is a `metadata` field.\n- Starts with `metrics_`: Is a `metrics` field.\n\n* `metrics_reach` and `metrics_frequency` are not currently supported\n\n### Layer Specific Metadata fields\n\n#### Campaign\n- `metadata_objective`\n- `metadata_daily_budget_amount`\n- `metadata_start_date_time`\n- `metadata_end_date_time`\n- `metadata_optimization_event`\n- `metadata_optimization_goal`\n- `metadata_spending_limit`\n\n#### Ad Group\n- `metadata_campaign_id`\n- `metadata_campaign_name`\n\n#### Ad\n- `metadata_campaign_id`\n- `metadata_campaign_name`\n- `metadata_ad_group_id`\n- `metadata_ad_group_name`\n- `metadata_submission_status`\n- `metadata_moderation_status`\n- `metadata_thumbnails`\n- `metadata_video`\n- `metadata_ad_headline`\n- `metadata_ad_description`\n- `metadata_ad_creative_format`\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "breakdown_type",
+                  "value": "<string>",
+                  "description": "When specified, the report is broken down by the specified audience breakdown type. The breakdown can be found inside the `metrics_breakdown` field in the response. \n\n**When included in a JSON request, the following restrictions apply:**\n- cannot use the `city`, `county`, `os`, `device_type` or `hyper_location_segment` breakdowns.\n- cannot use `breakdown_type` together with `breakdown_period`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "breakdown_period",
+                  "value": "<string>",
+                  "description": "The time period to breakdown the report by. The breakdown can be found inside the `metrics_breakdown` field in the response. \n\nThis option combines with the `breakdown_type` param. For example `breakdown_type=age&breakdown_period=day` \nresults in one breakdown row for each day and age combination within the specified date range.\n\n**When included in a JSON request, the following restrictions apply:**\n- When using `hour` breakdown period, 1-5 object IDs must be specified using the `target_ids` parameter.\n- cannot use `breakdown_type` together with `breakdown_period`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_deleted",
+                  "value": "false",
+                  "description": "Boolean flag for including deleted objects in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "mobile_app_attribution_mode",
+                  "value": "<string>",
+                  "description": "The mobile app attribution mode for counting conversions of app campaigns only. The mobile app attribution mode will not be applied for web campaigns.\n\nThere are two modes: `all` and `mmp_only`.\n\n`all` mode counts all app campaigns' conversions including those attributed by a Mobile Measurement Partner and SmartNews attribution.\n`mmp_only` mode only counts app campaigns' conversions attributed by a Mobile Measurement Partner.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "click_attribution_window",
+                  "value": "<string>",
+                  "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a click.\n\nThe default value is 30 days.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "vimp_attribution_window",
+                  "value": "<string>",
+                  "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a viewable impression.\n\nThe default value is 1 day.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "target_ids",
+                  "value": "<long>",
+                  "description": "Filter by target id(s) (campaign_id for Campaign, ad_group_id for AdGroup, ad_id for Ad)\nOnly the ad object id of the specified layer (determined by the `layer` in the path) is supported.\n\n**When included in a JSON request, this field is required when either of  the following parameters is specified:**\n- breakdown_type\n- breakdown_period\n\nNote: when `breakdown_period` is `hour`, the maximum size of `target_ids` is 5, not 100.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "<integer>",
+                  "description": "The number of objects to return per page.\n\nThe maximum page size is 100.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "<string>",
+                  "description": "Specify an array of fields and orders to sort the response by. The format of each item is `{field}:{order}`.\n\nIf not specified, the default sort order is by `id` descending.\n\nOrder must be either `asc` or `desc`.\n\nFor available values of `field`, see the `SortableField` enum, which includes:\n\n- Sortable Metadata fields:\n  - `metadata_configured_status`\n  - `metadata_name`\n  - `metadata_start_date_time`\n  - `metadata_end_date_time`\n  - `metadata_objective`\n  - `metadata_daily_budget_amount`\n  - `metadata_spending_limit`\n  - `metadata_submission_status`\n  - `metadata_moderation_status`\n  - `metadata_campaign_name`\n  - `metadata_ad_group_name`\n- Sortable Metrics fields:\n  - All fields starting with `metrics_` are available for sorting, except for:\n    - `metrics_reach`\n    - `metrics_frequency`\n    - `metrics_spent_before_this_month`\n    - `metrics_lifetime_spent`\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Filter by objects in the specified layer whose name or ID contains the search query.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "parent_ids",
+                  "value": "<long>",
+                  "description": "Only available when `layer` is `ad_groups` or `ads`.\n\nA comma separated list of parent IDs to filter the result by.\n\nIn `ad_groups` layer, it represents the `campaign_id` of the campaign(s) which own the ad groups.\nIn `ads` layer, it represents the `ad_group_id` of the ad group(s) which own the ads.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "remove_csv_header",
+                  "value": "false",
+                  "description": "Only applicable when the `Accept` header is `text/csv`.\n\nWhen set to `true`, the CSV header row is omitted from the response.\n\nThis is recommended when joining multiple CSV responses together, to avoid duplicate header rows.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "layer",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7436c2a7-1f3b-48be-bff4-3fc252d9bdaf",
+              "name": "Returns insights data in the requested format (JSON or CSV).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"type\": \"AD\",\n      \"id\": 6657,\n      \"metadata\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"created_at\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"updated_at\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"configured_status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"delivery_status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"ad_account_name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"ad_account_id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"objective\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"optimization_event\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"optimization_goal\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"start_date_time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"end_date_time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"daily_budget_amount\": \"123.4\",\n        \"ready_for_delivery\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"has_any_video_ads\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"is_migrated_from_v1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"is_large_unit_ads\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"spending_limit\": \"123.4\"\n      },\n      \"metrics\": {\n        \"viewable_impression\": 8292,\n        \"click\": 222,\n        \"ctr\": \"0.03\",\n        \"cpc\": \"1.2\",\n        \"cpm\": \"2.34\",\n        \"count_purchase\": 5259,\n        \"cvr_purchase\": \"2.34\",\n        \"cpa_purchase\": \"2.34\",\n        \"count_add_to_cart\": 739,\n        \"cvr_add_to_cart\": \"2.34\",\n        \"cpa_add_to_cart\": \"2.34\",\n        \"count_initiate_checkout\": 6741,\n        \"cvr_initiate_checkout\": \"2.34\",\n        \"cpa_initiate_checkout\": \"2.34\",\n        \"count_submit_form\": 1486,\n        \"cvr_submit_form\": \"2.34\",\n        \"cpa_submit_form\": \"2.34\",\n        \"count_subscribe\": 8805,\n        \"cvr_subscribe\": \"2.34\",\n        \"cpa_subscribe\": \"2.34\",\n        \"count_complete_registration\": 5482,\n        \"cvr_complete_registration\": \"2.34\",\n        \"cpa_complete_registration\": \"2.34\",\n        \"count_contact\": 673,\n        \"cvr_contact\": \"2.34\",\n        \"cpa_contact\": \"2.34\",\n        \"count_sign_up\": 5283,\n        \"cvr_sign_up\": \"2.34\",\n        \"cpa_sign_up\": \"2.34\",\n        \"count_view_content\": 8876,\n        \"cvr_view_content\": \"2.34\",\n        \"cpa_view_content\": \"2.34\",\n        \"count_add_payment_info\": 5987,\n        \"cvr_add_payment_info\": \"2.34\",\n        \"cpa_add_payment_info\": \"2.34\",\n        \"count_add_to_wish_list\": 2139,\n        \"cvr_add_to_wish_list\": \"2.34\",\n        \"cpa_add_to_wish_list\": \"2.34\",\n        \"count_visit_cart\": 8624,\n        \"cvr_visit_cart\": \"2.34\",\n        \"cpa_visit_cart\": \"2.34\",\n        \"count_customize_product\": 3558,\n        \"cvr_customize_product\": \"2.34\",\n        \"cpa_customize_product\": \"2.34\",\n        \"count_search\": 3575,\n        \"cvr_search\": \"2.34\",\n        \"cpa_search\": \"2.34\",\n        \"count_booking\": 3278,\n        \"cvr_booking\": \"2.34\",\n        \"cpa_booking\": \"2.34\",\n        \"count_download\": 101,\n        \"cvr_download\": \"2.34\",\n        \"cpa_download\": \"2.34\",\n        \"count_start_trial\": 7611,\n        \"cvr_start_trial\": \"2.34\",\n        \"cpa_start_trial\": \"2.34\",\n        \"count_share\": 8346,\n        \"cvr_share\": \"2.34\",\n        \"cpa_share\": \"2.34\",\n        \"count_login\": 5305,\n        \"cvr_login\": \"2.34\",\n        \"cpa_login\": \"2.34\",\n        \"count_donate\": 6015,\n        \"cvr_donate\": \"2.34\",\n        \"cpa_donate\": \"2.34\",\n        \"count_find_location\": 1993,\n        \"cvr_find_location\": \"2.34\",\n        \"cpa_find_location\": \"2.34\",\n        \"count_time_spent\": 6538,\n        \"cvr_time_spent\": \"2.34\",\n        \"cpa_time_spent\": \"2.34\",\n        \"count_install\": 6873,\n        \"cvr_install\": \"2.34\",\n        \"cpa_install\": \"2.34\",\n        \"count_d1_retention\": 7044,\n        \"cvr_d1_retention\": \"2.34\",\n        \"cpa_d1_retention\": \"2.34\",\n        \"budget_spent\": \"123.4\",\n        \"lifetime_spent\": \"123.4\",\n        \"spent_before_this_month\": \"123.4\",\n        \"video_views\": 9020,\n        \"video_views_p25\": 1174,\n        \"video_views_p50\": 7247,\n        \"video_views_p75\": 8728,\n        \"video_views_p95\": 6054,\n        \"video_views_completed\": 3469,\n        \"reach\": 6328,\n        \"frequency\": \"0.2\",\n        \"count_skan_install\": 8196,\n        \"cvr_skan_install\": \"0.2\",\n        \"cpa_skan_install\": \"0.2\",\n        \"count_lead\": 2824,\n        \"cvr_lead\": \"2.34\",\n        \"cpa_lead\": \"2.34\",\n        \"count_store_visit\": 4080,\n        \"cvr_store_visit\": \"2.34\",\n        \"cpa_store_visit\": \"2.34\"\n      },\n      \"metrics_breakdown\": [\n        {\n          \"segment_name\": \"21-24 & MALE\",\n          \"period\": \"2023-11-28, 2023-11-28 12:00\",\n          \"viewable_impression\": 6576,\n          \"click\": 8355,\n          \"ctr\": \"0.03\",\n          \"cpc\": \"1.2\",\n          \"cpm\": \"2.34\",\n          \"count_purchase\": 6027,\n          \"cvr_purchase\": \"2.34\",\n          \"cpa_purchase\": \"2.34\",\n          \"count_add_to_cart\": 3980,\n          \"cvr_add_to_cart\": \"2.34\",\n          \"cpa_add_to_cart\": \"2.34\",\n          \"count_initiate_checkout\": 722,\n          \"cvr_initiate_checkout\": \"2.34\",\n          \"cpa_initiate_checkout\": \"2.34\",\n          \"count_submit_form\": 7615,\n          \"cvr_submit_form\": \"2.34\",\n          \"cpa_submit_form\": \"2.34\",\n          \"count_subscribe\": 9673,\n          \"cvr_subscribe\": \"2.34\",\n          \"cpa_subscribe\": \"2.34\",\n          \"count_complete_registration\": 9528,\n          \"cvr_complete_registration\": \"2.34\",\n          \"cpa_complete_registration\": \"2.34\",\n          \"count_contact\": 6855,\n          \"cvr_contact\": \"2.34\",\n          \"cpa_contact\": \"2.34\",\n          \"count_sign_up\": 5531,\n          \"cvr_sign_up\": \"2.34\",\n          \"cpa_sign_up\": \"2.34\",\n          \"count_view_content\": 1880,\n          \"cvr_view_content\": \"2.34\",\n          \"cpa_view_content\": \"2.34\",\n          \"count_add_payment_info\": 6094,\n          \"cvr_add_payment_info\": \"2.34\",\n          \"cpa_add_payment_info\": \"2.34\",\n          \"count_add_to_wish_list\": 7873,\n          \"cvr_add_to_wish_list\": \"2.34\",\n          \"cpa_add_to_wish_list\": \"2.34\",\n          \"count_visit_cart\": 5125,\n          \"cvr_visit_cart\": \"2.34\",\n          \"cpa_visit_cart\": \"2.34\",\n          \"count_customize_product\": 4811,\n          \"cvr_customize_product\": \"2.34\",\n          \"cpa_customize_product\": \"2.34\",\n          \"count_search\": 9093,\n          \"cvr_search\": \"2.34\",\n          \"cpa_search\": \"2.34\",\n          \"count_booking\": 6500,\n          \"cvr_booking\": \"2.34\",\n          \"cpa_booking\": \"2.34\",\n          \"count_download\": 7277,\n          \"cvr_download\": \"2.34\",\n          \"cpa_download\": \"2.34\",\n          \"count_start_trial\": 1809,\n          \"cvr_start_trial\": \"2.34\",\n          \"cpa_start_trial\": \"2.34\",\n          \"count_share\": 5134,\n          \"cvr_share\": \"2.34\",\n          \"cpa_share\": \"2.34\",\n          \"count_login\": 7415,\n          \"cvr_login\": \"2.34\",\n          \"cpa_login\": \"2.34\",\n          \"count_donate\": 6384,\n          \"cvr_donate\": \"2.34\",\n          \"cpa_donate\": \"2.34\",\n          \"count_find_location\": 6245,\n          \"cvr_find_location\": \"2.34\",\n          \"cpa_find_location\": \"2.34\",\n          \"count_time_spent\": 4700,\n          \"cvr_time_spent\": \"2.34\",\n          \"cpa_time_spent\": \"2.34\",\n          \"count_install\": 2607,\n          \"cvr_install\": \"2.34\",\n          \"cpa_install\": \"2.34\",\n          \"count_d1_retention\": 2782,\n          \"cvr_d1_retention\": \"2.34\",\n          \"cpa_d1_retention\": \"2.34\",\n          \"budget_spent\": \"123.4\",\n          \"lifetime_spent\": \"123.4\",\n          \"spent_before_this_month\": \"123.4\",\n          \"video_views\": 774,\n          \"video_views_p25\": 223,\n          \"video_views_p50\": 7356,\n          \"video_views_p75\": 4763,\n          \"video_views_p95\": 8925,\n          \"video_views_completed\": 40,\n          \"reach\": 569,\n          \"frequency\": \"0.2\",\n          \"count_skan_install\": 5397,\n          \"cvr_skan_install\": \"0.2\",\n          \"cpa_skan_install\": \"0.2\",\n          \"count_lead\": 2432,\n          \"cvr_lead\": \"2.34\",\n          \"cpa_lead\": \"2.34\",\n          \"count_store_visit\": 2535,\n          \"cvr_store_visit\": \"2.34\",\n          \"cpa_store_visit\": \"2.34\"\n        },\n        {\n          \"segment_name\": \"21-24 & MALE\",\n          \"period\": \"2023-11-28, 2023-11-28 12:00\",\n          \"viewable_impression\": 9962,\n          \"click\": 558,\n          \"ctr\": \"0.03\",\n          \"cpc\": \"1.2\",\n          \"cpm\": \"2.34\",\n          \"count_purchase\": 6041,\n          \"cvr_purchase\": \"2.34\",\n          \"cpa_purchase\": \"2.34\",\n          \"count_add_to_cart\": 3419,\n          \"cvr_add_to_cart\": \"2.34\",\n          \"cpa_add_to_cart\": \"2.34\",\n          \"count_initiate_checkout\": 559,\n          \"cvr_initiate_checkout\": \"2.34\",\n          \"cpa_initiate_checkout\": \"2.34\",\n          \"count_submit_form\": 2124,\n          \"cvr_submit_form\": \"2.34\",\n          \"cpa_submit_form\": \"2.34\",\n          \"count_subscribe\": 5622,\n          \"cvr_subscribe\": \"2.34\",\n          \"cpa_subscribe\": \"2.34\",\n          \"count_complete_registration\": 2722,\n          \"cvr_complete_registration\": \"2.34\",\n          \"cpa_complete_registration\": \"2.34\",\n          \"count_contact\": 1018,\n          \"cvr_contact\": \"2.34\",\n          \"cpa_contact\": \"2.34\",\n          \"count_sign_up\": 4430,\n          \"cvr_sign_up\": \"2.34\",\n          \"cpa_sign_up\": \"2.34\",\n          \"count_view_content\": 233,\n          \"cvr_view_content\": \"2.34\",\n          \"cpa_view_content\": \"2.34\",\n          \"count_add_payment_info\": 9679,\n          \"cvr_add_payment_info\": \"2.34\",\n          \"cpa_add_payment_info\": \"2.34\",\n          \"count_add_to_wish_list\": 289,\n          \"cvr_add_to_wish_list\": \"2.34\",\n          \"cpa_add_to_wish_list\": \"2.34\",\n          \"count_visit_cart\": 8182,\n          \"cvr_visit_cart\": \"2.34\",\n          \"cpa_visit_cart\": \"2.34\",\n          \"count_customize_product\": 4306,\n          \"cvr_customize_product\": \"2.34\",\n          \"cpa_customize_product\": \"2.34\",\n          \"count_search\": 1555,\n          \"cvr_search\": \"2.34\",\n          \"cpa_search\": \"2.34\",\n          \"count_booking\": 2491,\n          \"cvr_booking\": \"2.34\",\n          \"cpa_booking\": \"2.34\",\n          \"count_download\": 3064,\n          \"cvr_download\": \"2.34\",\n          \"cpa_download\": \"2.34\",\n          \"count_start_trial\": 1340,\n          \"cvr_start_trial\": \"2.34\",\n          \"cpa_start_trial\": \"2.34\",\n          \"count_share\": 5071,\n          \"cvr_share\": \"2.34\",\n          \"cpa_share\": \"2.34\",\n          \"count_login\": 3688,\n          \"cvr_login\": \"2.34\",\n          \"cpa_login\": \"2.34\",\n          \"count_donate\": 9524,\n          \"cvr_donate\": \"2.34\",\n          \"cpa_donate\": \"2.34\",\n          \"count_find_location\": 9389,\n          \"cvr_find_location\": \"2.34\",\n          \"cpa_find_location\": \"2.34\",\n          \"count_time_spent\": 7975,\n          \"cvr_time_spent\": \"2.34\",\n          \"cpa_time_spent\": \"2.34\",\n          \"count_install\": 589,\n          \"cvr_install\": \"2.34\",\n          \"cpa_install\": \"2.34\",\n          \"count_d1_retention\": 5691,\n          \"cvr_d1_retention\": \"2.34\",\n          \"cpa_d1_retention\": \"2.34\",\n          \"budget_spent\": \"123.4\",\n          \"lifetime_spent\": \"123.4\",\n          \"spent_before_this_month\": \"123.4\",\n          \"video_views\": 7787,\n          \"video_views_p25\": 4718,\n          \"video_views_p50\": 456,\n          \"video_views_p75\": 4261,\n          \"video_views_p95\": 3219,\n          \"video_views_completed\": 596,\n          \"reach\": 3829,\n          \"frequency\": \"0.2\",\n          \"count_skan_install\": 9364,\n          \"cvr_skan_install\": \"0.2\",\n          \"cpa_skan_install\": \"0.2\",\n          \"count_lead\": 8166,\n          \"cvr_lead\": \"2.34\",\n          \"cpa_lead\": \"2.34\",\n          \"count_store_visit\": 695,\n          \"cvr_store_visit\": \"2.34\",\n          \"cpa_store_visit\": \"2.34\"\n        }\n      ],\n      \"parent\": {\n        \"id\": 5139,\n        \"type\": \"AD_GROUP\",\n        \"name\": \"string\",\n        \"objective\": \"TRAFFIC\",\n        \"optimization_event\": \"INITIATE_CHECKOUT\",\n        \"ready_for_delivery\": false,\n        \"store_set_id\": 5113,\n        \"parent\": {}\n      }\n    },\n    {\n      \"type\": \"CAMPAIGN\",\n      \"id\": 2257,\n      \"metadata\": {\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"created_at\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"updated_at\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"configured_status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"delivery_status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"ad_account_name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"ad_account_id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"objective\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"optimization_event\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"optimization_goal\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"start_date_time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"end_date_time\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"daily_budget_amount\": \"123.4\",\n        \"ready_for_delivery\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"has_any_video_ads\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"is_migrated_from_v1\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"is_large_unit_ads\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"spending_limit\": \"123.4\"\n      },\n      \"metrics\": {\n        \"viewable_impression\": 5816,\n        \"click\": 8101,\n        \"ctr\": \"0.03\",\n        \"cpc\": \"1.2\",\n        \"cpm\": \"2.34\",\n        \"count_purchase\": 7368,\n        \"cvr_purchase\": \"2.34\",\n        \"cpa_purchase\": \"2.34\",\n        \"count_add_to_cart\": 4453,\n        \"cvr_add_to_cart\": \"2.34\",\n        \"cpa_add_to_cart\": \"2.34\",\n        \"count_initiate_checkout\": 3607,\n        \"cvr_initiate_checkout\": \"2.34\",\n        \"cpa_initiate_checkout\": \"2.34\",\n        \"count_submit_form\": 7925,\n        \"cvr_submit_form\": \"2.34\",\n        \"cpa_submit_form\": \"2.34\",\n        \"count_subscribe\": 8076,\n        \"cvr_subscribe\": \"2.34\",\n        \"cpa_subscribe\": \"2.34\",\n        \"count_complete_registration\": 9237,\n        \"cvr_complete_registration\": \"2.34\",\n        \"cpa_complete_registration\": \"2.34\",\n        \"count_contact\": 2197,\n        \"cvr_contact\": \"2.34\",\n        \"cpa_contact\": \"2.34\",\n        \"count_sign_up\": 9215,\n        \"cvr_sign_up\": \"2.34\",\n        \"cpa_sign_up\": \"2.34\",\n        \"count_view_content\": 9488,\n        \"cvr_view_content\": \"2.34\",\n        \"cpa_view_content\": \"2.34\",\n        \"count_add_payment_info\": 356,\n        \"cvr_add_payment_info\": \"2.34\",\n        \"cpa_add_payment_info\": \"2.34\",\n        \"count_add_to_wish_list\": 6300,\n        \"cvr_add_to_wish_list\": \"2.34\",\n        \"cpa_add_to_wish_list\": \"2.34\",\n        \"count_visit_cart\": 2106,\n        \"cvr_visit_cart\": \"2.34\",\n        \"cpa_visit_cart\": \"2.34\",\n        \"count_customize_product\": 4664,\n        \"cvr_customize_product\": \"2.34\",\n        \"cpa_customize_product\": \"2.34\",\n        \"count_search\": 2245,\n        \"cvr_search\": \"2.34\",\n        \"cpa_search\": \"2.34\",\n        \"count_booking\": 1542,\n        \"cvr_booking\": \"2.34\",\n        \"cpa_booking\": \"2.34\",\n        \"count_download\": 1850,\n        \"cvr_download\": \"2.34\",\n        \"cpa_download\": \"2.34\",\n        \"count_start_trial\": 7128,\n        \"cvr_start_trial\": \"2.34\",\n        \"cpa_start_trial\": \"2.34\",\n        \"count_share\": 350,\n        \"cvr_share\": \"2.34\",\n        \"cpa_share\": \"2.34\",\n        \"count_login\": 2159,\n        \"cvr_login\": \"2.34\",\n        \"cpa_login\": \"2.34\",\n        \"count_donate\": 871,\n        \"cvr_donate\": \"2.34\",\n        \"cpa_donate\": \"2.34\",\n        \"count_find_location\": 1846,\n        \"cvr_find_location\": \"2.34\",\n        \"cpa_find_location\": \"2.34\",\n        \"count_time_spent\": 9675,\n        \"cvr_time_spent\": \"2.34\",\n        \"cpa_time_spent\": \"2.34\",\n        \"count_install\": 7191,\n        \"cvr_install\": \"2.34\",\n        \"cpa_install\": \"2.34\",\n        \"count_d1_retention\": 7929,\n        \"cvr_d1_retention\": \"2.34\",\n        \"cpa_d1_retention\": \"2.34\",\n        \"budget_spent\": \"123.4\",\n        \"lifetime_spent\": \"123.4\",\n        \"spent_before_this_month\": \"123.4\",\n        \"video_views\": 4706,\n        \"video_views_p25\": 745,\n        \"video_views_p50\": 2620,\n        \"video_views_p75\": 1603,\n        \"video_views_p95\": 1407,\n        \"video_views_completed\": 9245,\n        \"reach\": 1101,\n        \"frequency\": \"0.2\",\n        \"count_skan_install\": 6412,\n        \"cvr_skan_install\": \"0.2\",\n        \"cpa_skan_install\": \"0.2\",\n        \"count_lead\": 7651,\n        \"cvr_lead\": \"2.34\",\n        \"cpa_lead\": \"2.34\",\n        \"count_store_visit\": 6754,\n        \"cvr_store_visit\": \"2.34\",\n        \"cpa_store_visit\": \"2.34\"\n      },\n      \"metrics_breakdown\": [\n        {\n          \"segment_name\": \"21-24 & MALE\",\n          \"period\": \"2023-11-28, 2023-11-28 12:00\",\n          \"viewable_impression\": 8310,\n          \"click\": 3539,\n          \"ctr\": \"0.03\",\n          \"cpc\": \"1.2\",\n          \"cpm\": \"2.34\",\n          \"count_purchase\": 6310,\n          \"cvr_purchase\": \"2.34\",\n          \"cpa_purchase\": \"2.34\",\n          \"count_add_to_cart\": 3351,\n          \"cvr_add_to_cart\": \"2.34\",\n          \"cpa_add_to_cart\": \"2.34\",\n          \"count_initiate_checkout\": 8665,\n          \"cvr_initiate_checkout\": \"2.34\",\n          \"cpa_initiate_checkout\": \"2.34\",\n          \"count_submit_form\": 2202,\n          \"cvr_submit_form\": \"2.34\",\n          \"cpa_submit_form\": \"2.34\",\n          \"count_subscribe\": 2022,\n          \"cvr_subscribe\": \"2.34\",\n          \"cpa_subscribe\": \"2.34\",\n          \"count_complete_registration\": 1926,\n          \"cvr_complete_registration\": \"2.34\",\n          \"cpa_complete_registration\": \"2.34\",\n          \"count_contact\": 3838,\n          \"cvr_contact\": \"2.34\",\n          \"cpa_contact\": \"2.34\",\n          \"count_sign_up\": 2629,\n          \"cvr_sign_up\": \"2.34\",\n          \"cpa_sign_up\": \"2.34\",\n          \"count_view_content\": 3290,\n          \"cvr_view_content\": \"2.34\",\n          \"cpa_view_content\": \"2.34\",\n          \"count_add_payment_info\": 1654,\n          \"cvr_add_payment_info\": \"2.34\",\n          \"cpa_add_payment_info\": \"2.34\",\n          \"count_add_to_wish_list\": 4357,\n          \"cvr_add_to_wish_list\": \"2.34\",\n          \"cpa_add_to_wish_list\": \"2.34\",\n          \"count_visit_cart\": 2627,\n          \"cvr_visit_cart\": \"2.34\",\n          \"cpa_visit_cart\": \"2.34\",\n          \"count_customize_product\": 2868,\n          \"cvr_customize_product\": \"2.34\",\n          \"cpa_customize_product\": \"2.34\",\n          \"count_search\": 5271,\n          \"cvr_search\": \"2.34\",\n          \"cpa_search\": \"2.34\",\n          \"count_booking\": 6198,\n          \"cvr_booking\": \"2.34\",\n          \"cpa_booking\": \"2.34\",\n          \"count_download\": 4929,\n          \"cvr_download\": \"2.34\",\n          \"cpa_download\": \"2.34\",\n          \"count_start_trial\": 7677,\n          \"cvr_start_trial\": \"2.34\",\n          \"cpa_start_trial\": \"2.34\",\n          \"count_share\": 706,\n          \"cvr_share\": \"2.34\",\n          \"cpa_share\": \"2.34\",\n          \"count_login\": 8651,\n          \"cvr_login\": \"2.34\",\n          \"cpa_login\": \"2.34\",\n          \"count_donate\": 1502,\n          \"cvr_donate\": \"2.34\",\n          \"cpa_donate\": \"2.34\",\n          \"count_find_location\": 314,\n          \"cvr_find_location\": \"2.34\",\n          \"cpa_find_location\": \"2.34\",\n          \"count_time_spent\": 4688,\n          \"cvr_time_spent\": \"2.34\",\n          \"cpa_time_spent\": \"2.34\",\n          \"count_install\": 8958,\n          \"cvr_install\": \"2.34\",\n          \"cpa_install\": \"2.34\",\n          \"count_d1_retention\": 6644,\n          \"cvr_d1_retention\": \"2.34\",\n          \"cpa_d1_retention\": \"2.34\",\n          \"budget_spent\": \"123.4\",\n          \"lifetime_spent\": \"123.4\",\n          \"spent_before_this_month\": \"123.4\",\n          \"video_views\": 9066,\n          \"video_views_p25\": 3947,\n          \"video_views_p50\": 6163,\n          \"video_views_p75\": 2609,\n          \"video_views_p95\": 5257,\n          \"video_views_completed\": 2340,\n          \"reach\": 9204,\n          \"frequency\": \"0.2\",\n          \"count_skan_install\": 7289,\n          \"cvr_skan_install\": \"0.2\",\n          \"cpa_skan_install\": \"0.2\",\n          \"count_lead\": 7616,\n          \"cvr_lead\": \"2.34\",\n          \"cpa_lead\": \"2.34\",\n          \"count_store_visit\": 3881,\n          \"cvr_store_visit\": \"2.34\",\n          \"cpa_store_visit\": \"2.34\"\n        },\n        {\n          \"segment_name\": \"21-24 & MALE\",\n          \"period\": \"2023-11-28, 2023-11-28 12:00\",\n          \"viewable_impression\": 7539,\n          \"click\": 4369,\n          \"ctr\": \"0.03\",\n          \"cpc\": \"1.2\",\n          \"cpm\": \"2.34\",\n          \"count_purchase\": 6699,\n          \"cvr_purchase\": \"2.34\",\n          \"cpa_purchase\": \"2.34\",\n          \"count_add_to_cart\": 9710,\n          \"cvr_add_to_cart\": \"2.34\",\n          \"cpa_add_to_cart\": \"2.34\",\n          \"count_initiate_checkout\": 9297,\n          \"cvr_initiate_checkout\": \"2.34\",\n          \"cpa_initiate_checkout\": \"2.34\",\n          \"count_submit_form\": 7142,\n          \"cvr_submit_form\": \"2.34\",\n          \"cpa_submit_form\": \"2.34\",\n          \"count_subscribe\": 6595,\n          \"cvr_subscribe\": \"2.34\",\n          \"cpa_subscribe\": \"2.34\",\n          \"count_complete_registration\": 8460,\n          \"cvr_complete_registration\": \"2.34\",\n          \"cpa_complete_registration\": \"2.34\",\n          \"count_contact\": 7088,\n          \"cvr_contact\": \"2.34\",\n          \"cpa_contact\": \"2.34\",\n          \"count_sign_up\": 6985,\n          \"cvr_sign_up\": \"2.34\",\n          \"cpa_sign_up\": \"2.34\",\n          \"count_view_content\": 11,\n          \"cvr_view_content\": \"2.34\",\n          \"cpa_view_content\": \"2.34\",\n          \"count_add_payment_info\": 273,\n          \"cvr_add_payment_info\": \"2.34\",\n          \"cpa_add_payment_info\": \"2.34\",\n          \"count_add_to_wish_list\": 9936,\n          \"cvr_add_to_wish_list\": \"2.34\",\n          \"cpa_add_to_wish_list\": \"2.34\",\n          \"count_visit_cart\": 2524,\n          \"cvr_visit_cart\": \"2.34\",\n          \"cpa_visit_cart\": \"2.34\",\n          \"count_customize_product\": 675,\n          \"cvr_customize_product\": \"2.34\",\n          \"cpa_customize_product\": \"2.34\",\n          \"count_search\": 1494,\n          \"cvr_search\": \"2.34\",\n          \"cpa_search\": \"2.34\",\n          \"count_booking\": 2961,\n          \"cvr_booking\": \"2.34\",\n          \"cpa_booking\": \"2.34\",\n          \"count_download\": 7068,\n          \"cvr_download\": \"2.34\",\n          \"cpa_download\": \"2.34\",\n          \"count_start_trial\": 7352,\n          \"cvr_start_trial\": \"2.34\",\n          \"cpa_start_trial\": \"2.34\",\n          \"count_share\": 9134,\n          \"cvr_share\": \"2.34\",\n          \"cpa_share\": \"2.34\",\n          \"count_login\": 2735,\n          \"cvr_login\": \"2.34\",\n          \"cpa_login\": \"2.34\",\n          \"count_donate\": 1980,\n          \"cvr_donate\": \"2.34\",\n          \"cpa_donate\": \"2.34\",\n          \"count_find_location\": 5522,\n          \"cvr_find_location\": \"2.34\",\n          \"cpa_find_location\": \"2.34\",\n          \"count_time_spent\": 3573,\n          \"cvr_time_spent\": \"2.34\",\n          \"cpa_time_spent\": \"2.34\",\n          \"count_install\": 2682,\n          \"cvr_install\": \"2.34\",\n          \"cpa_install\": \"2.34\",\n          \"count_d1_retention\": 9645,\n          \"cvr_d1_retention\": \"2.34\",\n          \"cpa_d1_retention\": \"2.34\",\n          \"budget_spent\": \"123.4\",\n          \"lifetime_spent\": \"123.4\",\n          \"spent_before_this_month\": \"123.4\",\n          \"video_views\": 3711,\n          \"video_views_p25\": 563,\n          \"video_views_p50\": 8262,\n          \"video_views_p75\": 8191,\n          \"video_views_p95\": 1820,\n          \"video_views_completed\": 8864,\n          \"reach\": 3339,\n          \"frequency\": \"0.2\",\n          \"count_skan_install\": 8040,\n          \"cvr_skan_install\": \"0.2\",\n          \"cpa_skan_install\": \"0.2\",\n          \"count_lead\": 6577,\n          \"cvr_lead\": \"2.34\",\n          \"cpa_lead\": \"2.34\",\n          \"count_store_visit\": 4932,\n          \"cvr_store_visit\": \"2.34\",\n          \"cpa_store_visit\": \"2.34\"\n        }\n      ],\n      \"parent\": {\n        \"id\": 7896,\n        \"type\": \"AD_GROUP\",\n        \"name\": \"string\",\n        \"objective\": \"TRAFFIC\",\n        \"optimization_event\": \"FIND_LOCATION\",\n        \"ready_for_delivery\": false,\n        \"store_set_id\": 5926,\n        \"parent\": {}\n      }\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 100,\n    \"total_pages\": 10,\n    \"total_objects\": 987\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11fba6a8-e4c2-420d-b677-9b3d1065645b",
+              "name": "Bad request, required query parameter is not found. (ie: metrics_fields)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5eb8ea80-26a8-4d23-a957-7b9542fbc24f",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a702f12-362c-44f3-89d6-1831dd0b9669",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f17b727-91c8-4752-944e-f29c12ea0078",
+              "name": "When the resource specified in the query is not found or the user doesn't have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"PIXEL\",\n    \"retriable\": true,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "704c35ef-68a3-41c0-8147-b935822292d5",
+              "name": "Not Acceptable. The requested format is not supported.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"NOT_ACCEPTABLE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14c4e07c-589c-40f3-a25e-8b1dcf0e611a",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7903ea5-5b8e-49df-ad53-282c225ffb51",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec60ed44-cedc-462b-8b51-6eb44b05e743",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "metrics_click:desc,metadata_name:asc"
+                    },
+                    {
+                      "key": "search",
+                      "value": "My Campaign Name"
+                    },
+                    {
+                      "key": "parent_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "remove_csv_header",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6d2edfa5-a627-4a36-bee0-059c6e469dbb",
+          "name": "Aggregated Insights",
+          "request": {
+            "name": "Aggregated Insights",
+            "description": {
+              "content": "Get aggregated metrics information for objects matching the query for the specified layer (Campaign/AdGroup/Ad).\n\nThe fields to include in the response must be specified by the API caller, using the `fields` parameter.\n\nNote: Only Ads Manager v2 metrics can be retrieved by this API.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "aggregated_insights",
+                ":layer"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "since",
+                  "value": "<dateTime>",
+                  "description": "(Required) Only include metrics from this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "until",
+                  "value": "<dateTime>",
+                  "description": "Only include metrics until this datetime (inclusive).\n\nIt must be specified in ISO 8601 format with UTC timezone (ends with `Z`).\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "The fields to include in the response. For a detailed description of each field, see the response section under `metrics`.\n\nNote: only fields beginning with `metrics_` are supported for aggregated insights.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields",
+                  "value": "<string>",
+                  "description": "The fields to include in the response. For a detailed description of each field, see the response section under `metrics`.\n\nNote: only fields beginning with `metrics_` are supported for aggregated insights.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "include_deleted",
+                  "value": "false",
+                  "description": "Boolean flag for including deleted objects in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "mobile_app_attribution_mode",
+                  "value": "<string>",
+                  "description": "The mobile app attribution mode for counting conversions of app campaigns only. The mobile app attribution mode will not be applied for web campaigns.\n\nThere are two modes: `all` and `mmp_only`:\n\n- `all` mode counts all app campaigns' conversions including those attributed by a Mobile Measurement Partner and SmartNews attribution.\n- `mmp_only` mode only counts app campaigns' conversions attributed by a Mobile Measurement Partner.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "click_attribution_window",
+                  "value": "<string>",
+                  "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a click.\n\nThe default value is 30 days.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "vimp_attribution_window",
+                  "value": "<string>",
+                  "description": "The attribution window for counting conversions.\n\nCalculate the conversions that occur within the specified time window after a viewable impression.\n\nThe default value is 1 day.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "target_ids",
+                  "value": "<long>",
+                  "description": "Filter by target id(s) (campaign_id for Campaign, ad_group_id for AdGroup, ad_id for Ad)\nOnly the ad object id of the specified layer (determined by the `layer` in the path) is supported.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "target_ids",
+                  "value": "<long>",
+                  "description": "Filter by target id(s) (campaign_id for Campaign, ad_group_id for AdGroup, ad_id for Ad)\nOnly the ad object id of the specified layer (determined by the `layer` in the path) is supported.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "breakdown_period",
+                  "value": "<string>",
+                  "description": "The time period to breakdown the report by. The breakdown can be found inside the `metrics_breakdown` field in the response.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "breakdown_type",
+                  "value": "<string>",
+                  "description": "When specified, the report is broken down by the specified audience breakdown type. The breakdown can be found inside the `metrics_breakdown` field in the response.\n"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "layer",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "64aa187d-2449-4022-accc-5efe5d8bd4a7",
+              "name": "An object of aggregated insights data of a specific object.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"metadata\": {\n      \"name\": \"string\",\n      \"created_at\": \"1966-03-13T12:49:56.739Z\",\n      \"updated_at\": \"1993-05-19T02:11:29.530Z\",\n      \"configured_status\": \"DELETED\",\n      \"delivery_status\": {\n        \"status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"reason\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"description\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"ad_account_name\": \"string\",\n      \"ad_account_id\": 6435,\n      \"objective\": \"APP_PROMOTION\",\n      \"optimization_event\": \"BOOKING\",\n      \"optimization_goal\": \"INSTALL_WITH_IN_APP_EVENT\",\n      \"start_date_time\": \"2046-01-07T16:02:00Z\",\n      \"end_date_time\": \"2046-02-07T16:02:00Z\",\n      \"daily_budget_amount\": \"123.4\",\n      \"ready_for_delivery\": true,\n      \"has_any_video_ads\": true,\n      \"is_migrated_from_v1\": false,\n      \"is_large_unit_ads\": false,\n      \"spending_limit\": \"123.4\"\n    },\n    \"metrics\": {\n      \"viewable_impression\": 3337,\n      \"click\": 8513,\n      \"ctr\": \"0.03\",\n      \"cpc\": \"1.2\",\n      \"cpm\": \"2.34\",\n      \"count_purchase\": 2556,\n      \"cvr_purchase\": \"2.34\",\n      \"cpa_purchase\": \"2.34\",\n      \"count_add_to_cart\": 230,\n      \"cvr_add_to_cart\": \"2.34\",\n      \"cpa_add_to_cart\": \"2.34\",\n      \"count_initiate_checkout\": 484,\n      \"cvr_initiate_checkout\": \"2.34\",\n      \"cpa_initiate_checkout\": \"2.34\",\n      \"count_submit_form\": 8384,\n      \"cvr_submit_form\": \"2.34\",\n      \"cpa_submit_form\": \"2.34\",\n      \"count_subscribe\": 329,\n      \"cvr_subscribe\": \"2.34\",\n      \"cpa_subscribe\": \"2.34\",\n      \"count_complete_registration\": 7509,\n      \"cvr_complete_registration\": \"2.34\",\n      \"cpa_complete_registration\": \"2.34\",\n      \"count_contact\": 5045,\n      \"cvr_contact\": \"2.34\",\n      \"cpa_contact\": \"2.34\",\n      \"count_sign_up\": 3792,\n      \"cvr_sign_up\": \"2.34\",\n      \"cpa_sign_up\": \"2.34\",\n      \"count_view_content\": 4876,\n      \"cvr_view_content\": \"2.34\",\n      \"cpa_view_content\": \"2.34\",\n      \"count_add_payment_info\": 5142,\n      \"cvr_add_payment_info\": \"2.34\",\n      \"cpa_add_payment_info\": \"2.34\",\n      \"count_add_to_wish_list\": 7306,\n      \"cvr_add_to_wish_list\": \"2.34\",\n      \"cpa_add_to_wish_list\": \"2.34\",\n      \"count_visit_cart\": 2559,\n      \"cvr_visit_cart\": \"2.34\",\n      \"cpa_visit_cart\": \"2.34\",\n      \"count_customize_product\": 4889,\n      \"cvr_customize_product\": \"2.34\",\n      \"cpa_customize_product\": \"2.34\",\n      \"count_search\": 4934,\n      \"cvr_search\": \"2.34\",\n      \"cpa_search\": \"2.34\",\n      \"count_booking\": 1774,\n      \"cvr_booking\": \"2.34\",\n      \"cpa_booking\": \"2.34\",\n      \"count_download\": 3337,\n      \"cvr_download\": \"2.34\",\n      \"cpa_download\": \"2.34\",\n      \"count_start_trial\": 246,\n      \"cvr_start_trial\": \"2.34\",\n      \"cpa_start_trial\": \"2.34\",\n      \"count_share\": 4224,\n      \"cvr_share\": \"2.34\",\n      \"cpa_share\": \"2.34\",\n      \"count_login\": 6014,\n      \"cvr_login\": \"2.34\",\n      \"cpa_login\": \"2.34\",\n      \"count_donate\": 9469,\n      \"cvr_donate\": \"2.34\",\n      \"cpa_donate\": \"2.34\",\n      \"count_find_location\": 380,\n      \"cvr_find_location\": \"2.34\",\n      \"cpa_find_location\": \"2.34\",\n      \"count_time_spent\": 8017,\n      \"cvr_time_spent\": \"2.34\",\n      \"cpa_time_spent\": \"2.34\",\n      \"count_install\": 2728,\n      \"cvr_install\": \"2.34\",\n      \"cpa_install\": \"2.34\",\n      \"count_d1_retention\": 5075,\n      \"cvr_d1_retention\": \"2.34\",\n      \"cpa_d1_retention\": \"2.34\",\n      \"budget_spent\": \"123.4\",\n      \"lifetime_spent\": \"123.4\",\n      \"spent_before_this_month\": \"123.4\",\n      \"video_views\": 4988,\n      \"video_views_p25\": 1378,\n      \"video_views_p50\": 5178,\n      \"video_views_p75\": 416,\n      \"video_views_p95\": 3586,\n      \"video_views_completed\": 7253,\n      \"reach\": 5096,\n      \"frequency\": \"0.2\",\n      \"count_skan_install\": 6799,\n      \"cvr_skan_install\": \"0.2\",\n      \"cpa_skan_install\": \"0.2\",\n      \"count_lead\": 3501,\n      \"cvr_lead\": \"2.34\",\n      \"cpa_lead\": \"2.34\",\n      \"count_store_visit\": 9806,\n      \"cvr_store_visit\": \"2.34\",\n      \"cpa_store_visit\": \"2.34\"\n    },\n    \"metrics_breakdown\": [\n      {\n        \"segment_name\": \"21-24 & MALE\",\n        \"period\": \"2023-11-28, 2023-11-28 12:00\",\n        \"viewable_impression\": 7861,\n        \"click\": 860,\n        \"ctr\": \"0.03\",\n        \"cpc\": \"1.2\",\n        \"cpm\": \"2.34\",\n        \"count_purchase\": 2617,\n        \"cvr_purchase\": \"2.34\",\n        \"cpa_purchase\": \"2.34\",\n        \"count_add_to_cart\": 120,\n        \"cvr_add_to_cart\": \"2.34\",\n        \"cpa_add_to_cart\": \"2.34\",\n        \"count_initiate_checkout\": 2333,\n        \"cvr_initiate_checkout\": \"2.34\",\n        \"cpa_initiate_checkout\": \"2.34\",\n        \"count_submit_form\": 8402,\n        \"cvr_submit_form\": \"2.34\",\n        \"cpa_submit_form\": \"2.34\",\n        \"count_subscribe\": 4995,\n        \"cvr_subscribe\": \"2.34\",\n        \"cpa_subscribe\": \"2.34\",\n        \"count_complete_registration\": 1790,\n        \"cvr_complete_registration\": \"2.34\",\n        \"cpa_complete_registration\": \"2.34\",\n        \"count_contact\": 7657,\n        \"cvr_contact\": \"2.34\",\n        \"cpa_contact\": \"2.34\",\n        \"count_sign_up\": 806,\n        \"cvr_sign_up\": \"2.34\",\n        \"cpa_sign_up\": \"2.34\",\n        \"count_view_content\": 3491,\n        \"cvr_view_content\": \"2.34\",\n        \"cpa_view_content\": \"2.34\",\n        \"count_add_payment_info\": 602,\n        \"cvr_add_payment_info\": \"2.34\",\n        \"cpa_add_payment_info\": \"2.34\",\n        \"count_add_to_wish_list\": 6314,\n        \"cvr_add_to_wish_list\": \"2.34\",\n        \"cpa_add_to_wish_list\": \"2.34\",\n        \"count_visit_cart\": 388,\n        \"cvr_visit_cart\": \"2.34\",\n        \"cpa_visit_cart\": \"2.34\",\n        \"count_customize_product\": 9018,\n        \"cvr_customize_product\": \"2.34\",\n        \"cpa_customize_product\": \"2.34\",\n        \"count_search\": 2879,\n        \"cvr_search\": \"2.34\",\n        \"cpa_search\": \"2.34\",\n        \"count_booking\": 8488,\n        \"cvr_booking\": \"2.34\",\n        \"cpa_booking\": \"2.34\",\n        \"count_download\": 9388,\n        \"cvr_download\": \"2.34\",\n        \"cpa_download\": \"2.34\",\n        \"count_start_trial\": 7876,\n        \"cvr_start_trial\": \"2.34\",\n        \"cpa_start_trial\": \"2.34\",\n        \"count_share\": 9158,\n        \"cvr_share\": \"2.34\",\n        \"cpa_share\": \"2.34\",\n        \"count_login\": 8375,\n        \"cvr_login\": \"2.34\",\n        \"cpa_login\": \"2.34\",\n        \"count_donate\": 30,\n        \"cvr_donate\": \"2.34\",\n        \"cpa_donate\": \"2.34\",\n        \"count_find_location\": 4240,\n        \"cvr_find_location\": \"2.34\",\n        \"cpa_find_location\": \"2.34\",\n        \"count_time_spent\": 5011,\n        \"cvr_time_spent\": \"2.34\",\n        \"cpa_time_spent\": \"2.34\",\n        \"count_install\": 7181,\n        \"cvr_install\": \"2.34\",\n        \"cpa_install\": \"2.34\",\n        \"count_d1_retention\": 9177,\n        \"cvr_d1_retention\": \"2.34\",\n        \"cpa_d1_retention\": \"2.34\",\n        \"budget_spent\": \"123.4\",\n        \"lifetime_spent\": \"123.4\",\n        \"spent_before_this_month\": \"123.4\",\n        \"video_views\": 8963,\n        \"video_views_p25\": 900,\n        \"video_views_p50\": 3958,\n        \"video_views_p75\": 8312,\n        \"video_views_p95\": 9552,\n        \"video_views_completed\": 9059,\n        \"reach\": 7583,\n        \"frequency\": \"0.2\",\n        \"count_skan_install\": 4505,\n        \"cvr_skan_install\": \"0.2\",\n        \"cpa_skan_install\": \"0.2\",\n        \"count_lead\": 1283,\n        \"cvr_lead\": \"2.34\",\n        \"cpa_lead\": \"2.34\",\n        \"count_store_visit\": 8795,\n        \"cvr_store_visit\": \"2.34\",\n        \"cpa_store_visit\": \"2.34\"\n      },\n      {\n        \"segment_name\": \"21-24 & MALE\",\n        \"period\": \"2023-11-28, 2023-11-28 12:00\",\n        \"viewable_impression\": 5,\n        \"click\": 6925,\n        \"ctr\": \"0.03\",\n        \"cpc\": \"1.2\",\n        \"cpm\": \"2.34\",\n        \"count_purchase\": 1287,\n        \"cvr_purchase\": \"2.34\",\n        \"cpa_purchase\": \"2.34\",\n        \"count_add_to_cart\": 5686,\n        \"cvr_add_to_cart\": \"2.34\",\n        \"cpa_add_to_cart\": \"2.34\",\n        \"count_initiate_checkout\": 1608,\n        \"cvr_initiate_checkout\": \"2.34\",\n        \"cpa_initiate_checkout\": \"2.34\",\n        \"count_submit_form\": 2526,\n        \"cvr_submit_form\": \"2.34\",\n        \"cpa_submit_form\": \"2.34\",\n        \"count_subscribe\": 8638,\n        \"cvr_subscribe\": \"2.34\",\n        \"cpa_subscribe\": \"2.34\",\n        \"count_complete_registration\": 3361,\n        \"cvr_complete_registration\": \"2.34\",\n        \"cpa_complete_registration\": \"2.34\",\n        \"count_contact\": 4785,\n        \"cvr_contact\": \"2.34\",\n        \"cpa_contact\": \"2.34\",\n        \"count_sign_up\": 9421,\n        \"cvr_sign_up\": \"2.34\",\n        \"cpa_sign_up\": \"2.34\",\n        \"count_view_content\": 4440,\n        \"cvr_view_content\": \"2.34\",\n        \"cpa_view_content\": \"2.34\",\n        \"count_add_payment_info\": 6213,\n        \"cvr_add_payment_info\": \"2.34\",\n        \"cpa_add_payment_info\": \"2.34\",\n        \"count_add_to_wish_list\": 643,\n        \"cvr_add_to_wish_list\": \"2.34\",\n        \"cpa_add_to_wish_list\": \"2.34\",\n        \"count_visit_cart\": 946,\n        \"cvr_visit_cart\": \"2.34\",\n        \"cpa_visit_cart\": \"2.34\",\n        \"count_customize_product\": 3723,\n        \"cvr_customize_product\": \"2.34\",\n        \"cpa_customize_product\": \"2.34\",\n        \"count_search\": 6368,\n        \"cvr_search\": \"2.34\",\n        \"cpa_search\": \"2.34\",\n        \"count_booking\": 1757,\n        \"cvr_booking\": \"2.34\",\n        \"cpa_booking\": \"2.34\",\n        \"count_download\": 6852,\n        \"cvr_download\": \"2.34\",\n        \"cpa_download\": \"2.34\",\n        \"count_start_trial\": 2281,\n        \"cvr_start_trial\": \"2.34\",\n        \"cpa_start_trial\": \"2.34\",\n        \"count_share\": 9518,\n        \"cvr_share\": \"2.34\",\n        \"cpa_share\": \"2.34\",\n        \"count_login\": 7374,\n        \"cvr_login\": \"2.34\",\n        \"cpa_login\": \"2.34\",\n        \"count_donate\": 5393,\n        \"cvr_donate\": \"2.34\",\n        \"cpa_donate\": \"2.34\",\n        \"count_find_location\": 2028,\n        \"cvr_find_location\": \"2.34\",\n        \"cpa_find_location\": \"2.34\",\n        \"count_time_spent\": 8269,\n        \"cvr_time_spent\": \"2.34\",\n        \"cpa_time_spent\": \"2.34\",\n        \"count_install\": 5213,\n        \"cvr_install\": \"2.34\",\n        \"cpa_install\": \"2.34\",\n        \"count_d1_retention\": 8863,\n        \"cvr_d1_retention\": \"2.34\",\n        \"cpa_d1_retention\": \"2.34\",\n        \"budget_spent\": \"123.4\",\n        \"lifetime_spent\": \"123.4\",\n        \"spent_before_this_month\": \"123.4\",\n        \"video_views\": 4016,\n        \"video_views_p25\": 6558,\n        \"video_views_p50\": 7415,\n        \"video_views_p75\": 8710,\n        \"video_views_p95\": 2765,\n        \"video_views_completed\": 879,\n        \"reach\": 6466,\n        \"frequency\": \"0.2\",\n        \"count_skan_install\": 9142,\n        \"cvr_skan_install\": \"0.2\",\n        \"cpa_skan_install\": \"0.2\",\n        \"count_lead\": 918,\n        \"cvr_lead\": \"2.34\",\n        \"cpa_lead\": \"2.34\",\n        \"count_store_visit\": 7334,\n        \"cvr_store_visit\": \"2.34\",\n        \"cpa_store_visit\": \"2.34\"\n      }\n    ]\n  },\n  \"total_objects\": 4316\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b99edb8e-00f1-4819-bd1c-3df91a3da1f6",
+              "name": "Bad request, required query parameter is not found. (ie: metrics_fields)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d9d313a-ee32-47a3-a817-2b9ddf10c0e3",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccd0c133-efb3-4bc1-8036-140925303bf6",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b29110a-8fb3-4ff0-99c9-c8eb93fa7fd2",
+              "name": "When the resource specified in the query is not found or the user doesn't have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"PIXEL\",\n    \"retriable\": true,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "351e69fd-4653-446e-b79f-f3e4348e7cde",
+              "name": "Not Acceptable. The requested format is not supported.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Acceptable",
+              "code": 406,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"NOT_ACCEPTABLE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6be472c1-90d7-44b9-8a76-4498ddfac5b2",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4fb9aff3-2b2f-48a4-b4b6-62e54ba6b254",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "931d02aa-2974-44a8-a088-594a286a8e6d",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "aggregated_insights",
+                    ":layer"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "since",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "until",
+                      "value": "2024-08-15T15:00:00Z"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "fields",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "mobile_app_attribution_mode",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "click_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "vimp_attribution_window",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "target_ids",
+                      "value": "<long>"
+                    },
+                    {
+                      "key": "breakdown_period",
+                      "value": "hour"
+                    },
+                    {
+                      "key": "breakdown_type",
+                      "value": "age"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "layer",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ads.smartnews.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f8069218-9e9e-4a27-93ae-66a37276d291",
+    "name": "SmartNews Marketing ad insights API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n\n\nContact Support:\n Name: SmartNews Ads Support",
+      "type": "text/plain"
+    }
+  }
+}

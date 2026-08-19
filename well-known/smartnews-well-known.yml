@@ -1,6 +1,14 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 source: /.well-known/ probes
+note: >-
+  Re-probed 2026-08-13 across every SmartNews host in apis.yml plus the Conversion
+  API hosts. Only https://www.smartnews.com/.well-known/security.txt returns a
+  real document; every other path 404s. developer.smartnews.com is a Hugo
+  engineering blog whose catch-all answers HTTP 200 with an HTML page for every
+  /.well-known/* path — recorded as a miss, not a hit. status.smartnews.com and
+  trust.smartnews.com are wildcard-DNS soft-200s serving the consumer news app;
+  neither is a status page or a trust center.
 documents:
   - host: https://ads.smartnews.com
     path: /.well-known/security.txt
@@ -16,6 +24,12 @@ documents:
     status: 404
   - host: https://ads.smartnews.com
     path: /.well-known/ai-plugin.json
+    status: 404
+  - host: https://ads.smartnews.com
+    path: /.well-known/agent-card.json
+    status: 404
+  - host: https://ads.smartnews.com
+    path: /.well-known/agent.json
     status: 404
   - host: https://www.smartnews.com
     path: /.well-known/security.txt
@@ -33,3 +47,54 @@ documents:
   - host: https://www.smartnews.com
     path: /.well-known/ai-plugin.json
     status: 404
+  - host: https://www.smartnews.com
+    path: /.well-known/agent-card.json
+    status: 404
+  - host: https://www.smartnews.com
+    path: /.well-known/agent.json
+    status: 404
+  - host: https://log.smartnews-ads.com
+    path: /.well-known/security.txt
+    status: 404
+  - host: https://log.smartnews-ads.com
+    path: /.well-known/oauth-authorization-server
+    status: 404
+  - host: https://log.smartnews-ads.com
+    path: /.well-known/api-catalog
+    status: 404
+  - host: https://log.smartnews-ads.com
+    path: /.well-known/agent-card.json
+    status: 404
+  - host: https://log.smartnews-ads.com
+    path: /.well-known/agent.json
+    status: 404
+  - host: https://stg-log.smartnews-ads.com
+    path: /.well-known/security.txt
+    status: 404
+  - host: https://stg-log.smartnews-ads.com
+    path: /.well-known/agent-card.json
+    status: 404
+  - host: https://stg-log.smartnews-ads.com
+    path: /.well-known/agent.json
+    status: 404
+  - host: https://developer.smartnews.com
+    path: /.well-known/agent-card.json
+    status: 200
+    accepted: false
+    reason: HTML page from the Hugo blog catch-all, not a JSON AgentCard document.
+  - host: https://developer.smartnews.com
+    path: /.well-known/agent.json
+    status: 200
+    accepted: false
+    reason: HTML page from the Hugo blog catch-all, not a JSON AgentCard document.
+  - host: https://api.smartnews.com
+    path: /.well-known/agent-card.json
+    status: 404
+  - host: https://business.smartnews.com
+    path: /.well-known/agent-card.json
+    status: 404
+agent_card: none
+llms_txt:
+  - {host: https://ads.smartnews.com, path: /llms.txt, status: 404}
+  - {host: https://www.smartnews.com, path: /llms.txt, status: 404}
+  - {host: https://developer.smartnews.com, path: /llms.txt, status: 200, accepted: false, reason: HTML blog catch-all}

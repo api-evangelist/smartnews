@@ -1,0 +1,3321 @@
+{
+  "item": [
+    {
+      "id": "9aa2e00c-ef80-4a2e-8165-8b467ebd6494",
+      "name": "campaign",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9d942d72-b041-4209-8a18-d938d0731c62",
+          "name": "List Campaigns (Paginated)",
+          "request": {
+            "name": "List Campaigns (Paginated)",
+            "description": {
+              "content": "Get a paginated list of campaign objects.\n\nThis endpoint returns campaigns with pagination support, including pagination metadata in the response.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "campaigns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "include_deleted",
+                  "value": "false",
+                  "description": "Boolean flag for including deleted campaigns in the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "campaign_ids",
+                  "value": "<long>",
+                  "description": "Filter the response by a target list of campaign_ids"
+                },
+                {
+                  "disabled": false,
+                  "key": "page_size",
+                  "value": "1000"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "791b432f-74f2-40dc-a2fb-ddca94ea504b",
+              "name": "A paginated list of campaign objects with pagination metadata.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "campaign_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"ad_account_id\": 865,\n      \"bid_strategy\": \"MANUAL\",\n      \"billing_event\": \"VIEWABLE_IMPRESSION\",\n      \"buying_type\": \"AUCTION\",\n      \"campaign_id\": 7320,\n      \"channel_view_placement\": \"PRIMARY_SLOT\",\n      \"click_destination_type\": \"BROWSER\",\n      \"configured_status\": \"ACTIVE\",\n      \"conversion_attribution_window\": \"SEVEN_DAYS\",\n      \"created_at\": \"1967-11-25T09:33:22.514Z\",\n      \"daily_budget_amount_micro\": 10000000000,\n      \"daily_schedules\": [\n        {\n          \"start_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"end_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"start_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"end_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"delivery_status\": {\n        \"status\": \"PAUSED\",\n        \"reason\": \"NO_APPROVED_ADS\",\n        \"description\": \"string\"\n      },\n      \"has_any_video_ads\": true,\n      \"is_dynamic_ads\": false,\n      \"is_large_unit_ads\": false,\n      \"is_large_unit_square_ads\": true,\n      \"is_migrated_from_v1\": true,\n      \"is_multi_order_attribution\": false,\n      \"is_permanently_disabled\": false,\n      \"is_skadnetwork_enabled\": false,\n      \"is_sticky_placements_enabled\": false,\n      \"name\": \"string\",\n      \"objective\": \"AWARENESS\",\n      \"ready_for_delivery\": false,\n      \"start_date_time\": \"2046-01-07T16:02:00Z\",\n      \"updated_at\": \"2010-10-09T18:59:40.394Z\",\n      \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n      \"target_cost_micro\": 6182,\n      \"bid_amount_micro\": 3407,\n      \"optimization_goal\": \"INSTALL\",\n      \"delivery_type\": \"STANDARD\",\n      \"optimization_event\": \"LEAD\",\n      \"end_date_time\": \"2046-02-07T16:02:00Z\",\n      \"spending_limit_micro\": 10000000000,\n      \"viewability_measurement\": {\n        \"vendor_type\": \"MOAT\",\n        \"vendor_key\": \"string\",\n        \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n        \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n      },\n      \"dynamic_ads_info\": {\n        \"catalog_id\": 9758\n      },\n      \"budget_auto_target_cpa_micro\": 10000000000,\n      \"app_promotion_info\": {\n        \"promotion_type\": \"ENGAGEMENT\",\n        \"operating_system\": \"IOS\",\n        \"store_id\": \"string\",\n        \"mmp_type\": \"ADJUST\",\n        \"mmp_tracking_url\": \"string\"\n      },\n      \"app_tracking_configs\": [\n        {\n          \"operating_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"store_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_tracking_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"operating_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"store_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_tracking_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"store_set_id\": 1505,\n      \"total_spending\": \"10000\",\n      \"minimal_spending_limit_micro\": 10000000000\n    },\n    {\n      \"ad_account_id\": 7183,\n      \"bid_strategy\": \"TARGET_COST\",\n      \"billing_event\": \"VIEWABLE_IMPRESSION\",\n      \"buying_type\": \"AUCTION\",\n      \"campaign_id\": 6376,\n      \"channel_view_placement\": \"IN_FEED\",\n      \"click_destination_type\": \"APP_STORE\",\n      \"configured_status\": \"PAUSED\",\n      \"conversion_attribution_window\": \"THIRTY_DAYS\",\n      \"created_at\": \"1952-04-11T08:25:39.101Z\",\n      \"daily_budget_amount_micro\": 10000000000,\n      \"daily_schedules\": [\n        {\n          \"start_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"end_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"start_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"end_time\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"delivery_status\": {\n        \"status\": \"PAUSED\",\n        \"reason\": \"NO_AD_GROUPS\",\n        \"description\": \"string\"\n      },\n      \"has_any_video_ads\": false,\n      \"is_dynamic_ads\": false,\n      \"is_large_unit_ads\": true,\n      \"is_large_unit_square_ads\": false,\n      \"is_migrated_from_v1\": true,\n      \"is_multi_order_attribution\": false,\n      \"is_permanently_disabled\": false,\n      \"is_skadnetwork_enabled\": false,\n      \"is_sticky_placements_enabled\": true,\n      \"name\": \"string\",\n      \"objective\": \"TRAFFIC\",\n      \"ready_for_delivery\": true,\n      \"start_date_time\": \"2046-01-07T16:02:00Z\",\n      \"updated_at\": \"1979-10-12T15:27:22.031Z\",\n      \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n      \"target_cost_micro\": 5665,\n      \"bid_amount_micro\": 8002,\n      \"optimization_goal\": \"INSTALL_WITH_IN_APP_EVENT\",\n      \"delivery_type\": \"ACCELERATED\",\n      \"optimization_event\": \"ADD_TO_WISH_LIST\",\n      \"end_date_time\": \"2046-02-07T16:02:00Z\",\n      \"spending_limit_micro\": 10000000000,\n      \"viewability_measurement\": {\n        \"vendor_type\": \"MOAT\",\n        \"vendor_key\": \"string\",\n        \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n        \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n      },\n      \"dynamic_ads_info\": {\n        \"catalog_id\": 833\n      },\n      \"budget_auto_target_cpa_micro\": 10000000000,\n      \"app_promotion_info\": {\n        \"promotion_type\": \"INSTALL\",\n        \"operating_system\": \"IOS\",\n        \"store_id\": \"string\",\n        \"mmp_type\": \"SINGULAR\",\n        \"mmp_tracking_url\": \"string\"\n      },\n      \"app_tracking_configs\": [\n        {\n          \"operating_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"store_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_tracking_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        {\n          \"operating_system\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"store_id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_type\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"mmp_tracking_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      ],\n      \"store_set_id\": 5962,\n      \"total_spending\": \"10000\",\n      \"minimal_spending_limit_micro\": 10000000000\n    }\n  ],\n  \"pagination\": {\n    \"page\": 1,\n    \"page_size\": 100,\n    \"total_pages\": 10,\n    \"total_objects\": 987\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b9f039b4-3f40-46e6-8263-a791d7942a50",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "campaign_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7ce14c5-ae58-4d08-9f1a-3f8221874293",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "campaign_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2f78ead-2de8-410d-86c2-a0555322507e",
+              "name": "When the resource specified in the query is not found or the user doesn't have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "campaign_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"STORE_SET\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17ee3faa-a232-4f93-9f72-b4b4875dd2e0",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "campaign_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8831b457-8059-41e0-bad2-a343563ada03",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "campaign_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cad90903-3142-4685-a248-22e3ebf1a515",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "include_deleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "campaign_ids",
+                      "value": "1,2,3"
+                    },
+                    {
+                      "key": "page_size",
+                      "value": "100"
+                    },
+                    {
+                      "key": "page",
+                      "value": "2"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8d1cc33e-9ffa-4448-87fc-18a486aea313",
+          "name": "Create a Campaign",
+          "request": {
+            "name": "Create a Campaign",
+            "description": {
+              "content": "Create a campaign object. An ad account can only have up to 1,000 campaigns.\n\nWhen the number of campaigns exceed the limit, the API returns a Business Error.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "campaigns"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"objective\": \"<string>\",\n  \"daily_budget_amount_micro\": \"<long>\",\n  \"bid_strategy\": \"<string>\",\n  \"billing_event\": \"<string>\",\n  \"start_date_time\": \"<dateTime>\",\n  \"configured_status\": \"<string>\",\n  \"website_tracking_tag\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"end_date_time\": \"<dateTime>\",\n  \"spending_limit_micro\": \"<long>\",\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"<string>\",\n    \"verification_script_url\": \"<string>\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": \"<boolean>\",\n  \"is_skadnetwork_enabled\": \"<boolean>\",\n  \"is_dynamic_ads\": false,\n  \"dynamic_ads_info\": {\n    \"catalog_id\": \"<integer>\"\n  },\n  \"budget_auto_target_cpa_micro\": null,\n  \"app_promotion_info\": {\n    \"promotion_type\": \"<string>\",\n    \"operating_system\": \"<string>\",\n    \"store_id\": \"<string>\",\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"<string>\",\n      \"end_time\": \"<string>\"\n    },\n    {\n      \"start_time\": \"<string>\",\n      \"end_time\": \"<string>\"\n    }\n  ],\n  \"store_set_id\": \"<long>\",\n  \"channel_view_placement\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9176ab3a-edb3-4442-aaa2-51e09cdb2dc9",
+              "name": "A newly created campaign object.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ad_account_id\": 7436,\n  \"bid_strategy\": \"<string>\",\n  \"billing_event\": \"<string>\",\n  \"buying_type\": \"AUCTION\",\n  \"campaign_id\": 2045,\n  \"channel_view_placement\": \"<string>\",\n  \"click_destination_type\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"created_at\": \"1951-02-28T07:52:26.180Z\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"delivery_status\": {\n    \"status\": \"ENDED\",\n    \"reason\": \"NO_ACTIVE_APPROVED_ADS\",\n    \"description\": \"string\"\n  },\n  \"has_any_video_ads\": false,\n  \"is_dynamic_ads\": false,\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_migrated_from_v1\": true,\n  \"is_multi_order_attribution\": false,\n  \"is_permanently_disabled\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"name\": \"<string>\",\n  \"objective\": \"<string>\",\n  \"ready_for_delivery\": false,\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"updated_at\": \"1984-10-09T10:09:06.840Z\",\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"optimization_event\": \"<string>\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"dynamic_ads_info\": {\n    \"catalog_id\": \"<integer>\"\n  },\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"promotion_type\": \"<string>\",\n    \"operating_system\": \"<string>\",\n    \"store_id\": \"<string>\",\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"store_set_id\": \"<long>\",\n  \"total_spending\": \"10000\",\n  \"minimal_spending_limit_micro\": 10000000000\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1437fc8-5a9f-4f20-8711-7906e6661660",
+              "name": "Bad Request. The request body must be JSON format. This error response means the JSON body is malformed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bde2e17d-36bb-4b15-b3c6-9cace40e5228",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5192e611-faef-401c-b08f-58deb035e217",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49b7a388-2d4e-40e9-832a-5ef8edbf8e5f",
+              "name": "Business Error. The request body is formatted correctly but doesn't pass some ad account/system level restriction.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"BUSINESS_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51f5ff17-78cf-40b3-816c-c22dfa01bff6",
+              "name": "Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"error_fields\": [\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      },\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      }\n    ],\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"VALIDATION_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "420c5715-b048-4906-8a77-3490e6ea916f",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a0c11185-4b63-42c7-830e-75052e1e1134",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0708004-2ef5-48a2-8a66-c9536c899030",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c6b79c9f-94e9-4470-bcbb-fc1a842aa08c",
+          "name": "Get a Campaign",
+          "request": {
+            "name": "Get a Campaign",
+            "description": {
+              "content": "Get a single campaign object.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "campaigns",
+                ":campaign_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "campaign_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8878fd69-5346-4015-a969-ecd99c3e28e1",
+              "name": "A single campaign object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ad_account_id\": 7436,\n  \"bid_strategy\": \"<string>\",\n  \"billing_event\": \"<string>\",\n  \"buying_type\": \"AUCTION\",\n  \"campaign_id\": 2045,\n  \"channel_view_placement\": \"<string>\",\n  \"click_destination_type\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"created_at\": \"1951-02-28T07:52:26.180Z\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"delivery_status\": {\n    \"status\": \"ENDED\",\n    \"reason\": \"NO_ACTIVE_APPROVED_ADS\",\n    \"description\": \"string\"\n  },\n  \"has_any_video_ads\": false,\n  \"is_dynamic_ads\": false,\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_migrated_from_v1\": true,\n  \"is_multi_order_attribution\": false,\n  \"is_permanently_disabled\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"name\": \"<string>\",\n  \"objective\": \"<string>\",\n  \"ready_for_delivery\": false,\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"updated_at\": \"1984-10-09T10:09:06.840Z\",\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"optimization_event\": \"<string>\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"dynamic_ads_info\": {\n    \"catalog_id\": \"<integer>\"\n  },\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"promotion_type\": \"<string>\",\n    \"operating_system\": \"<string>\",\n    \"store_id\": \"<string>\",\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"store_set_id\": \"<long>\",\n  \"total_spending\": \"10000\",\n  \"minimal_spending_limit_micro\": 10000000000\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6b47bfc-4c4f-4541-bc7f-ce7bbc256961",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1cd28261-95e7-4d5d-a953-eb1a05dbddc5",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e86a0f7-95d1-4dab-9e83-78c935eff55b",
+              "name": "When the resource specified in the path is not found or the user doesn't have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"STORE_SET\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc9b1ba8-fe9f-46f6-b362-c81fdbb83fb7",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6fe659a-2c2e-4460-8130-4c05e3fe35b1",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c33d16f-fdfa-4eab-8947-6025697ec52e",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aed1b42b-accd-4950-9bca-98ecf23bedc8",
+          "name": "Update a Campaign",
+          "request": {
+            "name": "Update a Campaign",
+            "description": {
+              "content": "Update an existing campaign by using the JSON Merge Patch specification, described in [RFC 7396](https://www.rfc-editor.org/rfc/rfc7396).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "campaigns",
+                ":campaign_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "campaign_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/merge-patch+json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": \"<long>\",\n  \"website_tracking_tag\": \"<string>\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"<dateTime>\",\n  \"end_date_time\": \"<dateTime>\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": \"<long>\",\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"<string>\",\n    \"verification_script_url\": \"<string>\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": \"<boolean>\",\n  \"is_skadnetwork_enabled\": \"<boolean>\",\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": null,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"<string>\",\n      \"end_time\": \"<string>\"\n    },\n    {\n      \"start_time\": \"<string>\",\n      \"end_time\": \"<string>\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9099d06e-126d-41d7-b5e0-8b745d25bf11",
+              "name": "A single campaign object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ad_account_id\": 7436,\n  \"bid_strategy\": \"<string>\",\n  \"billing_event\": \"<string>\",\n  \"buying_type\": \"AUCTION\",\n  \"campaign_id\": 2045,\n  \"channel_view_placement\": \"<string>\",\n  \"click_destination_type\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"created_at\": \"1951-02-28T07:52:26.180Z\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"delivery_status\": {\n    \"status\": \"ENDED\",\n    \"reason\": \"NO_ACTIVE_APPROVED_ADS\",\n    \"description\": \"string\"\n  },\n  \"has_any_video_ads\": false,\n  \"is_dynamic_ads\": false,\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_migrated_from_v1\": true,\n  \"is_multi_order_attribution\": false,\n  \"is_permanently_disabled\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"name\": \"<string>\",\n  \"objective\": \"<string>\",\n  \"ready_for_delivery\": false,\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"updated_at\": \"1984-10-09T10:09:06.840Z\",\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"optimization_event\": \"<string>\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"dynamic_ads_info\": {\n    \"catalog_id\": \"<integer>\"\n  },\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"promotion_type\": \"<string>\",\n    \"operating_system\": \"<string>\",\n    \"store_id\": \"<string>\",\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"store_set_id\": \"<long>\",\n  \"total_spending\": \"10000\",\n  \"minimal_spending_limit_micro\": 10000000000\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a825eb06-db6c-40bc-8398-0b6304c0e9fd",
+              "name": "Bad Request. The request body must be JSON format. This error response means the JSON body is malformed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53ac9dff-8aa8-41cb-923c-91c3e3b0a3c5",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99c0edc6-1de4-477f-b5d6-12d26ba775c4",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29da2f4f-9932-4ede-9517-083ddb35f80e",
+              "name": "When the resource specified in the path is not found or the user doesn't have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"STORE_SET\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd4b4d32-93da-4bce-b800-d9d0e82369e9",
+              "name": "The resource specified in the path is deleted and no longer available. If the user doesn't have permission to access the ad account, 404 is returned instead.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Gone",
+              "code": 410,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"STORE_SET\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41e4420b-a664-4e37-a435-5293388e1227",
+              "name": "Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"error_fields\": [\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      },\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      }\n    ],\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"VALIDATION_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d1606a1-4fdd-4ee8-ab12-bf5dcd9f1b96",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49d9a76b-b58b-409e-8117-fefab85de22e",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7caf664d-e043-4767-b19c-a9f4a88ed981",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"configured_status\": \"<string>\",\n  \"daily_budget_amount_micro\": 10000000000,\n  \"website_tracking_tag\": \"89d2b4523c7245ee9ec773a8\",\n  \"optimization_event\": \"<string>\",\n  \"conversion_attribution_window\": \"<string>\",\n  \"start_date_time\": \"2046-01-07T16:02:00Z\",\n  \"end_date_time\": \"2046-02-07T16:02:00Z\",\n  \"bid_strategy\": \"<string>\",\n  \"target_cost_micro\": \"<long>\",\n  \"bid_amount_micro\": \"<long>\",\n  \"billing_event\": \"<string>\",\n  \"optimization_goal\": \"<string>\",\n  \"delivery_type\": \"<string>\",\n  \"spending_limit_micro\": 10000000000,\n  \"viewability_measurement\": {\n    \"vendor_type\": \"<string>\",\n    \"vendor_key\": \"<string>\",\n    \"verification_parameters\": \"{\\\"campaign_name\\\": \\\"{campaign_name}\\\"}\",\n    \"verification_script_url\": \"https://z.moatads.com/mydisplayads248228380663/moatad.js\"\n  },\n  \"click_destination_type\": \"<string>\",\n  \"is_large_unit_ads\": \"<boolean>\",\n  \"is_large_unit_square_ads\": \"<boolean>\",\n  \"is_sticky_placements_enabled\": \"<boolean>\",\n  \"is_multi_order_attribution\": false,\n  \"is_skadnetwork_enabled\": false,\n  \"store_set_id\": \"<long>\",\n  \"budget_auto_target_cpa_micro\": 10000000000,\n  \"app_promotion_info\": {\n    \"mmp_type\": \"<string>\",\n    \"mmp_tracking_url\": \"<string>\"\n  },\n  \"app_tracking_configs\": [\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    },\n    {\n      \"operating_system\": \"<string>\",\n      \"store_id\": \"<string>\",\n      \"mmp_type\": \"<string>\",\n      \"mmp_tracking_url\": \"<string>\"\n    }\n  ],\n  \"daily_schedules\": [\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    },\n    {\n      \"start_time\": \"09:00\",\n      \"end_time\": \"17:00\"\n    }\n  ],\n  \"channel_view_placement\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2fd9890d-63c5-4a56-81cc-6a8a11dde252",
+          "name": "Delete a Campaign",
+          "request": {
+            "name": "Delete a Campaign",
+            "description": {
+              "content": "Delete an existing campaign and all of its ad-groups and ads. The API returns a business error if the campaign cannot be deleted due to business logic constraints.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "ma",
+                "v3",
+                "ad_accounts",
+                ":ad_account_id",
+                "campaigns",
+                ":campaign_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "ad_account_id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "campaign_id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "Accept-Language",
+                "value": "<string>",
+                "description": ""
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e7f2e5e8-5a24-4b61-a5b2-a891873655f8",
+              "name": "Deletion completed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "649bffee-bffc-4b21-b1f2-1da75a3d3fda",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2defde93-4112-4d70-b814-449862fa8f29",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "65e55011-4c5a-4110-b0f6-8b811d0f6280",
+              "name": "When the resource specified in the path is not found or the user doesn't have permission to access the resource.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"STORE_SET\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3cef364-7cf9-44d2-9d88-73e4b668c2dc",
+              "name": "Business Error. The request is formatted correctly but doesn't pass business rule validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"BUSINESS_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05446042-5336-427a-9b0c-201b6a637df3",
+              "name": "Too many requests were made within a short period. Wait a while and try again.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TOO_MANY_REQUESTS\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9acacca6-321f-48a5-be9e-821354cda33c",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4867fc49-a901-4316-a7c2-2398b33f0b42",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "ma",
+                    "v3",
+                    "ad_accounts",
+                    ":ad_account_id",
+                    "campaigns",
+                    ":campaign_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "ad_account_id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "campaign_id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "key": "Accept-Language",
+                    "value": "en-US",
+                    "description": ""
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ads.smartnews.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f9edbbd5-f354-4c0c-bf77-e2f22f9aff3a",
+    "name": "SmartNews Marketing ad campaign API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n\n\nContact Support:\n Name: SmartNews Ads Support",
+      "type": "text/plain"
+    }
+  }
+}

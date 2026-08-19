@@ -1,0 +1,4413 @@
+{
+  "item": [
+    {
+      "id": "a833c74e-e17b-4a84-b4c7-062c78bbdd1b",
+      "name": "catalog",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "0c7f3b92-7883-4f8e-b2eb-7da25b2f367b",
+          "name": "list Business Catalogs",
+          "request": {
+            "name": "list Business Catalogs",
+            "description": {
+              "content": "Retrieve all catalogs associated with the specified business.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business whose catalogs will be listed."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "90c4bc8e-397c-4d71-9e03-4a848b0dbfdd",
+              "name": "Catalogs associated with the specified business.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business whose catalogs will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"catalog_id\": 8037,\n      \"business_id\": 1223,\n      \"name\": \"string\",\n      \"review_status\": \"SUBMITTED\",\n      \"total_item_count\": 3571,\n      \"ad_accounts\": [\n        {\n          \"ad_account_id\": \"string\",\n          \"ad_account_name\": \"string\"\n        },\n        {\n          \"ad_account_id\": \"string\",\n          \"ad_account_name\": \"string\"\n        }\n      ],\n      \"product_sources\": [\n        {\n          \"product_source_id\": 7566,\n          \"catalog_id\": 6571,\n          \"product_source_name\": \"string\",\n          \"file_type\": \"TSV\",\n          \"file_url\": \"string\",\n          \"status\": \"ERROR\",\n          \"last_fetched_at\": \"1967-07-05T21:37:02.898Z\",\n          \"last_failed_item_count\": 2182,\n          \"last_successful_item_count\": 2538,\n          \"username\": \"string\",\n          \"ingestion_error_reason\": \"UNKNOWN_ERROR\",\n          \"ingestion_error_message\": \"string\",\n          \"last_out_of_stock_item_count\": 9218,\n          \"last_unparsable_item_count\": 3420,\n          \"last_blocked_item_count\": 36\n        },\n        {\n          \"product_source_id\": 6474,\n          \"catalog_id\": 2116,\n          \"product_source_name\": \"string\",\n          \"file_type\": \"TSV\",\n          \"file_url\": \"string\",\n          \"status\": \"SUCCESS\",\n          \"last_fetched_at\": \"1991-10-04T23:58:39.479Z\",\n          \"last_failed_item_count\": 3645,\n          \"last_successful_item_count\": 455,\n          \"username\": \"string\",\n          \"ingestion_error_reason\": \"SERVER_UNAVAILABLE\",\n          \"ingestion_error_message\": \"string\",\n          \"last_out_of_stock_item_count\": 1531,\n          \"last_unparsable_item_count\": 1642,\n          \"last_blocked_item_count\": 7530\n        }\n      ],\n      \"created_at\": \"2015-04-14T18:39:49.623Z\",\n      \"updated_at\": \"1997-09-25T00:31:45.433Z\",\n      \"currency\": \"string\",\n      \"description\": \"string\",\n      \"all_ad_account_access\": false,\n      \"pixel_tag_id\": \"string\",\n      \"app_tracking\": {\n        \"tracking_type\": \"IOS\",\n        \"ios_app_id\": \"string\",\n        \"android_app_id\": \"string\"\n      }\n    },\n    {\n      \"catalog_id\": 1343,\n      \"business_id\": 4310,\n      \"name\": \"string\",\n      \"review_status\": \"APPROVED\",\n      \"total_item_count\": 279,\n      \"ad_accounts\": [\n        {\n          \"ad_account_id\": \"string\",\n          \"ad_account_name\": \"string\"\n        },\n        {\n          \"ad_account_id\": \"string\",\n          \"ad_account_name\": \"string\"\n        }\n      ],\n      \"product_sources\": [\n        {\n          \"product_source_id\": 3352,\n          \"catalog_id\": 8949,\n          \"product_source_name\": \"string\",\n          \"file_type\": \"CSV\",\n          \"file_url\": \"string\",\n          \"status\": \"WARNING\",\n          \"last_fetched_at\": \"1961-11-17T13:39:11.468Z\",\n          \"last_failed_item_count\": 2775,\n          \"last_successful_item_count\": 5167,\n          \"username\": \"string\",\n          \"ingestion_error_reason\": \"FILE_NOT_FOUND\",\n          \"ingestion_error_message\": \"string\",\n          \"last_out_of_stock_item_count\": 805,\n          \"last_unparsable_item_count\": 4415,\n          \"last_blocked_item_count\": 567\n        },\n        {\n          \"product_source_id\": 1926,\n          \"catalog_id\": 5276,\n          \"product_source_name\": \"string\",\n          \"file_type\": \"TSV\",\n          \"file_url\": \"string\",\n          \"status\": \"CREATED\",\n          \"last_fetched_at\": \"2020-09-14T20:49:00.544Z\",\n          \"last_failed_item_count\": 1840,\n          \"last_successful_item_count\": 2888,\n          \"username\": \"string\",\n          \"ingestion_error_reason\": \"REQUEST_ERROR\",\n          \"ingestion_error_message\": \"string\",\n          \"last_out_of_stock_item_count\": 2990,\n          \"last_unparsable_item_count\": 2303,\n          \"last_blocked_item_count\": 7924\n        }\n      ],\n      \"created_at\": \"1966-09-21T03:57:48.750Z\",\n      \"updated_at\": \"1985-12-25T06:42:47.170Z\",\n      \"currency\": \"string\",\n      \"description\": \"string\",\n      \"all_ad_account_access\": false,\n      \"pixel_tag_id\": \"string\",\n      \"app_tracking\": {\n        \"tracking_type\": \"ALL\",\n        \"ios_app_id\": \"string\",\n        \"android_app_id\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3562b96b-a928-4f40-8c5a-167452ffc117",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business whose catalogs will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca9e14a6-1da2-4c3e-b2d0-10e74a8f6702",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business whose catalogs will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a00310a-5795-4f26-af43-a6bc939120d9",
+              "name": "When the business resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business whose catalogs will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbb84ed7-e29e-41fa-b396-662fdf67bae3",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business whose catalogs will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "03c46df6-855c-4a9c-be84-d0476acdf260",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business whose catalogs will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "37b865b3-7719-4acf-a653-9748c2a60b17",
+          "name": "create Business Catalog",
+          "request": {
+            "name": "create Business Catalog",
+            "description": {
+              "content": "Create a new catalog for the specified business.\nOnly business admins can create catalogs.\nThe catalog will be created with the provided configuration and linked to the specified ad accounts.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business that will own the catalog."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8e6f9255-84ed-443a-a62b-0859e41ccf93",
+              "name": "Catalog created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"catalog_id\": 9240,\n  \"business_id\": 3663,\n  \"name\": \"string\",\n  \"currency\": \"string\",\n  \"review_status\": \"SUBMITTED\",\n  \"total_item_count\": 8246,\n  \"ad_accounts\": [\n    {\n      \"ad_account_id\": \"string\",\n      \"ad_account_name\": \"string\"\n    },\n    {\n      \"ad_account_id\": \"string\",\n      \"ad_account_name\": \"string\"\n    }\n  ],\n  \"product_sources\": [\n    {\n      \"product_source_id\": 5107,\n      \"catalog_id\": 9349,\n      \"product_source_name\": \"string\",\n      \"file_type\": \"<string>\",\n      \"file_url\": \"string\",\n      \"status\": \"CREATED\",\n      \"last_fetched_at\": \"1956-02-02T14:53:23.839Z\",\n      \"last_failed_item_count\": 6022,\n      \"last_successful_item_count\": 9701,\n      \"username\": \"string\",\n      \"ingestion_error_reason\": \"INVALID_FORMAT\",\n      \"ingestion_error_message\": \"string\",\n      \"last_out_of_stock_item_count\": 5133,\n      \"last_unparsable_item_count\": 4318,\n      \"last_blocked_item_count\": 3458\n    },\n    {\n      \"product_source_id\": 9379,\n      \"catalog_id\": 605,\n      \"product_source_name\": \"string\",\n      \"file_type\": \"<string>\",\n      \"file_url\": \"string\",\n      \"status\": \"WARNING\",\n      \"last_fetched_at\": \"2022-03-11T13:01:05.182Z\",\n      \"last_failed_item_count\": 7573,\n      \"last_successful_item_count\": 8685,\n      \"username\": \"string\",\n      \"ingestion_error_reason\": \"FILE_NOT_FOUND\",\n      \"ingestion_error_message\": \"string\",\n      \"last_out_of_stock_item_count\": 8283,\n      \"last_unparsable_item_count\": 4158,\n      \"last_blocked_item_count\": 3117\n    }\n  ],\n  \"created_at\": \"1994-01-14T03:41:34.088Z\",\n  \"updated_at\": \"1989-04-19T09:01:36.548Z\",\n  \"description\": \"string\",\n  \"all_ad_account_access\": false,\n  \"pixel_tag_id\": \"string\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8fce7c1-c63c-471a-8ec9-5cdc69428403",
+              "name": "Bad Request. The request body or query parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d378275-08f6-4421-b753-fe119dba2ca2",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d304bbca-062b-4bca-ac74-a6c808240df8",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"message\": \"The owner of the assets must accept the Ads terms of service.\",\n    \"terms_of_service_path\": \"/terms/agreement\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ea541e7-b635-460e-97c1-06ade860aaa4",
+              "name": "When the business resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56979762-9f05-4607-9e40-c7830f123d6f",
+              "name": "Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"error_fields\": [\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      },\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      }\n    ],\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"VALIDATION_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "28d89b2e-13a7-49f2-95c9-d2cc80b7762f",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e511b428-8d45-412d-9ddc-83a3a72d5f1f",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that will own the catalog."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\"\n  ],\n  \"pixel_tag_id\": \"<string>\",\n  \"product_source\": {\n    \"product_source_name\": \"<string>\",\n    \"file_type\": \"<string>\",\n    \"file_url\": \"<string>\",\n    \"username\": \"<string>\",\n    \"password\": \"<string>\"\n  },\n  \"description\": \"<string>\",\n  \"all_ad_account_access\": false,\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8bbebaf1-8ddd-451f-9103-a40e7f9e8e47",
+          "name": "get Business Catalog",
+          "request": {
+            "name": "get Business Catalog",
+            "description": {
+              "content": "Retrieve metadata of a specific catalog under the specified business.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs",
+                ":catalog_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business that owns the catalog."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "catalog_id",
+                  "description": "(Required) Identifier of the catalog to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4f1fcb73-2f4e-41ba-a070-cfed4cacad38",
+              "name": "Catalog details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"catalog_id\": 8114,\n  \"business_id\": 4465,\n  \"name\": \"string\",\n  \"review_status\": \"SUBMITTED\",\n  \"total_item_count\": 4193,\n  \"ad_accounts\": [\n    {\n      \"ad_account_id\": \"string\",\n      \"ad_account_name\": \"string\"\n    },\n    {\n      \"ad_account_id\": \"string\",\n      \"ad_account_name\": \"string\"\n    }\n  ],\n  \"product_sources\": [\n    {\n      \"product_source_id\": 1406,\n      \"catalog_id\": 6311,\n      \"product_source_name\": \"string\",\n      \"file_type\": \"<string>\",\n      \"file_url\": \"string\",\n      \"status\": \"CREATED\",\n      \"last_fetched_at\": \"1956-07-31T12:36:09.241Z\",\n      \"last_failed_item_count\": 5505,\n      \"last_successful_item_count\": 1125,\n      \"username\": \"string\",\n      \"ingestion_error_reason\": \"FILE_NOT_FOUND\",\n      \"ingestion_error_message\": \"string\",\n      \"last_out_of_stock_item_count\": 8772,\n      \"last_unparsable_item_count\": 8464,\n      \"last_blocked_item_count\": 2282\n    },\n    {\n      \"product_source_id\": 9290,\n      \"catalog_id\": 2570,\n      \"product_source_name\": \"string\",\n      \"file_type\": \"<string>\",\n      \"file_url\": \"string\",\n      \"status\": \"CREATED\",\n      \"last_fetched_at\": \"1965-11-28T11:05:21.016Z\",\n      \"last_failed_item_count\": 3483,\n      \"last_successful_item_count\": 3100,\n      \"username\": \"string\",\n      \"ingestion_error_reason\": \"INVALID_FORMAT\",\n      \"ingestion_error_message\": \"string\",\n      \"last_out_of_stock_item_count\": 3738,\n      \"last_unparsable_item_count\": 8518,\n      \"last_blocked_item_count\": 6492\n    }\n  ],\n  \"created_at\": \"1982-08-17T09:01:08.467Z\",\n  \"updated_at\": \"1969-12-15T23:23:28.984Z\",\n  \"currency\": \"string\",\n  \"description\": \"string\",\n  \"all_ad_account_access\": false,\n  \"pixel_tag_id\": \"string\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2a150fa-b8ad-4c6a-b8fa-497843457729",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20955f75-b2dc-421d-9887-468f92efed1d",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"type\": \"ACCESS_DENIED\",\n    \"message\": \"ViewCatalog permission is required.\",\n    \"retriable\": false\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1cd27a73-9ae8-46c9-b8fc-acfb25a5c95f",
+              "name": "When the business or catalog resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72874587-2097-4dc3-9eee-40b7872bbf0f",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "12b8a9f3-5781-4d30-99ea-a4ce71194ba7",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7d6a467a-1793-430e-b242-7263b2540d08",
+          "name": "update Business Catalog",
+          "request": {
+            "name": "update Business Catalog",
+            "description": {
+              "content": "Update metadata of an existing catalog under the specified business.\nOnly the catalog-level fields are editable here; product source fields are\nmanaged via the product source endpoint and no connection validation is\ntriggered by this operation.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs",
+                ":catalog_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business that owns the catalog."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "catalog_id",
+                  "description": "(Required) Identifier of the catalog to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "de0a0354-8e45-43fe-9fce-00c9855ddc0f",
+              "name": "Catalog updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"catalog_id\": 8114,\n  \"business_id\": 4465,\n  \"name\": \"string\",\n  \"review_status\": \"SUBMITTED\",\n  \"total_item_count\": 4193,\n  \"ad_accounts\": [\n    {\n      \"ad_account_id\": \"string\",\n      \"ad_account_name\": \"string\"\n    },\n    {\n      \"ad_account_id\": \"string\",\n      \"ad_account_name\": \"string\"\n    }\n  ],\n  \"product_sources\": [\n    {\n      \"product_source_id\": 1406,\n      \"catalog_id\": 6311,\n      \"product_source_name\": \"string\",\n      \"file_type\": \"<string>\",\n      \"file_url\": \"string\",\n      \"status\": \"CREATED\",\n      \"last_fetched_at\": \"1956-07-31T12:36:09.241Z\",\n      \"last_failed_item_count\": 5505,\n      \"last_successful_item_count\": 1125,\n      \"username\": \"string\",\n      \"ingestion_error_reason\": \"FILE_NOT_FOUND\",\n      \"ingestion_error_message\": \"string\",\n      \"last_out_of_stock_item_count\": 8772,\n      \"last_unparsable_item_count\": 8464,\n      \"last_blocked_item_count\": 2282\n    },\n    {\n      \"product_source_id\": 9290,\n      \"catalog_id\": 2570,\n      \"product_source_name\": \"string\",\n      \"file_type\": \"<string>\",\n      \"file_url\": \"string\",\n      \"status\": \"CREATED\",\n      \"last_fetched_at\": \"1965-11-28T11:05:21.016Z\",\n      \"last_failed_item_count\": 3483,\n      \"last_successful_item_count\": 3100,\n      \"username\": \"string\",\n      \"ingestion_error_reason\": \"INVALID_FORMAT\",\n      \"ingestion_error_message\": \"string\",\n      \"last_out_of_stock_item_count\": 3738,\n      \"last_unparsable_item_count\": 8518,\n      \"last_blocked_item_count\": 6492\n    }\n  ],\n  \"created_at\": \"1982-08-17T09:01:08.467Z\",\n  \"updated_at\": \"1969-12-15T23:23:28.984Z\",\n  \"currency\": \"string\",\n  \"description\": \"string\",\n  \"all_ad_account_access\": false,\n  \"pixel_tag_id\": \"string\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ead6e97-2c8b-409d-87c8-f9c4cb069c7c",
+              "name": "Bad Request. The request body or query parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6fb1754-c1b1-43de-93a5-54b1b7252f05",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad65df7a-f744-4286-9a5a-ce1795a98433",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"terms_of_service_path\": \"/terms/agreement\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4d5742a-7e28-46f5-92f7-c6b96f3a57f3",
+              "name": "When the business or catalog resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9920df39-bd83-4c62-8452-cab1adaeba18",
+              "name": "Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"error_fields\": [\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      },\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      }\n    ],\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"VALIDATION_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0fe6b353-9b5e-41e1-8373-175595a7d906",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1949acc5-66eb-4a8e-b799-f035b116bb7e",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"da_ad_account_ids\": [\n    \"<long>\",\n    \"<long>\"\n  ],\n  \"all_ad_account_access\": \"<boolean>\",\n  \"pixel_tag_id\": \"<string>\",\n  \"app_tracking\": {\n    \"tracking_type\": \"<string>\",\n    \"ios_app_id\": \"<string>\",\n    \"android_app_id\": \"<string>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4c94f301-6f71-4f6a-8c37-db5794da576e",
+          "name": "list Catalog Product Sets",
+          "request": {
+            "name": "list Catalog Product Sets",
+            "description": {
+              "content": "Retrieve all product sets configured under the specified catalog.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs",
+                ":catalog_id",
+                "product_sets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business that owns the catalog."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "catalog_id",
+                  "description": "(Required) Identifier of the catalog whose product sets will be listed."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7bc7927f-b210-428a-96cf-7b913d8e2796",
+              "name": "Product sets associated with the specified catalog.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog whose product sets will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"product_set_id\": 41,\n      \"catalog_id\": 1479,\n      \"name\": \"string\",\n      \"status\": \"READY\",\n      \"rule_match_type\": \"ALL\",\n      \"item_count\": 4854,\n      \"is_universal_set\": false,\n      \"created_at\": \"2014-02-08T18:51:25.254Z\",\n      \"updated_at\": \"1973-09-26T10:53:25.132Z\",\n      \"filter_rules\": [\n        {\n          \"filter_rule_id\": 1349,\n          \"field\": \"RATING\",\n          \"condition\": \"GREATER_THAN\",\n          \"values\": [\n            \"string\",\n            \"string\"\n          ]\n        },\n        {\n          \"filter_rule_id\": 9289,\n          \"field\": \"CUSTOM_NUMBER_4\",\n          \"condition\": \"LESS_THAN_OR_EQUAL\",\n          \"values\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      ],\n      \"last_processed_at\": \"1989-11-10T13:26:15.442Z\",\n      \"condition_updated_at\": \"1998-06-28T03:58:43.098Z\"\n    },\n    {\n      \"product_set_id\": 7602,\n      \"catalog_id\": 8165,\n      \"name\": \"string\",\n      \"status\": \"ERROR\",\n      \"rule_match_type\": \"AT_LEAST_ONE\",\n      \"item_count\": 5882,\n      \"is_universal_set\": false,\n      \"created_at\": \"1960-07-07T07:22:24.564Z\",\n      \"updated_at\": \"1999-09-26T05:33:40.541Z\",\n      \"filter_rules\": [\n        {\n          \"filter_rule_id\": 7266,\n          \"field\": \"CUSTOM_LABEL_2\",\n          \"condition\": \"IS_NOT\",\n          \"values\": [\n            \"string\",\n            \"string\"\n          ]\n        },\n        {\n          \"filter_rule_id\": 1939,\n          \"field\": \"PRODUCT_TYPE\",\n          \"condition\": \"CONTAINS\",\n          \"values\": [\n            \"string\",\n            \"string\"\n          ]\n        }\n      ],\n      \"last_processed_at\": \"1949-11-04T16:33:56.969Z\",\n      \"condition_updated_at\": \"2008-04-08T21:45:38.618Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1b399e86-53f3-44f1-b8a6-9a50937baebd",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog whose product sets will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "86a1e6b1-d374-4f53-bcd1-f712981955b8",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog whose product sets will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"terms_of_service_path\": \"/terms/agreement\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8683e0dc-accb-47b6-9e65-c57a37cca32a",
+              "name": "When the business or catalog resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog whose product sets will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbcd59eb-f75d-40a7-a5f6-0121e4806215",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog whose product sets will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dbd52ccc-faef-4f23-bc43-435cb11d0d09",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog whose product sets will be listed."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6f1617fd-7562-49c9-8cab-f9d60d25cfc9",
+          "name": "create Catalog Product Set",
+          "request": {
+            "name": "create Catalog Product Set",
+            "description": {
+              "content": "Create a new product set under the specified catalog.\nUsers can configure name, rule_match_type, and filter_rules.\nEach filter rule must specify a valid field, condition, and values combination.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs",
+                ":catalog_id",
+                "product_sets"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business that owns the catalog."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "catalog_id",
+                  "description": "(Required) Identifier of the catalog under which to create the product set."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e58bd33a-5025-4939-97d3-2c4d357f8120",
+              "name": "Product set created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"product_set_id\": 6910,\n    \"catalog_id\": 9698,\n    \"name\": \"string\",\n    \"status\": \"CREATED\",\n    \"rule_match_type\": \"<string>\",\n    \"item_count\": 3934,\n    \"is_universal_set\": false,\n    \"created_at\": \"1981-05-04T06:53:10.952Z\",\n    \"updated_at\": \"2024-02-25T16:29:58.697Z\",\n    \"filter_rules\": [\n      {\n        \"filter_rule_id\": 6352,\n        \"field\": \"<string>\",\n        \"condition\": \"<string>\",\n        \"values\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      {\n        \"filter_rule_id\": 5857,\n        \"field\": \"<string>\",\n        \"condition\": \"<string>\",\n        \"values\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    ],\n    \"last_processed_at\": \"1972-11-11T04:31:03.596Z\",\n    \"condition_updated_at\": \"2015-11-16T09:03:01.564Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee865539-6c99-4b85-9198-0350cf36f273",
+              "name": "Bad Request. The request body or query parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3b68790-4cab-4558-97c8-bd5276037dbf",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2aeda50b-4397-4a2f-940b-ed6d4ec9d16b",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"terms_of_service_path\": \"/terms/agreement\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6277e386-363a-481d-8b78-ac825147274b",
+              "name": "When the business or catalog resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54dabf5b-dcb3-4ce7-b2da-f056387176e6",
+              "name": "Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"error_fields\": [\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      },\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      }\n    ],\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"VALIDATION_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ce860bb-bff7-4954-9ada-7cc2b09815a4",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db2b67f0-2f7b-4fb6-a0e7-ad5f9b657623",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog under which to create the product set."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba5846b6-7b37-4a01-b571-1b5334e54423",
+          "name": "get Catalog Product Set",
+          "request": {
+            "name": "get Catalog Product Set",
+            "description": {
+              "content": "Retrieve details of a specific product set under the specified catalog.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs",
+                ":catalog_id",
+                "product_sets",
+                ":product_set_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business that owns the catalog."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "catalog_id",
+                  "description": "(Required) Identifier of the catalog that contains the product set."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "product_set_id",
+                  "description": "(Required) Identifier of the product set to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "95fb66f7-192f-4eaf-959b-1da72289e0b0",
+              "name": "Product set details.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"product_set_id\": 6910,\n    \"catalog_id\": 9698,\n    \"name\": \"string\",\n    \"status\": \"CREATED\",\n    \"rule_match_type\": \"<string>\",\n    \"item_count\": 3934,\n    \"is_universal_set\": false,\n    \"created_at\": \"1981-05-04T06:53:10.952Z\",\n    \"updated_at\": \"2024-02-25T16:29:58.697Z\",\n    \"filter_rules\": [\n      {\n        \"filter_rule_id\": 6352,\n        \"field\": \"<string>\",\n        \"condition\": \"<string>\",\n        \"values\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      {\n        \"filter_rule_id\": 5857,\n        \"field\": \"<string>\",\n        \"condition\": \"<string>\",\n        \"values\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    ],\n    \"last_processed_at\": \"1972-11-11T04:31:03.596Z\",\n    \"condition_updated_at\": \"2015-11-16T09:03:01.564Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41e8d436-8b2e-4a49-8e0f-75528db5db28",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "911cc2b5-ee69-46aa-97a9-019835eedba6",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"terms_of_service_path\": \"/terms/agreement\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74029b87-9707-463d-869d-727527286cf4",
+              "name": "When the business, catalog, or product set resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73e7b252-12aa-4b3c-9853-de6f625165fa",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d7ef313-9f9c-4d67-8139-fc52359df0e7",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "383fbed9-113b-4c87-b4dc-245da812630d",
+          "name": "update Catalog Product Set",
+          "request": {
+            "name": "update Catalog Product Set",
+            "description": {
+              "content": "Update an existing product set under the specified catalog.\nUsers can update name, rule_match_type, and filter_rules.\nEach filter rule must specify a valid field, condition, and values combination.\nAt least one field must be provided in the request body.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "bm-external",
+                "v1",
+                "businesses",
+                ":business_id",
+                "catalogs",
+                ":catalog_id",
+                "product_sets",
+                ":product_set_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "business_id",
+                  "description": "(Required) Identifier of the business that owns the catalog."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "catalog_id",
+                  "description": "(Required) Identifier of the catalog that contains the product set."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "product_set_id",
+                  "description": "(Required) Identifier of the product set to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "459a92b5-c742-4296-9b3c-fe7f9622c0ea",
+              "name": "Product set updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {\n    \"product_set_id\": 6910,\n    \"catalog_id\": 9698,\n    \"name\": \"string\",\n    \"status\": \"CREATED\",\n    \"rule_match_type\": \"<string>\",\n    \"item_count\": 3934,\n    \"is_universal_set\": false,\n    \"created_at\": \"1981-05-04T06:53:10.952Z\",\n    \"updated_at\": \"2024-02-25T16:29:58.697Z\",\n    \"filter_rules\": [\n      {\n        \"filter_rule_id\": 6352,\n        \"field\": \"<string>\",\n        \"condition\": \"<string>\",\n        \"values\": [\n          \"string\",\n          \"string\"\n        ]\n      },\n      {\n        \"filter_rule_id\": 5857,\n        \"field\": \"<string>\",\n        \"condition\": \"<string>\",\n        \"values\": [\n          \"string\",\n          \"string\"\n        ]\n      }\n    ],\n    \"last_processed_at\": \"1972-11-11T04:31:03.596Z\",\n    \"condition_updated_at\": \"2015-11-16T09:03:01.564Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aeed7c8d-0b09-478a-a0a7-3b6b5761cee3",
+              "name": "Bad Request. The request body or query parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"BAD_REQUEST\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1167023-685d-4b8e-8bee-5a367ba17db6",
+              "name": "Unauthorized. The access token is either expired or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": false,\n    \"type\": \"UNAUTHORIZED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5ff2886-8fb8-4b4b-9d97-798f9cf0b946",
+              "name": "Forbidden. Access to the requested resource is denied.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"TERMS_OF_SERVICE_NOT_ACCEPTED\",\n    \"terms_of_service_path\": \"/terms/agreement\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b25f1630-2f10-43a4-a1fa-fd8c37ebb449",
+              "name": "When the business, catalog, or product set resource specified in the path is not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"resource_type\": \"AD_CREDIT_ACCOUNT\",\n    \"retriable\": false,\n    \"type\": \"DELETED\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2823f78-fc3f-4cf3-85bf-bde25255c7e7",
+              "name": "Validation Error. This error is returned when the request body contains unknown fields, invalid fields or invalid values. The `error_fields` shows the fields that don't pass the validations.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"error_fields\": [\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      },\n      {\n        \"field_name\": \"string\",\n        \"reason\": \"string\"\n      }\n    ],\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"VALIDATION_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2ce023a9-a02e-4042-bcc4-71971b9b26fa",
+              "name": "Unexpected error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNEXPECTED_ERROR\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "44765c8a-9424-4099-90a8-de52782d748e",
+              "name": "The service is temporarily unavailable.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "bm-external",
+                    "v1",
+                    "businesses",
+                    ":business_id",
+                    "catalogs",
+                    ":catalog_id",
+                    "product_sets",
+                    ":product_set_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "business_id",
+                      "description": "(Required) Identifier of the business that owns the catalog."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "catalog_id",
+                      "description": "(Required) Identifier of the catalog that contains the product set."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "product_set_id",
+                      "description": "(Required) Identifier of the product set to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"<string>\",\n  \"rule_match_type\": \"<string>\",\n  \"filter_rules\": [\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"field\": \"<string>\",\n      \"condition\": \"<string>\",\n      \"values\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"message\": \"string\",\n    \"retriable\": true,\n    \"type\": \"UNDER_MAINTENANCE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://ads.smartnews.com",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ff7eebaa-e7db-448b-acb5-6ca15f3dcd17",
+    "name": "SmartNews Marketing ad catalog API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Previous Versions\n- SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. Please ensure that your system has been updated to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# About This Document\nThis document provides the API specifications for the Ads Management system on the SmartNews Ads Platform. It is intended for developers who use the API to automate advertising operations.\n\nTo use the SmartNews Ads API, you must agree to the SmartNews Ads API Terms of Service.\n\n- **English Version:** https://ads.smartnews.com/developers/tos-en.html\n- **Japanese Reference Translation:** https://ads.smartnews.com/developers/tos-ja.html\n# Contact Information\n\nAPI Help Page:\n- (Ja) https://help-ads.smartnews.com/item-4207/\n- (En) https://help-ads.smartnews.com/linkonly/item-4442/\n\n**For inquiries:**\n\nFor the Japan region\n\nPlease contact us through the following link:\nhttps://smartnews-ads.zendesk.com/hc/ja/requests/new?ticket_form_id=&u=1723081408\n\n- **カテゴリ:** Select \"Standard Adsに関するお問い合わせ\"\n- **該当の項目:** Select \"APIの仕様・不具合について\"\n- **対象のAPI:** Select \"Marketing API\"\n\nFor the US region\n\nPlease contact us through the following link:\nhttps://business.smartnews.com/get-started-ads\n\n# Change Log\n\nJanuary 2026\n- Released Marketing API v3 version which requires pagination parameters for insights and list campaign/adgroup/ad endpoints.\n  - See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3)\n  - To access the old docs, visit https://ads.smartnews.com/developers/deprecated/v2/index.html\n  - API v2 will be sunset on June 30, 2026 (JST). Please ensure that your system is updated to use API v3 by that date.\n- CSV format is now supported for insights v3.\n\nApril 2026\n- (catalog) Added new APIs for catalogs and productSets which are available for certain allowlisted developer app only.\n  - In order to access the API, one developer app should be created with access to the adAccount for campaign management.\n  - Please contact Customer Support with the developer app and business details to request access to the Catalog APIs.\n\nMay 2026\n- Added rate limit for OAuth token issuance endpoint (`generateAccessToken`): 5 requests per minute per developer app. Access tokens are valid for 24 hours and should be reused within that period.\n- Added new `channel_alias_labels` endpoint to retrieve channel alias label options for ad group targeting.\n- Increased the maximum `spending_limit_micro` for JP ad accounts from 1,000,000,000,000,000 to 10,000,000,000,000,000.\n\nJuly 2026\n- **API v2 has been fully disabled.** All requests to `api/ma/v2/*` endpoints now return a `410 Gone` error. If you have not yet migrated, please update your system to use API v3. See [How to Upgrade From Marketing API v2 to v3](#section/How-to-Upgrade-From-Marketing-API-v2-to-v3).\n\n# How to Upgrade From Marketing API v2 to v3\n- **Note: API v2 is now fully disabled. Any request to an `api/ma/v2/*` endpoint will return a `410 Gone` error. You must migrate to the equivalent `api/ma/v3/*` endpoint.**\n- The main change is pagination; affected endpoints are as follows:\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads`\n  - `/api/ma/v3/ad_accounts/{ad_account_id}/ads`\n- For the above endpoints, `page_size` and `page` query parameters are added with default values.\n- The full list of objects for an account can no longer be retrieved by a single request if the number of objects exceeds the maximum `page_size` (differs per endpoint, please check endpoint documentation for details).\n- Newly added `pagination` object in response provides the total number of available objects and pages. Please use this information to fetch all pages as required.\n- For CSV, we recommend setting `remove_csv_header=true` for pages greater than 1. This allows you to easily join all pages to create the full CSV file.\n  - CSV does not include the pagination summary. Please keep calling the endpoint until there are no rows returned in the response.\n\n# Base URL\nThe base URL for all API requests is `https://ads.smartnews.com/`.\n\nFor example, to call the GET Campaign endpoint, the request URL will be `https://ads.smartnews.com/api/ma/v3/ad_accounts/{ad_account_id}/campaigns/`\n\n# Rate Limit\nRequests are limited per developer app ID. Making too many requests in a short time will result in a 429 error.\n\nIn this case, please wait a short time and retry the request again.\n\nCurrently the limits are as follows:\n\n- 10 GET requests per second\n- 10 POST/PATCH/DELETE requests per second\n- 5 OAuth token requests per minute (generateAccessToken endpoint)\n  - Access tokens are valid for 24 hours. Please reuse the same token for multiple API requests within its validity period, rather than generating a new token for each request.\n\nNote: we do not guarantee these limits and they are subject to change, so we strongly recommend not relying on these limits but instead implementing retry logic\nbased on 429 error response.\n\n# Authentication / Authorization\nTo set the JWT token in the HTTP header based on the provided OpenAPI definition, please include the Authorization header with the following format:\n```\nAuthorization: Bearer <access token>\n```\nAccess tokens are generated using the OAuth API. Please refer to the [OAuth API](#tag/oauth) for more information.\n\n# About Currency Units\n\nThe SmartNews Ads Marketing API uses the `_micro` notation for monetary amounts, representing currency values as integers.\nExamples include `daily_budget_amount_micro` and `bid_amount_micro` in campaign level.\n\nThis integer representation multiplies the actual currency amount by 1,000,000.\n\nExamples:\n\n| Currency | API notation (micro) | Actual amount |\n-----------|----------------------|---------------|\n| USD      | 1,500,000            | $1.50 USD     |\n| USD      | 2,500,000            | $2.50 USD     |\n| JPY      | 5,000,000            | ¥5 JPY        |\n| JPY      | 120,000,000          | ¥120 JPY      |\n\nIn practice, when specifying monetary amounts via the API, you should use an integer value equal to 1,000,000 times the intended actual amount.\n\nAvailable currencies are set at the advertising account level.\n\n# Simultaneous Update Operation Limitation\n\nThe following applies to Campaign, AdGroup, Ad `POST`, `PATCH` and `DELETE` endpoints:\n\nThere are limitations on doing simultaneous operations on related objects (\"simultaneous\" means starting a second request before receiving a response from the first request).\n\nThe following cases are not allowed and will result in a `409 Conflict` error:\n\n- __Creating, updating or deleting multiple children of the same parent simultaneously.__\n  - Example 1: Updating two Ads which both belong to the same Campaign at the same time.\n  - Example 2: Creating an Ad and deleting another Ad which both belong to the same Campaign.\n  - Example 3: Creating two AdGroups which both belong to the same Campaign.\n  - Example 4: Creating an AdGroup and an Ad which both belong to the same Campaign.\n- __Creating, updating or deleting objects at the same time as its parent object.__\n  - Example 1: Updating a Campaign and its child AdGroup at the same time.\n  - Example 2: Updating an AdGroup and deleting one of its Ads at the same time.\n\n\nContact Support:\n Name: SmartNews Ads Support",
+      "type": "text/plain"
+    }
+  }
+}

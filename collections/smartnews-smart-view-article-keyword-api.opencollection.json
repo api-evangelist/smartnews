@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad smart view article keyword API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "smart view article keyword",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Batch search SmartView article keyword suggestions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://ads.smartnews.com/api/ma/v3/article_keywords/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Accepts a list of keywords and returns preset SmartView article keyword\nsuggestions for each, suitable for autocomplete experiences.\n\n- Input is language-agnostic: both EN and JA queries are supported.\n- Results may contain both EN and JA keywords (exact and similar matches).\n- Results for each keyword are sorted by relevance in descending order.\n- When no matches are found for a keyword, an empty array is returned for that key.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

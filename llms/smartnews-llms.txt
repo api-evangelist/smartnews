@@ -6,9 +6,15 @@
 > with an Insights API for reporting. Auth is OAuth 2.0 bearer (JWT).
 
 ## APIs
-- [SmartNews Marketing API — developer portal](https://ads.smartnews.com/developers/): OpenAPI 3.0 reference (v3.0.1)
+- [SmartNews Marketing API — developer portal](https://ads.smartnews.com/developers/): OpenAPI 3.0 reference (v3.0.1), base https://ads.smartnews.com/api/ma/v3
+- [SmartNews Ads Conversion API](https://help-ads.smartnews.com/en/item-5499/): server-to-server conversion event ingestion, base https://log.smartnews-ads.com — no OpenAPI published
 - [Getting started](https://help-ads.smartnews.com/en/item-4207/): first campaign via the Marketing API
 - [Ads API Terms of Service](https://ads.smartnews.com/developers/tos-en.html)
+
+Access is gated: an existing SmartNews Ads account plus an approved Developer
+Application Form is required, one developer app per organization. Marketing API
+v2 is disabled (410 Gone); v3 is current. There is no sandbox for the Marketing
+API — only the Conversion API publishes a staging host.
 
 ## Specs
 - [OpenAPI (verbatim)](openapi/smartnews-marketing-openapi.json): 46 operations, base https://ads.smartnews.com
@@ -22,8 +28,13 @@
 - [Lifecycle & versioning](lifecycle/smartnews-lifecycle.yml)
 - [Changelog](changelog/smartnews-changelog.yml)
 - [Conformance](conformance/smartnews-conformance.yml)
-- [Candidate MCP tools](mcp/smartnews-mcp.yml)
+- [Candidate MCP tools](mcp/smartnews-mcp.yml): derived candidates only — SmartNews ships no MCP server
 - [Agent skills](skills/_index.yml)
+- [Sandbox / test environments](sandbox/smartnews-sandbox.yml)
+- [Plans & pricing](plans/smartnews-plans-pricing.yml): no published API plans
+- [Conversion event vocabulary](vocabulary/smartnews-conversion-events.yml): 35 event_name values
+- [Rate limits](rate-limits/smartnews-rate-limits.yml)
+- [Well-known probe results](well-known/smartnews-well-known.yml): no agent card, no llms.txt, no API catalog
 
 ## Docs
 - [SmartNews Ads Help Center](https://help-ads.smartnews.com/en/)

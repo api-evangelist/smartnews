@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SmartNews Marketing ad locations API",
+    "version": "3.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "locations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Locations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://ads.smartnews.com/api/ma/v3/locations",
+            "params": [
+              {
+                "name": "region",
+                "value": "",
+                "type": "query",
+                "description": "The region to obtain locations for.\n\nThere are currently two regions: `JP` and `US`.\n- `JP`: contains all the prefectures and their cities in Japan.\n- `US`: contains all the states and their counties in the US.\n\nIf a value is not specified, the default is `JP`.\n"
+              }
+            ]
+          },
+          "docs": "Returns an array of locations for the specified region (prefectures for `JP`, states for `US`).\n\nEach location contains an array of `children` objects, representing cities inside that prefecture for `JP`, and counties inside that state for `US`. \n\nDisplay names are provided in Japanese and English via the `ja` and `en` fields.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

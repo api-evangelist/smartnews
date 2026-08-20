@@ -90,6 +90,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Campaign
+  tags_raw:
   - campaign
   properties:
   - type: OpenAPI
@@ -104,6 +106,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Catalog
+  tags_raw:
   - catalog
   properties:
   - type: OpenAPI
@@ -160,6 +164,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Insights
+  tags_raw:
   - insights
   properties:
   - type: OpenAPI
@@ -174,6 +180,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Interests
+  tags_raw:
   - interests
   properties:
   - type: OpenAPI
@@ -188,6 +196,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Locations
+  tags_raw:
   - locations
   properties:
   - type: OpenAPI
@@ -201,7 +211,8 @@ apis:
   description: The media-file API from SmartNews — 1 operation(s) for media-file.
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
-  tags:
+  tags: []
+  tags_raw:
   - media-file
   properties:
   - type: OpenAPI
@@ -216,6 +227,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Authentication
+  tags_raw:
   - oauth
   properties:
   - type: OpenAPI
@@ -230,6 +243,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Pixel
+  tags_raw:
   - pixel
   properties:
   - type: OpenAPI
@@ -252,6 +267,10 @@ apis:
   humanURL: https://help-ads.smartnews.com/en/item-5499/
   baseURL: https://log.smartnews-ads.com
   tags:
+  - Conversion
+  - Event
+  - Attribution
+  tags_raw:
   - conversion
   - events
   - attribution

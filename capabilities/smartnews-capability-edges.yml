@@ -1,0 +1,58 @@
+slug: smartnews
+provider: SmartNews
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Media, Entertainment & Telecom Content
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: ad-group
+  spec_file: smartnews-ad-group-api-openapi.yml
+  capability_id: BC-3760.40
+  capability_id_l1: BC-3760
+  capability_name: Ad Trafficking & Operations
+  confidence: 0.8
+  evidence: POST /api/ma/v3/ad_accounts/{ad_account_id}/campaigns/{campaign_id}/ad_groups  Create an Ad
+    Group; schemas SmartViewArticleCategoryTargeting, AdGroupLocations, UserSegment
+  reason: Ad group CRUD with targeting, placement and delivery status on an ads platform — advertising
+    trafficking/operations. Some ambiguity between ad ops and inventory sub-capabilities, hence 0.8.
+- tag: insights
+  spec_file: smartnews-insights-api-openapi.yml
+  capability_id: BC-3760.60
+  capability_id_l1: BC-3760
+  capability_name: Advertising Revenue Reporting
+  confidence: 0.75
+  evidence: GET /api/ma/v3/ad_accounts/{ad_account_id}/insights/{layer}  Insights; GET .../aggregated_insights/{layer}  Aggregated
+    Insights
+  reason: Campaign/ad-group/ad level delivery and performance metrics reporting for advertisers — advertising
+    revenue and delivery reporting.
+- tag: ad
+  spec_file: smartnews-ad-api-openapi.yml
+  capability_id: BC-3760.40
+  capability_id_l1: BC-3760
+  capability_name: Ad Trafficking & Operations
+  confidence: 0.7
+  evidence: 'POST /api/ma/v3/ad_accounts/{ad_account_id}/ad_groups/{ad_group_id}/ads  postAd  Create an
+    Ad; schemas: CreativeRequest, SubmissionStatus, RejectionReason, ReadyForDelivery, AdImpressionMeasurement'
+  reason: CRUD over individual ads within ad groups, carrying creative payloads and a creative review
+    lifecycle (SubmissionStatus, RejectionReason, ReadyForDelivery) on a media owner's ad platform — creative
+    onboarding and ad operations. Some ambiguity remains between trafficking and campaign/sales management,
+    hence 0.7.
+- tag: campaign
+  spec_file: smartnews-campaign-api-openapi.yml
+  capability_id: BC-3760.20
+  capability_id_l1: BC-3760
+  capability_name: Direct Ad Sales Management
+  confidence: 0.7
+  evidence: POST /api/ma/v3/ad_accounts/{ad_account_id}/campaigns  Create a Campaign; schemas BillingEvent,
+    BidAmountMicro, DeliveryType, CampaignDailySchedule
+  reason: Advertising campaign lifecycle on an ad sales platform with bidding, budget and delivery scheduling;
+    L1 advertising sales & operations is clear, exact sub-capability (direct sales vs trafficking) less
+    so.

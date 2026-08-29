@@ -316,6 +316,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/smartnews-capability-edges.yml
+  name: SmartNews Business Capability Map
 - type: Overlay
   url: overlays/smartnews-marketing-overlay.yaml
 - type: RateLimits

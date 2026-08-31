@@ -60,6 +60,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Ad
+  tags_raw:
   - ad
   properties:
   - type: OpenAPI
@@ -74,6 +76,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - AdGroup
+  tags_raw:
   - ad-group
   properties:
   - type: OpenAPI
@@ -102,7 +106,7 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
-  - Campaign
+  - campaign
   tags_raw:
   - campaign
   properties:
@@ -192,7 +196,7 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
-  - Interests
+  - interests
   tags_raw:
   - interests
   properties:
@@ -223,7 +227,8 @@ apis:
   description: The media-file API from SmartNews — 1 operation(s) for media-file.
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
-  tags: []
+  tags:
+  - media-file
   tags_raw:
   - media-file
   properties:
@@ -279,7 +284,7 @@ apis:
   humanURL: https://help-ads.smartnews.com/en/item-5499/
   baseURL: https://log.smartnews-ads.com
   tags:
-  - Conversion
+  - conversion
   - Event
   - Attribution
   tags_raw:

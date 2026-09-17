@@ -240,22 +240,6 @@ apis:
     url: https://ads.smartnews.com/developers/
   - type: APIReference
     url: https://ads.smartnews.com/developers/
-- aid: smartnews:smartnews-oauth-api
-  name: SmartNews oauth API
-  description: The oauth API from SmartNews — 2 operation(s) for oauth.
-  humanURL: https://ads.smartnews.com/developers/
-  baseURL: https://ads.smartnews.com
-  tags:
-  - Authentication
-  tags_raw:
-  - oauth
-  properties:
-  - type: OpenAPI
-    url: openapi/smartnews-oauth-api-openapi.yml
-  - type: Documentation
-    url: https://ads.smartnews.com/developers/
-  - type: APIReference
-    url: https://ads.smartnews.com/developers/
 - aid: smartnews:smartnews-pixel-api
   name: SmartNews pixel API
   description: The pixel API from SmartNews — 2 operation(s) for pixel.
@@ -275,14 +259,12 @@ apis:
 - aid: smartnews:smartnews-conversion-api
   name: SmartNews Ads Conversion API
   description: >-
-    Server-to-server conversion event ingestion for SmartNews Ads. Advertisers
-    POST self-attributed web and app conversions (35 event names including
-    Purchase, AddToCart, Lead, Install and SignUp) to SmartNews for attribution
-    and optimization, either singly or in batches of up to 1,000 events. Auth is
-    a token in the Authorization header; a published staging host is available for
-    testing before switching to production. Documented in the official SmartNews
-    Ads API spec repository and the Ads Help Center — no OpenAPI is published for
-    this surface.
+    Server-to-server conversion event ingestion for SmartNews Ads. Advertisers POST self-attributed web
+    and app conversions (35 event names including Purchase, AddToCart, Lead, Install and SignUp) to SmartNews
+    for attribution and optimization, either singly or in batches of up to 1,000 events. Auth is a token
+    in the Authorization header; a published staging host is available for testing before switching to
+    production. Documented in the official SmartNews Ads API spec repository and the Ads Help Center —
+    no OpenAPI is published for this surface.
   humanURL: https://help-ads.smartnews.com/en/item-5499/
   baseURL: https://log.smartnews-ads.com
   tags:
@@ -297,7 +279,8 @@ apis:
   - type: Documentation
     url: https://help-ads.smartnews.com/en/item-5499/
   - type: APIReference
-    url: https://github.com/smartnews/smartnews-ads-advertising-api-spec/blob/v1.0/smartnews-ads-conversion-api.md
+    url: >-
+      https://github.com/smartnews/smartnews-ads-advertising-api-spec/blob/v1.0/smartnews-ads-conversion-api.md
   - type: Vocabulary
     url: vocabulary/smartnews-conversion-events.yml
   - type: Sandbox
@@ -313,6 +296,20 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/smartnews-smart-view-article-keyword-api-openapi.yml
+  - type: Documentation
+    url: https://ads.smartnews.com/developers/
+  - type: APIReference
+    url: https://ads.smartnews.com/developers/
+- aid: smartnews:smartnews-oauth-api
+  name: SmartNews OAUTH API
+  description: The oauth API from SmartNews — 2 operation(s) for oauth.
+  humanURL: https://ads.smartnews.com/developers/
+  baseURL: https://ads.smartnews.com
+  tags:
+  - oauth
+  properties:
+  - type: OpenAPI
+    url: openapi/smartnews-oauth-api-openapi.yml
   - type: Documentation
     url: https://ads.smartnews.com/developers/
   - type: APIReference

@@ -215,7 +215,7 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
-  - Locations
+  - Location
   tags_raw:
   - locations
   properties:
@@ -306,6 +306,8 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
+  - Authentication
+  tags_raw:
   - oauth
   properties:
   - type: OpenAPI

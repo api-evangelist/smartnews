@@ -1,21 +1,7 @@
 {
   "provider": "smartnews",
   "sources": [
-    "smartnews-ad-api-openapi.yml",
-    "smartnews-ad-group-api-openapi.yml",
-    "smartnews-article-category-api-openapi.yml",
-    "smartnews-campaign-api-openapi.yml",
-    "smartnews-catalog-api-openapi.yml",
-    "smartnews-channel-alias-label-api-openapi.yml",
-    "smartnews-custom-audience-api-openapi.yml",
-    "smartnews-developer-app-api-openapi.yml",
-    "smartnews-insights-api-openapi.yml",
-    "smartnews-interests-api-openapi.yml",
-    "smartnews-locations-api-openapi.yml",
-    "smartnews-media-file-api-openapi.yml",
-    "smartnews-oauth-api-openapi.yml",
-    "smartnews-pixel-api-openapi.yml",
-    "smartnews-smart-view-article-keyword-api-openapi.yml"
+    "_original/smartnews-marketing-openapi.json"
   ],
   "outputs": [
     "smartnews-ad-api-openapi.yml",
@@ -34,9 +20,47 @@
     "smartnews-pixel-api-openapi.yml",
     "smartnews-smart-view-article-keyword-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "smartnews-marketing-openapi.json: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "smartnews-marketing-openapi.json: declared missing tag: ad",
+    "smartnews-marketing-openapi.json: declared missing tag: ad-group",
+    "smartnews-marketing-openapi.json: declared missing tag: article category",
+    "smartnews-marketing-openapi.json: declared missing tag: campaign",
+    "smartnews-marketing-openapi.json: declared missing tag: catalog",
+    "smartnews-marketing-openapi.json: declared missing tag: channel alias label",
+    "smartnews-marketing-openapi.json: declared missing tag: custom-audience",
+    "smartnews-marketing-openapi.json: declared missing tag: developer-app",
+    "smartnews-marketing-openapi.json: declared missing tag: insights",
+    "smartnews-marketing-openapi.json: declared missing tag: interests",
+    "smartnews-marketing-openapi.json: declared missing tag: locations",
+    "smartnews-marketing-openapi.json: declared missing tag: media-file",
+    "smartnews-marketing-openapi.json: declared missing tag: oauth",
+    "smartnews-marketing-openapi.json: declared missing tag: pixel",
+    "smartnews-marketing-openapi.json: declared missing tag: smart view article keyword",
+    "superseded outputs removed: smartnews-o-auth-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 16 total)"
+  ],
+  "skipped": [
+    "smartnews-ad-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-ad-group-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-article-category-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-campaign-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-catalog-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-channel-alias-label-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-custom-audience-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-developer-app-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-insights-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-interests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-locations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-media-file-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-pixel-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-smart-view-article-keyword-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

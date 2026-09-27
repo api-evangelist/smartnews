@@ -96,68 +96,13 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    DisplayName:
-      type: object
-      required:
-      - en
-      - ja
-      properties:
-        en:
-          type: string
-          example: Food
-          description: The English name of the interest category.
-        ja:
-          type: string
-          example: 食べ物
-          description: The Japanese name of the interest category.
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    RateLimitedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ErrorBase'
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            enum:
-            - TOO_MANY_REQUESTS
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    UnauthorizedErrorResponse:
+    RateLimitedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/UnauthorizedError'
+          $ref: '#/components/schemas/RateLimitedError'
     IABInterestCategory:
       type: object
       required:
@@ -182,13 +127,6 @@ components:
           type: integer
           format: int32
           description: The parent interest category ID. A value of `0` means there is no parent.
-    RateLimitedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
     ServiceUnavailableErrorResponse:
       type: object
       required:
@@ -196,14 +134,12 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ServiceUnavailableError'
-    UnexpectedErrorResponse:
+    UnexpectedError:
       type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    ServiceUnavailableErrorExtension:
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnauthorizedErrorExtension:
       type: object
       required:
       - type
@@ -211,7 +147,14 @@ components:
         type:
           type: string
           enum:
-          - UNDER_MAINTENANCE
+          - UNAUTHORIZED
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
     ForbiddenError:
       type: object
       allOf:
@@ -231,15 +174,6 @@ components:
           type: string
           example: /terms/agreement
           description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    UnauthorizedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNAUTHORIZED
     ServiceUnavailableError:
       type: object
       allOf:
@@ -252,6 +186,72 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ForbiddenError'
+    DisplayName:
+      type: object
+      required:
+      - en
+      - ja
+      properties:
+        en:
+          type: string
+          example: Food
+          description: The English name of the interest category.
+        ja:
+          type: string
+          example: 食べ物
+          description: The Japanese name of the interest category.
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
   securitySchemes:
     ApiKeyAuth:
       type: http

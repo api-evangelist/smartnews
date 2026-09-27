@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   version: 3.0.1
-  title: SmartNews Marketing OAUTH API
+  title: SmartNews Marketing OAuth API
   description: '# Previous Versions
 
     - SmartNews Marketing API (2.0.0): https://ads.smartnews.com/developers/deprecated/v2/index.html
@@ -74,52 +74,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    RevokeAccessTokenRequest:
-      type: object
-      required:
-      - client_id
-      - client_secret
-      properties:
-        client_id:
-          type: integer
-          format: int64
-          description: The client id(developer app id) of the developer app.
-        client_secret:
-          type: string
-          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
-    GenerateAccessTokenRequest:
-      type: object
-      required:
-      - grant_type
-      - client_id
-      - client_secret
-      properties:
-        grant_type:
-          type: string
-          description: The grant type of the request. It should be 'client_credentials'.
-          example: client_credentials
-        client_id:
-          type: integer
-          format: int64
-          description: The client id(developer app id) of the developer app.
-        client_secret:
-          type: string
-          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
-    Error:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: object
-          required:
-          - message
-          - retriable
-          properties:
-            message:
-              type: string
-            retriable:
-              type: boolean
     GenerateAccessTokenResponse:
       type: object
       required:
@@ -142,6 +96,52 @@ components:
         expires_in: 86400
         token_type: Bearer
         scope: ads-manager
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: object
+          required:
+          - message
+          - retriable
+          properties:
+            message:
+              type: string
+            retriable:
+              type: boolean
+    GenerateAccessTokenRequest:
+      type: object
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      properties:
+        grant_type:
+          type: string
+          description: The grant type of the request. It should be 'client_credentials'.
+          example: client_credentials
+        client_id:
+          type: integer
+          format: int64
+          description: The client id(developer app id) of the developer app.
+        client_secret:
+          type: string
+          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
+    RevokeAccessTokenRequest:
+      type: object
+      required:
+      - client_id
+      - client_secret
+      properties:
+        client_id:
+          type: integer
+          format: int64
+          description: The client id(developer app id) of the developer app.
+        client_secret:
+          type: string
+          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
   securitySchemes:
     ApiKeyAuth:
       type: http

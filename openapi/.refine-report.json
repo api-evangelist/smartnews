@@ -20,9 +20,7 @@
     "smartnews-pixel-api-openapi.yml",
     "smartnews-smart-view-article-keyword-api-openapi.yml"
   ],
-  "archived": [
-    "deleted 1 superseded output(s) from the previous generation"
-  ],
+  "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
@@ -43,8 +41,7 @@
     "smartnews-marketing-openapi.json: declared missing tag: oauth",
     "smartnews-marketing-openapi.json: declared missing tag: pixel",
     "smartnews-marketing-openapi.json: declared missing tag: smart view article keyword",
-    "superseded outputs removed: smartnews-o-auth-api-openapi.yml",
-    "apis.yml register: written (+1 apis, 16 total)"
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "smartnews-ad-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -59,7 +56,7 @@
     "smartnews-interests-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "smartnews-locations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "smartnews-media-file-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "smartnews-o-auth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "smartnews-oauth-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "smartnews-pixel-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "smartnews-smart-view-article-keyword-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]

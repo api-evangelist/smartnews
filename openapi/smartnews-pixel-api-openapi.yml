@@ -180,11 +180,29 @@ paths:
                 $ref: '#/components/schemas/UnexpectedErrorResponse'
 components:
   schemas:
-    UnauthorizedError:
+    PixelWithValidationArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PixelWithValidationResponse'
+    UnexpectedError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
     ResourceNotFoundErrorExtension:
       type: object
       required:
@@ -211,120 +229,6 @@ components:
           - CATALOG
           - STORE_SET
           - RULE
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
-    PixelWithValidationResponse:
-      allOf:
-      - $ref: '#/components/schemas/PixelResponse'
-      - type: object
-        required:
-        - last_event_date_time
-        properties:
-          status:
-            $ref: '#/components/schemas/PixelValidationStatus'
-          last_event_date_time:
-            $ref: '#/components/schemas/LastEventDateTime'
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    ResourceNotFoundErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ResourceNotFoundError'
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    PixelResponse:
-      type: object
-      required:
-      - user_id
-      - name
-      - pixel_tag_id
-      - created_at
-      properties:
-        user_id:
-          $ref: '#/components/schemas/UserId'
-        name:
-          $ref: '#/components/schemas/CommonSchemas_Name'
-        pixel_tag_id:
-          $ref: '#/components/schemas/PixelTagId'
-        created_at:
-          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
-    PixelWithValidationArrayResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PixelWithValidationResponse'
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
-    CommonSchemas_CreatedAt:
-      type: string
-      format: date-time
-      description: The DateTime when the object was created.
-    AdAccountId:
-      type: integer
-      format: int64
-      description: Unique ID of the ad account.
-    LastEventDateTime:
-      type:
-      - string
-      - 'null'
-      format: date-time
-      description: The timestamp at which the last event was received for this pixel.
-    PixelTagId:
-      type: string
-      example: 71ccbe033ff6837c48e6c3c6
-      description: Unique ID of the pixel which is used in tracking scripts.
-    ResourceNotFoundError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    CommonSchemas_Name:
-      type: string
-      description: The name of the pixel.
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
     PixelValidationStatus:
       type: string
       enum:
@@ -344,20 +248,47 @@ components:
         * `PARAMETERS_ERROR` - Additional parameters error
 
         '
-    UnauthorizedErrorExtension:
+    ForbiddenErrorResponse:
       type: object
       required:
-      - type
+      - error
       properties:
-        type:
-          type: string
-          enum:
-          - UNAUTHORIZED
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    LastEventDateTime:
+      type:
+      - string
+      - 'null'
+      format: date-time
+      description: The timestamp at which the last event was received for this pixel.
+    ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    PixelWithValidationResponse:
+      allOf:
+      - $ref: '#/components/schemas/PixelResponse'
+      - type: object
+        required:
+        - last_event_date_time
+        properties:
+          status:
+            $ref: '#/components/schemas/PixelValidationStatus'
+          last_event_date_time:
+            $ref: '#/components/schemas/LastEventDateTime'
     ForbiddenError:
       type: object
       allOf:
       - $ref: '#/components/schemas/ForbiddenErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
+    ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ResourceNotFoundError'
     ForbiddenErrorExtension:
       type: object
       required:
@@ -372,10 +303,79 @@ components:
           type: string
           example: /terms/agreement
           description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    CommonSchemas_CreatedAt:
+      type: string
+      format: date-time
+      description: The DateTime when the object was created.
     UserId:
       type: integer
       format: int64
       description: Unique ID of the user who created the pixel.
+    PixelResponse:
+      type: object
+      required:
+      - user_id
+      - name
+      - pixel_tag_id
+      - created_at
+      properties:
+        user_id:
+          $ref: '#/components/schemas/UserId'
+        name:
+          $ref: '#/components/schemas/CommonSchemas_Name'
+        pixel_tag_id:
+          $ref: '#/components/schemas/PixelTagId'
+        created_at:
+          $ref: '#/components/schemas/CommonSchemas_CreatedAt'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    AdAccountId:
+      type: integer
+      format: int64
+      description: Unique ID of the ad account.
+    PixelTagId:
+      type: string
+      example: 71ccbe033ff6837c48e6c3c6
+      description: Unique ID of the pixel which is used in tracking scripts.
+    CommonSchemas_Name:
+      type: string
+      description: The name of the pixel.
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
   securitySchemes:
     ApiKeyAuth:
       type: http

@@ -94,84 +94,37 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ChannelAliasLabelMasterName:
-      type: object
-      required:
-      - en
-      - ja
-      properties:
-        en:
-          type: string
-          description: The English name of the channel alias label.
-          example: News
-        ja:
-          type: string
-          description: The Japanese name of the channel alias label.
-          example: ニュース
-    ChannelAliasLabelMasterResponse:
-      type: array
-      description: 'An array of channel alias label master data.
-
-        '
-      items:
-        $ref: '#/components/schemas/ChannelAliasLabelMaster'
-      example:
-      - id: CR_JA_TOP
-        name:
-          en: News
-          ja: ニュース
-      - id: CR_JA_POLITICS
-        name:
-          en: Politics
-          ja: 政治
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    RateLimitedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ErrorBase'
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            enum:
-            - TOO_MANY_REQUESTS
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    UnauthorizedErrorResponse:
+    RateLimitedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/UnauthorizedError'
+          $ref: '#/components/schemas/RateLimitedError'
+    ChannelAliasLabelMaster:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          description: The unique ID of the channel alias label.
+          example: CR_JA_TOP
+        name:
+          $ref: '#/components/schemas/ChannelAliasLabelMasterName'
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
     UnauthorizedErrorExtension:
       type: object
       required:
@@ -181,20 +134,6 @@ components:
           type: string
           enum:
           - UNAUTHORIZED
-    RateLimitedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
-    ServiceUnavailableErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
     UnexpectedErrorResponse:
       type: object
       required:
@@ -202,15 +141,6 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/UnexpectedError'
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
     ForbiddenError:
       type: object
       allOf:
@@ -230,23 +160,36 @@ components:
           type: string
           example: /terms/agreement
           description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    ChannelAliasLabelMaster:
+    ChannelAliasLabelMasterResponse:
+      type: array
+      description: 'An array of channel alias label master data.
+
+        '
+      items:
+        $ref: '#/components/schemas/ChannelAliasLabelMaster'
+      example:
+      - id: CR_JA_TOP
+        name:
+          en: News
+          ja: ニュース
+      - id: CR_JA_POLITICS
+        name:
+          en: Politics
+          ja: 政治
+    ChannelAliasLabelMasterName:
       type: object
       required:
-      - id
-      - name
+      - en
+      - ja
       properties:
-        id:
+        en:
           type: string
-          description: The unique ID of the channel alias label.
-          example: CR_JA_TOP
-        name:
-          $ref: '#/components/schemas/ChannelAliasLabelMasterName'
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
+          description: The English name of the channel alias label.
+          example: News
+        ja:
+          type: string
+          description: The Japanese name of the channel alias label.
+          example: ニュース
     ForbiddenErrorResponse:
       type: object
       required:
@@ -254,6 +197,63 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ForbiddenError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
   securitySchemes:
     ApiKeyAuth:
       type: http

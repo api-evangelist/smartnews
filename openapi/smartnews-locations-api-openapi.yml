@@ -148,19 +148,27 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    ServiceUnavailableErrorResponse:
+    UnexpectedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
+          $ref: '#/components/schemas/UnexpectedError'
     UnexpectedError:
       type: object
       allOf:
       - $ref: '#/components/schemas/UnexpectedErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    UnauthorizedErrorExtension:
+    Region:
+      type: string
+      enum:
+      - JP
+      - US
+      x-enum-varnames:
+      - JP
+      - US
+    ServiceUnavailableErrorExtension:
       type: object
       required:
       - type
@@ -168,11 +176,12 @@ components:
         type:
           type: string
           enum:
-          - UNAUTHORIZED
-    LocationNameJapanese:
-      type: string
-      example: 北海道
-      description: The name of the location in Japanese.
+          - UNDER_MAINTENANCE
+    CommonSchemas_LocationId:
+      type: integer
+      format: int32
+      example: 70149
+      description: The location ID which can be used for AdGroup level location targeting.
     ForbiddenErrorResponse:
       type: object
       required:
@@ -180,61 +189,11 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ForbiddenError'
-    LocationNameData:
-      type: object
-      required:
-      - location_id
-      - ja
-      - en
-      properties:
-        location_id:
-          $ref: '#/components/schemas/CommonSchemas_LocationId'
-        ja:
-          $ref: '#/components/schemas/LocationNameJapanese'
-        en:
-          $ref: '#/components/schemas/LocationNameEnglish'
     ForbiddenError:
       type: object
       allOf:
       - $ref: '#/components/schemas/ForbiddenErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    ForbiddenErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
-    RateLimitedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
-    CommonSchemas_LocationId:
-      type: integer
-      format: int32
-      example: 70149
-      description: The location ID which can be used for AdGroup level location targeting.
-    LocationNameEnglish:
-      type: string
-      example: Hokkaido
-      description: The name of the location in English.
     Locations:
       type: object
       required:
@@ -256,13 +215,37 @@ components:
             '
           items:
             $ref: '#/components/schemas/LocationNameData'
-    UnexpectedErrorResponse:
+    LocationNameEnglish:
+      type: string
+      example: Hokkaido
+      description: The name of the location in English.
+    UnexpectedErrorExtension:
       type: object
       required:
-      - error
+      - type
       properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    LocationNameData:
+      type: object
+      required:
+      - location_id
+      - ja
+      - en
+      properties:
+        location_id:
+          $ref: '#/components/schemas/CommonSchemas_LocationId'
+        ja:
+          $ref: '#/components/schemas/LocationNameJapanese'
+        en:
+          $ref: '#/components/schemas/LocationNameEnglish'
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
     RateLimitedError:
       type: object
       allOf:
@@ -275,33 +258,6 @@ components:
             type: string
             enum:
             - TOO_MANY_REQUESTS
-    Region:
-      type: string
-      enum:
-      - JP
-      - US
-      x-enum-varnames:
-      - JP
-      - US
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
     ErrorBase:
       type: object
       required:
@@ -312,7 +268,33 @@ components:
           type: string
         retriable:
           type: boolean
-    UnexpectedErrorExtension:
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    UnauthorizedErrorExtension:
       type: object
       required:
       - type
@@ -320,7 +302,25 @@ components:
         type:
           type: string
           enum:
-          - UNEXPECTED_ERROR
+          - UNAUTHORIZED
+    LocationNameJapanese:
+      type: string
+      example: 北海道
+      description: The name of the location in Japanese.
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
   securitySchemes:
     ApiKeyAuth:
       type: http

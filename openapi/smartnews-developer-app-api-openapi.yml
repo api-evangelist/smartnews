@@ -94,19 +94,19 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    ServiceUnavailableErrorResponse:
+    UnexpectedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
+          $ref: '#/components/schemas/UnexpectedError'
     UnexpectedError:
       type: object
       allOf:
       - $ref: '#/components/schemas/UnexpectedErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    UnauthorizedErrorExtension:
+    ServiceUnavailableErrorExtension:
       type: object
       required:
       - type
@@ -114,7 +114,7 @@ components:
         type:
           type: string
           enum:
-          - UNAUTHORIZED
+          - UNDER_MAINTENANCE
     ForbiddenErrorResponse:
       type: object
       required:
@@ -122,6 +122,11 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ForbiddenError'
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
     AdAccountNamespaceRole:
       type: string
       enum:
@@ -134,6 +139,32 @@ components:
         - If a user has the ADS_ADVERTISER_ANALYST role for a particular ad account, they have read-only access to that particular ad account, but this authority does not extend to other ad accounts even if they are in the same business.
 
         '
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    DeveloperAppAccessibleAdAccountArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeveloperAppAccessibleAdAccountResponse'
+      description: 'This response contains list of ad accounts that associated with the specified business.
+
+        '
     CommonSchemas_ResourceNotFoundErrorResponse:
       type: object
       required:
@@ -141,6 +172,16 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundError'
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
     CommonSchemas_ResourceNotFoundErrorExtension:
       type: object
       required:
@@ -171,25 +212,18 @@ components:
           - CATALOG
           - PRODUCT_SET
           - STORE_SET
-    ForbiddenError:
+    ServiceUnavailableError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    ForbiddenErrorExtension:
+    ServiceUnavailableErrorResponse:
       type: object
       required:
-      - type
+      - error
       properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
     UnauthorizedErrorResponse:
       type: object
       required:
@@ -197,6 +231,15 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/UnauthorizedError'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
     CommonSchemas_ResourceNotFoundError:
       type: object
       allOf:
@@ -229,19 +272,7 @@ components:
           items:
             $ref: '#/components/schemas/AdAccountNamespaceRole'
           description: A list of roles that the ad account has.
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ServiceUnavailableErrorExtension:
+    ForbiddenErrorExtension:
       type: object
       required:
       - type
@@ -249,43 +280,12 @@ components:
         type:
           type: string
           enum:
-          - UNDER_MAINTENANCE
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
           type: string
-        retriable:
-          type: boolean
-    DeveloperAppAccessibleAdAccountArrayResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeveloperAppAccessibleAdAccountResponse'
-      description: 'This response contains list of ad accounts that associated with the specified business.
-
-        '
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
   securitySchemes:
     ApiKeyAuth:
       type: http

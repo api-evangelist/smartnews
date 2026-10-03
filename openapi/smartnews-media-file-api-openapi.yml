@@ -307,6 +307,13 @@ paths:
                 $ref: '#/components/schemas/GatewayTimeoutErrorResponse'
 components:
   schemas:
+    GatewayTimeoutErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorBase'
     MediaFileResponse:
       type: object
       required:
@@ -386,22 +393,91 @@ components:
           description: The date-time at which the media file was last updated.
         status:
           $ref: '#/components/schemas/MediaFileStatus'
-    VideoSchemas_Url:
-      type: string
-      description: The full url path of the video file.
-    ServiceUnavailableErrorResponse:
+    UnexpectedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
+          $ref: '#/components/schemas/UnexpectedError'
+    MediaFilePaginatedResponse:
+      type: object
+      description: A paginated list of media files with pagination metadata.
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFileResponse'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoResponse'
     UnexpectedError:
       type: object
       allOf:
       - $ref: '#/components/schemas/UnexpectedErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    UnauthorizedErrorExtension:
+    MediaFileStatus:
+      type: string
+      description: 'The status of the media file.
+
+        - `ACTIVE`: The media file is visible in the Media Library.
+
+        - `INACTIVE`: The media file has been soft-deleted and is no longer visible in the Media Library.
+
+
+        Note: Even if a media file is set to `INACTIVE`, it will still be visible in the creatives where it is used.
+
+        '
+      enum:
+      - ACTIVE
+      - INACTIVE
+    VideoSchemas_Url:
+      type: string
+      description: The full url path of the video file.
+    MediaType:
+      type: string
+      description: The type of the media file.
+      enum:
+      - IMAGE
+      - VIDEO
+    AcceptLanguage:
+      type: string
+      description: 'The language to use for system generated text within API responses.
+
+
+        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
+
+        '
+      example: en-US
+    Url:
+      type: string
+      description: The storage full url path of the image file.
+    Page:
+      type: integer
+      minimum: 1
+      default: 1
+      example: 2
+      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
+
+
+        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
+
+        '
+    ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ResourceNotFoundError'
+    ServiceUnavailableErrorExtension:
       type: object
       required:
       - type
@@ -409,7 +485,114 @@ components:
         type:
           type: string
           enum:
-          - UNAUTHORIZED
+          - UNDER_MAINTENANCE
+    ValidationErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ValidationError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    MediaFileRequest:
+      type: object
+      required:
+      - file_name
+      - media_type
+      - media_file
+      properties:
+        file_name:
+          description: 'The filename of the uploaded file.
+
+            '
+          type: string
+        media_type:
+          $ref: '#/components/schemas/MediaType'
+        media_file:
+          type: string
+          format: binary
+          description: "If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n"
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    AspectRatioType:
+      type: string
+      enum:
+      - ASPECT_RATIO_1_1
+      - ASPECT_RATIO_6_5
+      - ASPECT_RATIO_16_9
+      - ASPECT_RATIO_191_100
+      description: The predefined enums for the aspect ratio of images and videos.
+    ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    BusinessErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BUSINESS_ERROR
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
     ResourceNotFoundErrorExtension:
       type: object
       required:
@@ -436,24 +619,117 @@ components:
           - CATALOG
           - STORE_SET
           - RULE
-    MediaFileRequest:
+    BusinessError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BusinessErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    BusinessErrorResponse:
       type: object
       required:
-      - file_name
-      - media_type
-      - media_file
+      - error
       properties:
-        file_name:
-          description: 'The filename of the uploaded file.
+        error:
+          $ref: '#/components/schemas/BusinessError'
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    PaginationInfoResponse:
+      description: 'An object describing pagination parameters for this response.
 
-            '
+        '
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_objects
+      properties:
+        page:
+          type: integer
+          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
+          example: 1
+        page_size:
+          type: integer
+          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
+          example: 100
+        total_pages:
+          type: integer
+          description: The total number of pages for this query.
+          example: 10
+        total_objects:
+          type: integer
+          description: The total number of objects that exist across all pages.
+          example: 987
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
           type: string
-        media_type:
-          $ref: '#/components/schemas/MediaType'
-        media_file:
+          enum:
+          - UNAUTHORIZED
+    ImageResponse:
+      type: object
+      required:
+      - width
+      - height
+      - url
+      - filesize
+      - aspect_ratio_type
+      - image_scale
+      - created_at
+      properties:
+        width:
+          type: integer
+          description: The width of the ad image in pixels.
+        height:
+          type: integer
+          description: The height of the ad image in pixels.
+        url:
+          $ref: '#/components/schemas/Url'
+        filesize:
+          type: integer
+          description: The file size of image file.
+        aspect_ratio_type:
+          $ref: '#/components/schemas/AspectRatioType'
+        image_scale:
           type: string
-          format: binary
-          description: "If the same file has been uploaded under the same ad account in the past, the existing media file will be returned.\n\nThere are 2 types of media which can be uploaded:\n- IMAGE\n- VIDEO\n\n## 1. IMAGE\n\nActual Image file to be uploaded to represent the visual image.\\\nMax File Size: 5 MiB\\\nAn image which width exceeds Full Size Max Width will be automatically resized to Full Size Max Width.\\\nA small size image can be uploaded if its width exceeds Min Width.\\\nThe aspect ratio of the image must match one the of pre-defined aspect ratios.\\\nMin Width and Full Size Max Width for each pre-defined Aspect Ratio Type are as follows:\n\n| Pre-defined aspect ratio | Min Width    | Full Size Max Width | Example image size |\n|--------------------------|--------------|---------------------|--------------------|\n| 1:1                      | 300 pixels   | 600 pixels          | 300px x 300px      |\n| 6:5                      | 500 pixels   | 1080 pixels         | 600px x 500px      |\n| 16:9                     | 600 pixels   | 1280 pixels         | 1280px x 720px     |\n| 1.91:1                   | 600 pixels   | 1280 pixels         | 1200px x 628px     |\n\nAllowed Format\n  - JPEG\n  - PNG\n  - GIF (animated GIF is not allowed)\n\n## 2. VIDEO\nActual Video file to be uploaded to represent the visual video.\n\n### Videos that pass the below conditions are allowed to upload:\n- Video Length: 3 (seconds) <= video length <= 60 (seconds)\n- Aspect Ratio: 16:9\n- Minimum Video Resolution: 360p\n- Maximum File size: 100 MiB\n\nAllowed Format\n  - MP4\n"
+          enum:
+          - FULL
+          - HALF
+          - ORIGINAL
+          description: The scale of the image according to the delivery spec.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which this record was created.
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
     VideoResponse:
       type: object
       required:
@@ -494,244 +770,6 @@ components:
           type: string
           format: date-time
           description: The date-time at which this record was created
-    GatewayTimeoutErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ErrorBase'
-    BusinessErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - BUSINESS_ERROR
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    AspectRatioType:
-      type: string
-      enum:
-      - ASPECT_RATIO_1_1
-      - ASPECT_RATIO_6_5
-      - ASPECT_RATIO_16_9
-      - ASPECT_RATIO_191_100
-      description: The predefined enums for the aspect ratio of images and videos.
-    ResourceNotFoundError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ForbiddenError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ResourceNotFoundErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ResourceNotFoundError'
-    ForbiddenErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
-    MediaFileStatus:
-      type: string
-      description: 'The status of the media file.
-
-        - `ACTIVE`: The media file is visible in the Media Library.
-
-        - `INACTIVE`: The media file has been soft-deleted and is no longer visible in the Media Library.
-
-
-        Note: Even if a media file is set to `INACTIVE`, it will still be visible in the creatives where it is used.
-
-        '
-      enum:
-      - ACTIVE
-      - INACTIVE
-    ValidationError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ValidationErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ImageResponse:
-      type: object
-      required:
-      - width
-      - height
-      - url
-      - filesize
-      - aspect_ratio_type
-      - image_scale
-      - created_at
-      properties:
-        width:
-          type: integer
-          description: The width of the ad image in pixels.
-        height:
-          type: integer
-          description: The height of the ad image in pixels.
-        url:
-          $ref: '#/components/schemas/Url'
-        filesize:
-          type: integer
-          description: The file size of image file.
-        aspect_ratio_type:
-          $ref: '#/components/schemas/AspectRatioType'
-        image_scale:
-          type: string
-          enum:
-          - FULL
-          - HALF
-          - ORIGINAL
-          description: The scale of the image according to the delivery spec.
-        created_at:
-          type: string
-          format: date-time
-          description: The date-time at which this record was created.
-    RateLimitedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
-    MediaType:
-      type: string
-      description: The type of the media file.
-      enum:
-      - IMAGE
-      - VIDEO
-    Page:
-      type: integer
-      minimum: 1
-      default: 1
-      example: 2
-      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
-
-
-        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
-
-        '
-    ValidationErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ValidationError'
-    BusinessErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/BusinessError'
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    RateLimitedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ErrorBase'
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            enum:
-            - TOO_MANY_REQUESTS
-    AcceptLanguage:
-      type: string
-      description: 'The language to use for system generated text within API responses.
-
-
-        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
-
-        '
-      example: en-US
-    Url:
-      type: string
-      description: The storage full url path of the image file.
-    BusinessError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BusinessErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    PaginationInfoResponse:
-      description: 'An object describing pagination parameters for this response.
-
-        '
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_objects
-      properties:
-        page:
-          type: integer
-          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
-          example: 1
-        page_size:
-          type: integer
-          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
-          example: 100
-        total_pages:
-          type: integer
-          description: The total number of pages for this query.
-          example: 10
-        total_objects:
-          type: integer
-          description: The total number of objects that exist across all pages.
-          example: 987
-    MediaFilePaginatedResponse:
-      type: object
-      description: A paginated list of media files with pagination metadata.
-      required:
-      - data
-      - pagination
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MediaFileResponse'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfoResponse'
     ValidationErrorExtension:
       required:
       - type
@@ -751,44 +789,6 @@ components:
                 description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
               reason:
                 type: string
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
   securitySchemes:
     ApiKeyAuth:
       type: http

@@ -74,6 +74,19 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    RevokeAccessTokenRequest:
+      type: object
+      required:
+      - client_id
+      - client_secret
+      properties:
+        client_id:
+          type: integer
+          format: int64
+          description: The client id(developer app id) of the developer app.
+        client_secret:
+          type: string
+          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
     GenerateAccessTokenResponse:
       type: object
       required:
@@ -122,19 +135,6 @@ components:
           type: string
           description: The grant type of the request. It should be 'client_credentials'.
           example: client_credentials
-        client_id:
-          type: integer
-          format: int64
-          description: The client id(developer app id) of the developer app.
-        client_secret:
-          type: string
-          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
-    RevokeAccessTokenRequest:
-      type: object
-      required:
-      - client_id
-      - client_secret
-      properties:
         client_id:
           type: integer
           format: int64

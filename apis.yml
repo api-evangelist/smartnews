@@ -79,7 +79,7 @@ apis:
   humanURL: https://ads.smartnews.com/developers/
   baseURL: https://ads.smartnews.com
   tags:
-  - AdGroup
+  - Ad Group
   tags_raw:
   - ad-group
   properties:

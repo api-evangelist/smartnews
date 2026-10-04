@@ -784,142 +784,60 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    LocationId:
-      type: integer
-      format: int32
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    DeliveryStatusReason:
+    PlacementMediaType:
       type: string
       enum:
-      - CAMPAIGN_DELETED
-      - CAMPAIGN_PAUSED
-      - NO_AD_GROUPS
-      - ALL_AD_GROUPS_PAUSED_OR_DELETED
-      - NO_ADS
-      - NO_SUBMITTED_ADS
-      - ALL_ADS_PAUSED_DELETED_OR_REJECTED
-      - NO_APPROVED_ADS
-      - CAMPAIGN_STARTS_IN_FUTURE
-      - CAMPAIGN_ENDED
-      - CAMPAIGN_OUTSIDE_DAILY_SCHEDULE
-      - NO_ACTIVE_APPROVED_ADS
-      - CAMPAIGN_ELIGIBLE
-      - AD_GROUP_DELETED
-      - AD_GROUP_PAUSED
-      - AD_GROUP_ELIGIBLE
-      - AD_DELETED
-      - AD_NOT_SUBMITTED
-      - AD_NOT_REVIEWED
-      - AD_REJECTED
-      - AD_PAUSED
-      - AD_ELIGIBLE
-      - CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT
-      - UNCONFIRMED
-      - BUSINESS_DISABLED
-      - AD_ACCOUNT_OR_BRAND_DISABLED
-      - BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW
-      - BUSINESS_NOT_APPROVED
-      - AD_ACCOUNT_NOT_APPROVED
-      - PAYMENT_METHOD_NOT_VERIFIED
-      - PAYMENT_METHOD_ISSUE
-      - PRODUCT_SET_NOT_READY
-      - STORE_SET_NOT_READY
-      description: 'An enum field for the reason the delivery status was determined.
-
-        | Reason                                    | Layers    |
-
-        |-------------------------------------------|-----------|
-
-        | CAMPAIGN_DELETED                          | Campaign  |
-
-        | CAMPAIGN_PAUSED                           | Campaign, Ad group, Ad |
-
-        | NO_AD_GROUPS                              | Campaign  |
-
-        | ALL_AD_GROUPS_PAUSED_OR_DELETED           | Campaign  |
-
-        | NO_ADS                                    | Campaign, Ad group |
-
-        | NO_SUBMITTED_ADS                          | Campaign, Ad group |
-
-        | ALL_ADS_PAUSED_DELETED_OR_REJECTED        | Campaign, Ad group |
-
-        | NO_APPROVED_ADS                           | Campaign, Ad group |
-
-        | CAMPAIGN_STARTS_IN_FUTURE                 | Campaign, Ad group, Ad |
-
-        | CAMPAIGN_ENDED                            | Campaign, Ad group, Ad |
-
-        | CAMPAIGN_OUTSIDE_DAILY_SCHEDULE           | Campaign |
-
-        | NO_ACTIVE_APPROVED_ADS                    | Campaign, Ad group |
-
-        | CAMPAIGN_ELIGIBLE                         | Campaign  |
-
-        | AD_GROUP_DELETED                          | Ad group  |
-
-        | AD_GROUP_PAUSED                           | Ad group, Ad  |
-
-        | AD_GROUP_ELIGIBLE                         | Ad group  |
-
-        | AD_DELETED                                | Ad        |
-
-        | AD_NOT_SUBMITTED                          | Ad        |
-
-        | AD_NOT_REVIEWED                           | Ad        |
-
-        | AD_REJECTED                               | Ad        |
-
-        | AD_PAUSED                                 | Ad        |
-
-        | AD_ELIGIBLE                               | Ad        |
-
-        | CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT | Campaign, Ad group, Ad|
-
-        | UNCONFIRMED                               | Campaign, Ad group, Ad|
-
-        | BUSINESS_DISABLED                         | Campaign, Ad group, Ad |
-
-        | AD_ACCOUNT_OR_BRAND_DISABLED              | Campaign, Ad group, Ad |
-
-        | BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW      | Campaign, Ad group, Ad |
-
-        | BUSINESS_NOT_APPROVED                     | Campaign, Ad group, Ad |
-
-        | AD_ACCOUNT_NOT_APPROVED                   | Campaign, Ad group, Ad |
-
-        | PAYMENT_METHOD_NOT_VERIFIED               | Campaign, Ad group, Ad |
-
-        | PAYMENT_METHOD_ISSUE                      | Campaign, Ad group, Ad |
-
-        | PRODUCT_SET_NOT_READY                     | Campaign, Ad group, Ad |
-
-        | STORE_SET_NOT_READY                       | Campaign, Ad group, Ad |
-
-        '
-    IncludeDeleted:
+      - SMART_VIEW
+      - CHANNEL_VIEW
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    HasAnyVideoAds:
       type: boolean
-      default: false
-    ConnectionType:
-      type:
-      - string
-      - 'null'
+      description: Whether the ad object has any video ads, including those that have been deleted.
+    TargetingType:
+      type: string
+      description: "The type of DA targeting. \n\nRetargeting is for finding existing user; \nProspecting is for finding new user based on existing user log.\n\nThis value is NOT updatable once the campaign is ready for delivery.\n"
       enum:
-      - WIFI
-      - CELLULAR_5G
-      - CELLULAR_4G
-      - CELLULAR_3G
-    ConnectionTypes:
-      description: An array of connection types to target.
-      type: array
-      items:
-        $ref: '#/components/schemas/ConnectionType'
+      - RETARGETING
+      - PROSPECTING
+    ProductSetID:
+      type: integer
+      format: int64
+      description: The ID of the product set.
+    ConfiguredStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - DELETED
+      description: The status of the object configured by an ad operator.
+    ValidationErrorExtension:
+      required:
+      - type
+      - error_fields
+      properties:
+        type:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+        error_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
+              reason:
+                type: string
     LocationSegmentFixedAreaInfo:
       type: object
       description: 'The configuration for the Fixed Area location segment. Required and only settable when `segment_area_type` is `FIXED_AREA`.
@@ -930,35 +848,162 @@ components:
       properties:
         location_id:
           $ref: '#/components/schemas/HyperLocationSchemas_LocationId'
-    BadRequestError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BadRequestErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    Age:
-      type: string
+    ConnectionType:
+      type:
+      - string
+      - 'null'
       enum:
-      - AGE_UNDER_20
-      - AGE_21_24
-      - AGE_25_29
-      - AGE_30_34
-      - AGE_35_39
-      - AGE_40_44
-      - AGE_45_49
-      - AGE_50_54
-      - AGE_55_59
-      - AGE_60_64
-      - AGE_65_69
-      - AGE_OVER_70
-    ForbiddenError:
+      - WIFI
+      - CELLULAR_5G
+      - CELLULAR_4G
+      - CELLULAR_3G
+    StoreSetId:
+      type: integer
+      format: int64
+      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
+
+        Store sets are managed under Business Management.
+
+        '
+    Ages:
+      description: 'An array of age buckets to target.
+
+
+        Note:
+
+        - This field is not settable for US region ad accounts.
+
+        - `AGE_UNDER_20` option is deprecated and can no longer be used for new ad groups and when updating an existing ad group.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/Age'
+    HyperLocationConfigRequest:
+      type:
+      - object
+      - 'null'
+      description: 'An object containing hyper location targeting configuration.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - user_segment
+      - location_segments
+      properties:
+        user_segment:
+          $ref: '#/components/schemas/UserSegment'
+        location_segments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LocationSegmentRequest'
+          description: 'The list of location segments to target.
+
+
+            The list must contain all the segments to target. If a segment is not included in the list, it will be removed from the targeting configuration in a PATCH request.
+
+
+            Exactly one of `pin_with_radius_info` or `fixed_area_info` must be set based on the `segment_area_type` value.
+
+            '
+      example:
+        user_segment: RESIDENT_AND_VISITOR
+        location_segments:
+        - segment_area_type: FIXED_AREA
+          fixed_area_info:
+            location_id: 70196
+        - segment_area_type: FIXED_AREA
+          fixed_area_info:
+            location_id: 70150
+        - segment_area_type: PIN_WITH_RADIUS
+          pin_with_radius_info:
+            address: 福島県伊達郡川俣町山木屋キトウスズ山２
+            latitude: '37.59268044952155'
+            longitude: '140.63639730916015'
+            radius_in_meters: 3000
+            label: My Label
+    Parent:
+      type: object
+      required:
+      - id
+      - type
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of the parent object.
+        type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+        name:
+          type: string
+          description: The name of the object.
+        objective:
+          $ref: '#/components/schemas/CampaignObjective'
+        optimization_event:
+          $ref: '#/components/schemas/OptimizationEvent'
+        ready_for_delivery:
+          $ref: '#/components/schemas/ReadyForDelivery'
+        store_set_id:
+          $ref: '#/components/schemas/StoreSetId'
+        parent:
+          type: object
+          description: 'The parent of the parent. The properties are the same as parent (`id`, `name`, `type`, `objective`,
+
+            `optimization_event` ,`ready_for_delivery` ,`store_set_id` ,`parent`)
+
+            '
+    PageSize:
+      type: integer
+      minimum: 1
+      maximum: 1000
+      default: 1000
+      example: 100
+      description: 'The number of objects to return per page.
+
+
+        The maximum page size is 1000 and the default is 1000.
+
+        '
+    BusinessError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/BusinessErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    AdGroupSchemas_CreatedAt:
-      type: string
-      format: date-time
-      description: The date-time at which the ad group was created.
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    CampaignID:
+      type: integer
+      format: int64
+      description: The ID of the campaign.
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    IABInterestId:
+      type: integer
+      format: int32
     AdGroupLocations:
       description: 'An array of location IDs to target.
 
@@ -975,63 +1020,57 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/LocationId'
-    RateLimitedError:
+    AdGroupPatchRequest:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/ErrorBase'
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            enum:
-            - TOO_MANY_REQUESTS
-    ZipCodes:
-      description: "An array of ZIP codes to target.\n\nThe values are combined with `locations` (states and counties) using OR logic during delivery.\n\nThe response returns ZIP codes in ascending numeric order while keeping their 5-digit string form.\n\n- Submit an empty array `[]` or `null` in a PATCH request to remove all ZIP codes.\n- Duplicate values in the request payload are ignored; the response returns a unique set of ZIP codes.\n- Supports up to 40,000 ZIP codes per request.\n\n* e.g. This targets Washington state, Pierce County, and ZIP codes `12345` / `67890`:\n  ```\n  {\n    ...\n    \"audience\": {\n      \"locations\": [2, 3],\n      \"zip_codes\": [\"12345\", \"67890\"]\n    }\n  }\n  ```\n"
-      type: array
-      items:
-        $ref: '#/components/schemas/ZipCode'
-      maxItems: 1000
-      example:
-      - '10001'
-      - '10002'
-    RateLimitedErrorResponse:
+      properties:
+        name:
+          $ref: '#/components/schemas/AdGroupSchemas_Name'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        frequency_control:
+          $ref: '#/components/schemas/FrequencyControl'
+        audience:
+          $ref: '#/components/schemas/AudienceRequest'
+        dynamic_ads_config:
+          $ref: '#/components/schemas/DynamicAdsConfigPatchSchema'
+    UnauthorizedErrorExtension:
       type: object
       required:
-      - error
+      - type
       properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    MediaTypes:
-      description: 'An array of media types defining where the ads will be displayed in the SmartNews app.
-
-
-        Note: This field is not settable for US region ad accounts.
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    UserSegment:
+      type: string
+      description: 'The type of users to target.
 
         '
-      type: array
-      items:
-        $ref: '#/components/schemas/PlacementMediaType'
-    CampaignID:
-      type: integer
-      format: int64
-      description: The ID of the campaign.
-    BusinessError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BusinessErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    PlacementMediaType:
-      type: string
       enum:
-      - SMART_VIEW
-      - CHANNEL_VIEW
+      - RESIDENT_ONLY
+      - RESIDENT_AND_VISITOR
+    AdGroupPaginatedResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdGroupResponse'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoResponse'
+    HyperLocationSchemas_LocationId:
+      type: integer
+      description: 'The unique identifier of the location.
+
+
+        A list of location IDs can be obtained via the [locations](#tag/locations) endpoint.
+
+        '
+      format: int32
     FrequencyControl:
       type:
       - object
@@ -1051,18 +1090,139 @@ components:
         threshold:
           type: integer
           description: The maximum number of times the ad can be shown to a user within a given time period. Min 1, Max 15.
-    PageSize:
-      type: integer
-      minimum: 1
-      maximum: 1000
-      default: 1000
-      example: 100
-      description: 'The number of objects to return per page.
+    BadRequestErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BAD_REQUEST
+    SmartViewArticleCategoryTargeting:
+      type:
+      - object
+      - 'null'
+      required:
+      - include
+      - exclude
+      description: 'SmartView article category targeting settings for ad delivery.
 
 
-        The maximum page size is 1000 and the default is 1000.
+        It contains article category IDs to include or exclude for delivery.
+
+
+        This field is only configurable when `media_types` includes `SMART_VIEW`.
+
+
+        include `[]` means all article categories are included
+
+
+        exclude `[]` means no article categories are excluded
+
+
+        A category ID cannot appear in both the include and exclude lists.
+
+
+        Some example settings:
+
+        | **Case** | **Include**        | **Exclude** | **Behavior**                                                      |
+
+        |----------|--------------------|-------------|-------------------------------------------------------------------|
+
+        | 1        | `[]` (include All) | `[]`        | Deliver to all article categories (Also the default value for UI) |
+
+        | 2        | `[]` (include All) | `[1, 3, 5]` | Deliver to all categories except `1, 3, 5`                        |
+
+        | 3        | `[1, 2, 3]`        | `[]`        | Deliver to only categories `1, 2, 3`                              |
+
+        | 4        | `[1, 2]`           | `[3, 5]`    | Deliver only to categories `1, 2` excluding `3, 5`                |
+
+        | 5        | `[1, 2, 3]`        | `[1, 5]`    | ❌ Validation error - category `1` appears in both lists          |
+
+
+        A list of article category IDs can be obtained via the [article categories](#tag/article-category) endpoint.
 
         '
+      properties:
+        include:
+          description: An array of article category IDs to include for delivery.
+          type: array
+          items:
+            $ref: '#/components/schemas/SmartViewArticleCategoryId'
+        exclude:
+          description: An array of article category IDs to exclude for delivery.
+          type: array
+          items:
+            $ref: '#/components/schemas/SmartViewArticleCategoryId'
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    AutomatedTargeting:
+      type:
+      - object
+      - 'null'
+      description: 'Automated targeting settings for the ads to be delivered with SN optimized strategy.
+
+
+        If this field is non-null, automated targeting is enabled (even if the object is empty). Otherwise, it is disabled.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      properties:
+        age_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then age targeting will be strictly followed
+        gender_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then gender targeting will be strictly followed
+        location_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then location targeting will be strictly followed
+        custom_audience_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then custom audience will be strictly followed
+        carrier_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then carrier targeting will be strictly followed
+        connection_type_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then connection type targeting will be strictly followed
+        os_version_unbreakable:
+          type: boolean
+          default: false
+          description: If this field is `true`, then advertiser's os version targeting will be strictly followed
+    DynamicAdsConfigSchema:
+      type: object
+      required:
+      - targeting_type
+      description: 'The Configuration of the dynamic ads.
+
+        If campaign is for dynamic ads, this object is required.
+
+        '
+      properties:
+        targeting_type:
+          $ref: '#/components/schemas/TargetingType'
+        recency_days:
+          $ref: '#/components/schemas/RecencyDays'
+        product_set_id:
+          $ref: '#/components/schemas/ProductSetID'
+    LocationId:
+      type: integer
+      format: int32
     Genders:
       description: 'An array of genders to target.
 
@@ -1073,21 +1233,19 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Gender'
-    UnexpectedError:
+    DynamicAdsConfigPatchSchema:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    AdGroupArrayResponse:
-      type: object
-      required:
-      - data
+      description: 'The Configuration of the dynamic ads for PATCH requests.
+
+        If campaign is for dynamic ads, this object is required.
+
+        '
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdGroupResponse'
-    BadRequestErrorExtension:
+        targeting_type:
+          $ref: '#/components/schemas/TargetingType'
+        recency_days:
+          $ref: '#/components/schemas/RecencyDays'
+    ServiceUnavailableErrorExtension:
       type: object
       required:
       - type
@@ -1095,7 +1253,225 @@ components:
         type:
           type: string
           enum:
-          - BAD_REQUEST
+          - UNDER_MAINTENANCE
+    AdGroupID:
+      type: integer
+      format: int64
+      description: The ID of the ad group.
+    AdGroupRequest:
+      type: object
+      required:
+      - name
+      - configured_status
+      properties:
+        name:
+          $ref: '#/components/schemas/AdGroupSchemas_Name'
+        audience:
+          $ref: '#/components/schemas/AudienceRequest'
+        frequency_control:
+          $ref: '#/components/schemas/FrequencyControl'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        dynamic_ads_config:
+          $ref: '#/components/schemas/DynamicAdsConfigSchema'
+    LocationSegmentRequest:
+      type: object
+      required:
+      - segment_area_type
+      properties:
+        location_segment_id:
+          $ref: '#/components/schemas/LocationSegmentId'
+        segment_area_type:
+          $ref: '#/components/schemas/SegmentAreaType'
+        pin_with_radius_info:
+          $ref: '#/components/schemas/LocationSegmentPinWithRadiusInfo'
+        fixed_area_info:
+          $ref: '#/components/schemas/LocationSegmentFixedAreaInfo'
+    Gender:
+      type: string
+      description: Selected genders of users for the ads to be delivered.
+      enum:
+      - MALE
+      - FEMALE
+      - UNKNOWN
+    LocationSegmentResponse:
+      type: object
+      description: 'The response of the hyper location segment resource.
+
+
+        Only one of `location_segment_pin_with_radius_info` or `location_segment_fixed_area_info` will be returned based on the segment_area_type value.
+
+        '
+      required:
+      - location_segment_id
+      - segment_area_type
+      properties:
+        location_segment_id:
+          $ref: '#/components/schemas/LocationSegmentId'
+        segment_area_type:
+          $ref: '#/components/schemas/SegmentAreaType'
+        pin_with_radius_info:
+          $ref: '#/components/schemas/LocationSegmentPinWithRadiusInfo'
+        fixed_area_info:
+          $ref: '#/components/schemas/LocationSegmentFixedAreaInfo'
+    SegmentAreaType:
+      type: string
+      description: 'The area type of the segment.
+
+        '
+      enum:
+      - PIN_WITH_RADIUS
+      - FIXED_AREA
+    AdGroupSchemas_CreatedAt:
+      type: string
+      format: date-time
+      description: The date-time at which the ad group was created.
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ZipCode:
+      type: string
+      pattern: ^\d{5}$
+      description: 'A ZIP code used for ad group location targeting in the United States.
+
+
+        - Accepts exactly five numeric digits. Leading zeroes must be included where applicable.
+
+        - Only available for ad accounts in the US region.
+
+        - Only valid ZIP codes are accepted.
+
+        '
+      example: '10001'
+    IncludeDeleted:
+      type: boolean
+      default: false
+    HyperLocationConfigResponse:
+      type:
+      - object
+      - 'null'
+      description: 'An object containing hyper location targeting configuration.
+
+        '
+      required:
+      - user_segment
+      - location_segments
+      properties:
+        user_segment:
+          $ref: '#/components/schemas/UserSegment'
+        location_segments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/LocationSegmentResponse'
+          description: 'The list of location segments being targeted.
+
+            '
+    AdGroupResponse:
+      allOf:
+      - $ref: '#/components/schemas/AdGroupRequest'
+      - type: object
+        required:
+        - ad_group_id
+        - campaign_id
+        - created_at
+        - updated_at
+        - parent
+        - audience
+        - delivery_status
+        - has_any_video_ads
+        - is_migrated_from_v1
+        properties:
+          campaign_id:
+            $ref: '#/components/schemas/CampaignID'
+          ad_group_id:
+            $ref: '#/components/schemas/AdGroupID'
+          created_at:
+            $ref: '#/components/schemas/AdGroupSchemas_CreatedAt'
+          updated_at:
+            $ref: '#/components/schemas/AdGroupSchemas_UpdatedAt'
+          parent:
+            $ref: '#/components/schemas/Parent'
+          audience:
+            $ref: '#/components/schemas/AudienceResponse'
+          frequency_control:
+            $ref: '#/components/schemas/FrequencyControl'
+          delivery_status:
+            $ref: '#/components/schemas/DeliveryStatusObject'
+          has_any_video_ads:
+            $ref: '#/components/schemas/HasAnyVideoAds'
+          is_migrated_from_v1:
+            $ref: '#/components/schemas/IsMigratedFromV1'
+          dynamic_ads_config:
+            $ref: '#/components/schemas/DynamicAdsConfigSchema'
+    CustomAudiences:
+      type: object
+      description: "Custom audiences to include or exclude for ad delivery.\n\nIt contains the custom audience IDs to include or exclude for ad delivery.\n\nIf it's empty, it will be delivered to all users.\n\n* e.g. This will target all users\n  ```\n  {\n    ...\n    \"custom_audiences\": {\n      \"include\": [],\n      \"exclude\": []\n    }\n  }\n  ```\n* e.g. This will target users who are in custom audience `123`\n  ```\n  {\n    \"custom_audiences\": {\n        \"include\": [123],\n        \"exclude\": []\n      }\n  }\n  ```\n"
+      properties:
+        include:
+          type: array
+          description: An array of `custom_audience_id` to include for delivery.
+          items:
+            type: integer
+            format: int64
+        exclude:
+          type: array
+          description: An array of `custom_audience_id` to exclude for delivery.
+          items:
+            type: integer
+            format: int64
+    PaginationInfoResponse:
+      description: 'An object describing pagination parameters for this response.
+
+        '
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_objects
+      properties:
+        page:
+          type: integer
+          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
+          example: 1
+        page_size:
+          type: integer
+          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
+          example: 100
+        total_pages:
+          type: integer
+          description: The total number of pages for this query.
+          example: 10
+        total_objects:
+          type: integer
+          description: The total number of objects that exist across all pages.
+          example: 987
+    RecencyDays:
+      type:
+      - string
+      - 'null'
+      enum:
+      - LAST_1_DAY
+      - LAST_3_DAYS
+      - LAST_7_DAYS
+      - LAST_14_DAYS
+      - LAST_30_DAYS
+      - LAST_60_DAYS
+      - LAST_90_DAYS
+      description: 'The lookback window (in days) for user logs can be used for retargeting.
+
+
+        - Required when targeting_type is `RETARGETING`
+
+        - Set to null when targeting_type is `PROSPECTING`
+
+
+        This value is updatable when the campaign is ready for delivery.
+
+        '
     DeliveryStatus:
       type: string
       enum:
@@ -1131,66 +1507,86 @@ components:
         | DISABLED        | The object is disabled because the business, account, or brand is disabled|
 
         '
-    ConfiguredStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - PAUSED
-      - DELETED
-      description: The status of the object configured by an ad operator.
-    HyperLocationSchemas_LocationId:
-      type: integer
-      description: 'The unique identifier of the location.
-
-
-        A list of location IDs can be obtained via the [locations](#tag/locations) endpoint.
-
-        '
-      format: int32
-    ValidationError:
+    UnauthorizedError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    DynamicAdsConfigPatchSchema:
-      type: object
-      description: 'The Configuration of the dynamic ads for PATCH requests.
+    SmartViewArticleKeywordTargeting:
+      type:
+      - object
+      - 'null'
+      required:
+      - include
+      - exclude
+      description: 'SmartView article keyword targeting settings for ad delivery.
 
-        If campaign is for dynamic ads, this object is required.
+
+        Ads will be delivered to SmartView ad placements of articles which include and/or exclude these keywords or a similar topic.
+
+
+        This field is only configurable when `media_types` includes `SMART_VIEW`.
+
+
+        include `[]` means deliver to articles containing any keyword
+
+
+        exclude `[]` means no articles are excluded by keyword
+
+
+        A keyword cannot appear in both the include and exclude lists.
+
+
+        Only system available keywords are allowed. To get the list of available keywords, use the `POST /api/ma/v3/article_keywords/search` endpoint.
+
+
+        Duplicate values in the request payload are ignored; the response returns a unique set of keywords.
+
+
+        Some example settings:
+
+        | **Case** | **Include**                          | **Exclude**                | **Behavior**                                                                                        |
+
+        |----------|--------------------------------------|----------------------------|-----------------------------------------------------------------------------------------------------|
+
+        | 1        | `[]` (include All)                   | `[]`                       | Deliver to articles containing any keyword (Also the default value for UI)                          |
+
+        | 2        | `[]` (include All)                   | `["soccer", "baseball"]`   | Deliver to all articles except those containing `"soccer"` or `"baseball"`                          |
+
+        | 3        | `["restaurant", "tokyo", "travel"]`  | `[]`                       | Deliver only to articles containing `"restaurant"`, `"tokyo"`, or `"travel"`                        |
+
+        | 4        | `["restaurant", "tokyo"]`            | `["soccer", "baseball"]`   | Deliver to articles containing `"restaurant"` or `"tokyo"`, excluding those containing `"soccer"` or `"baseball"` |
+
+        | 5        | `["restaurant", "tokyo", "soccer"]`  | `["soccer", "baseball"]`   | ❌ Validation error - keyword `"soccer"` appears in both lists                                     |
 
         '
       properties:
-        targeting_type:
-          $ref: '#/components/schemas/TargetingType'
-        recency_days:
-          $ref: '#/components/schemas/RecencyDays'
-    AdGroupID:
-      type: integer
-      format: int64
-      description: The ID of the ad group.
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    ValidationErrorResponse:
+        include:
+          description: An array of keywords. Ads will be delivered to articles containing these keywords.
+          type: array
+          items:
+            type: string
+        exclude:
+          description: An array of keywords. Articles containing these keywords will be excluded from delivery.
+          type: array
+          items:
+            type: string
+    ResourceNotFoundErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/ValidationError'
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
+          $ref: '#/components/schemas/ResourceNotFoundError'
+    AcceptLanguage:
+      type: string
+      description: 'The language to use for system generated text within API responses.
+
+
+        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
+
+        '
+      example: en-US
     ChannelAliasLabels:
       description: 'An array of target channels to display the ads in the SmartNews app. If it is `null` or `[]`, all channels will be targeted.
 
@@ -1210,252 +1606,44 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/ChannelAliasLabel'
-    Parent:
+    MediaTypes:
+      description: 'An array of media types defining where the ads will be displayed in the SmartNews app.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      type: array
+      items:
+        $ref: '#/components/schemas/PlacementMediaType'
+    SmartViewArticleCategoryId:
+      type: integer
+      format: int32
+    UnexpectedErrorExtension:
       type: object
       required:
-      - id
       - type
-      - name
       properties:
-        id:
-          type: integer
-          format: int64
-          description: The ID of the parent object.
         type:
           type: string
           enum:
-          - CAMPAIGN
-          - AD_GROUP
-        name:
-          type: string
-          description: The name of the object.
-        objective:
-          $ref: '#/components/schemas/CampaignObjective'
-        optimization_event:
-          $ref: '#/components/schemas/OptimizationEvent'
-        ready_for_delivery:
-          $ref: '#/components/schemas/ReadyForDelivery'
-        store_set_id:
-          $ref: '#/components/schemas/StoreSetId'
-        parent:
-          type: object
-          description: 'The parent of the parent. The properties are the same as parent (`id`, `name`, `type`, `objective`,
-
-            `optimization_event` ,`ready_for_delivery` ,`store_set_id` ,`parent`)
-
-            '
-    HyperLocationConfigResponse:
-      type:
-      - object
-      - 'null'
-      description: 'An object containing hyper location targeting configuration.
-
-        '
-      required:
-      - user_segment
-      - location_segments
-      properties:
-        user_segment:
-          $ref: '#/components/schemas/UserSegment'
-        location_segments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/LocationSegmentResponse'
-          description: 'The list of location segments being targeted.
-
-            '
-    OptimizationEvent:
-      type:
-      - string
-      - 'null'
-      enum:
-      - PURCHASE
-      - ADD_TO_CART
-      - INITIATE_CHECKOUT
-      - SUBMIT_FORM
-      - SUBSCRIBE
-      - COMPLETE_REGISTRATION
-      - CONTACT
-      - SIGN_UP
-      - VIEW_CONTENT
-      - ADD_PAYMENT_INFO
-      - ADD_TO_WISH_LIST
-      - VISIT_CART
-      - CUSTOMIZE_PRODUCT
-      - SEARCH
-      - BOOKING
-      - DOWNLOAD
-      - START_TRIAL
-      - SHARE
-      - LOGIN
-      - DONATE
-      - FIND_LOCATION
-      - TIME_SPENT
-      - LEAD
-      - INSTALL
-      - D1_RETENTION
-      description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
-    BusinessErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/BusinessError'
-    PaginationInfoResponse:
-      description: 'An object describing pagination parameters for this response.
-
-        '
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_objects
-      properties:
-        page:
-          type: integer
-          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
-          example: 1
-        page_size:
-          type: integer
-          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
-          example: 100
-        total_pages:
-          type: integer
-          description: The total number of pages for this query.
-          example: 10
-        total_objects:
-          type: integer
-          description: The total number of objects that exist across all pages.
-          example: 987
-    ServiceUnavailableErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
-    RecencyDays:
-      type:
-      - string
-      - 'null'
-      enum:
-      - LAST_1_DAY
-      - LAST_3_DAYS
-      - LAST_7_DAYS
-      - LAST_14_DAYS
-      - LAST_30_DAYS
-      - LAST_60_DAYS
-      - LAST_90_DAYS
-      description: 'The lookback window (in days) for user logs can be used for retargeting.
-
-
-        - Required when targeting_type is `RETARGETING`
-
-        - Set to null when targeting_type is `PROSPECTING`
-
-
-        This value is updatable when the campaign is ready for delivery.
-
-        '
-    ZipCode:
+          - UNEXPECTED_ERROR
+    CarrierType:
       type: string
-      pattern: ^\d{5}$
-      description: 'A ZIP code used for ad group location targeting in the United States.
-
-
-        - Accepts exactly five numeric digits. Leading zeroes must be included where applicable.
-
-        - Only available for ad accounts in the US region.
-
-        - Only valid ZIP codes are accepted.
-
-        '
-      example: '10001'
-    AudienceRequest:
-      type: object
-      description: "In Patch Request, if you omit the property, the data will remain unchanged.\n\nIf you want to remove the current settings, set individual fields to either `null` or an empty array.\n\ne.g. This will remove the current settings of ages and genders, while keeping the locations and other audience fields unchanged:\n```\n{\n  ages: [],\n  genders: null,\n}\n```\n"
-      properties:
-        ages:
-          $ref: '#/components/schemas/Ages'
-        genders:
-          $ref: '#/components/schemas/Genders'
-        locations:
-          $ref: '#/components/schemas/AdGroupLocations'
-        zip_codes:
-          $ref: '#/components/schemas/ZipCodes'
-        hyper_location_config:
-          $ref: '#/components/schemas/HyperLocationConfigRequest'
-        operating_system:
-          $ref: '#/components/schemas/OperatingSystem'
-        custom_audiences:
-          $ref: '#/components/schemas/CustomAudiences'
-        connection_types:
-          $ref: '#/components/schemas/ConnectionTypes'
-        carrier_types:
-          $ref: '#/components/schemas/CarrierTypes'
-        interests:
-          $ref: '#/components/schemas/Interests'
-        media_types:
-          $ref: '#/components/schemas/MediaTypes'
-        channel_alias_labels:
-          $ref: '#/components/schemas/ChannelAliasLabels'
-        smart_view_article_category_targeting:
-          $ref: '#/components/schemas/SmartViewArticleCategoryTargeting'
-        smart_view_article_keyword_targeting:
-          $ref: '#/components/schemas/SmartViewArticleKeywordTargeting'
-        automated_targeting:
-          $ref: '#/components/schemas/AutomatedTargeting'
-    HasAnyVideoAds:
-      type: boolean
-      description: Whether the ad object has any video ads, including those that have been deleted.
-    AdGroupSchemas_Name:
-      type: string
-      minLength: 1
-      maxLength: 256
-      description: 'The name of the ad group.
-
-
-        Note: The maximum length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
-
-        '
-    Page:
-      type: integer
-      minimum: 1
-      default: 1
-      example: 2
-      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
-
-
-        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
-
-        '
-    StoreSetId:
-      type: integer
-      format: int64
-      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
-
-        Store sets are managed under Business Management.
-
-        '
-    DynamicAdsConfigSchema:
-      type: object
-      required:
-      - targeting_type
-      description: 'The Configuration of the dynamic ads.
-
-        If campaign is for dynamic ads, this object is required.
-
-        '
-      properties:
-        targeting_type:
-          $ref: '#/components/schemas/TargetingType'
-        recency_days:
-          $ref: '#/components/schemas/RecencyDays'
-        product_set_id:
-          $ref: '#/components/schemas/ProductSetID'
+      enum:
+      - DOCOMO
+      - AU
+      - SOFTBANK
+      - ATNT
+      - VERIZON
+      - TMOBILE
+      - BOOST
+      - SPRINT
+      - USCELLULAR
+      - XFINITY
+      - RAKUTEN
+      - OTHERS
+      - UNKNOWN
     ReadyForDelivery:
       type: boolean
       description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
@@ -1477,16 +1665,92 @@ components:
         7. `app_promotion_info` (PatchAppPromotionInfo)
 
         '
-    CarrierTypes:
-      description: 'An array of mobile network carriers to target.
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AudienceResponse:
+      type: object
+      required:
+      - ages
+      - genders
+      - custom_audiences
+      - locations
+      properties:
+        ages:
+          $ref: '#/components/schemas/Ages'
+        genders:
+          $ref: '#/components/schemas/Genders'
+        locations:
+          $ref: '#/components/schemas/AdGroupLocations'
+        zip_codes:
+          $ref: '#/components/schemas/ZipCodes'
+        hyper_location_config:
+          $ref: '#/components/schemas/HyperLocationConfigResponse'
+        custom_audiences:
+          $ref: '#/components/schemas/CustomAudiences'
+        operating_system:
+          $ref: '#/components/schemas/OperatingSystem'
+        connection_types:
+          $ref: '#/components/schemas/ConnectionTypes'
+        carrier_types:
+          $ref: '#/components/schemas/CarrierTypes'
+        interests:
+          $ref: '#/components/schemas/Interests'
+        media_types:
+          $ref: '#/components/schemas/MediaTypes'
+        channel_alias_labels:
+          $ref: '#/components/schemas/ChannelAliasLabels'
+        smart_view_article_category_targeting:
+          $ref: '#/components/schemas/SmartViewArticleCategoryTargeting'
+        smart_view_article_keyword_targeting:
+          $ref: '#/components/schemas/SmartViewArticleKeywordTargeting'
+        automated_targeting:
+          $ref: '#/components/schemas/AutomatedTargeting'
+    ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ZipCodes:
+      description: "An array of ZIP codes to target.\n\nThe values are combined with `locations` (states and counties) using OR logic during delivery.\n\nThe response returns ZIP codes in ascending numeric order while keeping their 5-digit string form.\n\n- Submit an empty array `[]` or `null` in a PATCH request to remove all ZIP codes.\n- Duplicate values in the request payload are ignored; the response returns a unique set of ZIP codes.\n- Supports up to 40,000 ZIP codes per request.\n\n* e.g. This targets Washington state, Pierce County, and ZIP codes `12345` / `67890`:\n  ```\n  {\n    ...\n    \"audience\": {\n      \"locations\": [2, 3],\n      \"zip_codes\": [\"12345\", \"67890\"]\n    }\n  }\n  ```\n"
       type: array
       items:
-        $ref: '#/components/schemas/CarrierType'
+        $ref: '#/components/schemas/ZipCode'
+      maxItems: 1000
+      example:
+      - '10001'
+      - '10002'
+    Page:
+      type: integer
+      minimum: 1
+      default: 1
+      example: 2
+      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
+
+
+        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
+
+        '
+    LocationSegmentId:
+      type: integer
+      description: 'The unique identifier of the location segment.
+
+
+        If this property is set, the specified location segment will be updated (PATCH request only).
+
+
+        If this property is not set, a new location segment will be created.
+
+
+        This property is not allowed in POST requests.
+
+        '
+      format: int64
+    IsMigratedFromV1:
+      type: boolean
+      description: A boolean flag that indicates whether the object is migrated from v1.
     ChannelAliasLabel:
       type: string
       enum:
@@ -1749,46 +2013,23 @@ components:
       - CR_JA_REGION_TOKYO_MEGURO_INFO
       - CR_JA_REGION_TOKYO_ADACHI_INFO
       - OTHERS
-    AdGroupSchemas_UpdatedAt:
-      type: string
-      format: date-time
-      description: The date-time at which the ad group was last updated.
-    LocationSegmentResponse:
+    RateLimitedErrorResponse:
       type: object
-      description: 'The response of the hyper location segment resource.
-
-
-        Only one of `location_segment_pin_with_radius_info` or `location_segment_fixed_area_info` will be returned based on the segment_area_type value.
-
-        '
       required:
-      - location_segment_id
-      - segment_area_type
+      - error
       properties:
-        location_segment_id:
-          $ref: '#/components/schemas/LocationSegmentId'
-        segment_area_type:
-          $ref: '#/components/schemas/SegmentAreaType'
-        pin_with_radius_info:
-          $ref: '#/components/schemas/LocationSegmentPinWithRadiusInfo'
-        fixed_area_info:
-          $ref: '#/components/schemas/LocationSegmentFixedAreaInfo'
-    IABInterestId:
-      type: integer
-      format: int32
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    SegmentAreaType:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    AdGroupSchemas_Name:
       type: string
-      description: 'The area type of the segment.
+      minLength: 1
+      maxLength: 256
+      description: 'The name of the ad group.
+
+
+        Note: The maximum length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
 
         '
-      enum:
-      - PIN_WITH_RADIUS
-      - FIXED_AREA
     Interests:
       description: 'An array of IAB Interest IDs to target.
 
@@ -1802,263 +2043,11 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/IABInterestId'
-    ResourceNotFoundError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    CampaignObjective:
-      type: string
-      enum:
-      - TRAFFIC
-      - SALES
-      - AWARENESS
-      - APP_PROMOTION
-      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
-
-
-        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
-
-        '
-    AdGroupRequest:
-      type: object
-      required:
-      - name
-      - configured_status
-      properties:
-        name:
-          $ref: '#/components/schemas/AdGroupSchemas_Name'
-        audience:
-          $ref: '#/components/schemas/AudienceRequest'
-        frequency_control:
-          $ref: '#/components/schemas/FrequencyControl'
-        configured_status:
-          $ref: '#/components/schemas/ConfiguredStatus'
-        dynamic_ads_config:
-          $ref: '#/components/schemas/DynamicAdsConfigSchema'
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
-    Interval:
-      type: string
-      description: The time interval which frequency will be calculated.
-      enum:
-      - LAST_1_DAY
-      - LAST_7_DAYS
-    SmartViewArticleCategoryTargeting:
-      type:
-      - object
-      - 'null'
-      required:
-      - include
-      - exclude
-      description: 'SmartView article category targeting settings for ad delivery.
-
-
-        It contains article category IDs to include or exclude for delivery.
-
-
-        This field is only configurable when `media_types` includes `SMART_VIEW`.
-
-
-        include `[]` means all article categories are included
-
-
-        exclude `[]` means no article categories are excluded
-
-
-        A category ID cannot appear in both the include and exclude lists.
-
-
-        Some example settings:
-
-        | **Case** | **Include**        | **Exclude** | **Behavior**                                                      |
-
-        |----------|--------------------|-------------|-------------------------------------------------------------------|
-
-        | 1        | `[]` (include All) | `[]`        | Deliver to all article categories (Also the default value for UI) |
-
-        | 2        | `[]` (include All) | `[1, 3, 5]` | Deliver to all categories except `1, 3, 5`                        |
-
-        | 3        | `[1, 2, 3]`        | `[]`        | Deliver to only categories `1, 2, 3`                              |
-
-        | 4        | `[1, 2]`           | `[3, 5]`    | Deliver only to categories `1, 2` excluding `3, 5`                |
-
-        | 5        | `[1, 2, 3]`        | `[1, 5]`    | ❌ Validation error - category `1` appears in both lists          |
-
-
-        A list of article category IDs can be obtained via the [article categories](#tag/article-category) endpoint.
-
-        '
-      properties:
-        include:
-          description: An array of article category IDs to include for delivery.
-          type: array
-          items:
-            $ref: '#/components/schemas/SmartViewArticleCategoryId'
-        exclude:
-          description: An array of article category IDs to exclude for delivery.
-          type: array
-          items:
-            $ref: '#/components/schemas/SmartViewArticleCategoryId'
-    TargetingType:
-      type: string
-      description: "The type of DA targeting. \n\nRetargeting is for finding existing user; \nProspecting is for finding new user based on existing user log.\n\nThis value is NOT updatable once the campaign is ready for delivery.\n"
-      enum:
-      - RETARGETING
-      - PROSPECTING
-    IsMigratedFromV1:
-      type: boolean
-      description: A boolean flag that indicates whether the object is migrated from v1.
-    ForbiddenErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    OperatingSystem:
-      type:
-      - object
-      - 'null'
-      description: Target OS and optionally a specific OS version. If it is not specified, all OS and OS versions are targeted.
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          description: 'The OS to target.
-
-            '
-          enum:
-          - IOS
-          - ANDROID
-        since_version:
-          type: string
-          description: 'Selected OS version of users for the ads to be delivered.
-
-            Ex: `13.0.0` means iOS 13.0.0 or later. Empty mean all version.
-
-            '
-    UserSegment:
-      type: string
-      description: 'The type of users to target.
-
-        '
-      enum:
-      - RESIDENT_ONLY
-      - RESIDENT_AND_VISITOR
-    BadRequestErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/BadRequestError'
-    Ages:
-      description: 'An array of age buckets to target.
-
-
-        Note:
-
-        - This field is not settable for US region ad accounts.
-
-        - `AGE_UNDER_20` option is deprecated and can no longer be used for new ad groups and when updating an existing ad group.
-
-        '
+    ConnectionTypes:
+      description: An array of connection types to target.
       type: array
       items:
-        $ref: '#/components/schemas/Age'
-    AdGroupPatchRequest:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/AdGroupSchemas_Name'
-        configured_status:
-          $ref: '#/components/schemas/ConfiguredStatus'
-        frequency_control:
-          $ref: '#/components/schemas/FrequencyControl'
-        audience:
-          $ref: '#/components/schemas/AudienceRequest'
-        dynamic_ads_config:
-          $ref: '#/components/schemas/DynamicAdsConfigPatchSchema'
-    AdGroupPaginatedResponse:
-      type: object
-      required:
-      - data
-      - pagination
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdGroupResponse'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfoResponse'
-    AcceptLanguage:
-      type: string
-      description: 'The language to use for system generated text within API responses.
-
-
-        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
-
-        '
-      example: en-US
-    CustomAudiences:
-      type: object
-      description: "Custom audiences to include or exclude for ad delivery.\n\nIt contains the custom audience IDs to include or exclude for ad delivery.\n\nIf it's empty, it will be delivered to all users.\n\n* e.g. This will target all users\n  ```\n  {\n    ...\n    \"custom_audiences\": {\n      \"include\": [],\n      \"exclude\": []\n    }\n  }\n  ```\n* e.g. This will target users who are in custom audience `123`\n  ```\n  {\n    \"custom_audiences\": {\n        \"include\": [123],\n        \"exclude\": []\n      }\n  }\n  ```\n"
-      properties:
-        include:
-          type: array
-          description: An array of `custom_audience_id` to include for delivery.
-          items:
-            type: integer
-            format: int64
-        exclude:
-          type: array
-          description: An array of `custom_audience_id` to exclude for delivery.
-          items:
-            type: integer
-            format: int64
-    Gender:
-      type: string
-      description: Selected genders of users for the ads to be delivered.
-      enum:
-      - MALE
-      - FEMALE
-      - UNKNOWN
-    ResourceNotFoundErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ResourceNotFoundError'
-    LocationSegmentId:
-      type: integer
-      description: 'The unique identifier of the location segment.
-
-
-        If this property is set, the specified location segment will be updated (PATCH request only).
-
-
-        If this property is not set, a new location segment will be created.
-
-
-        This property is not allowed in POST requests.
-
-        '
-      format: int64
+        $ref: '#/components/schemas/ConnectionType'
     LocationSegmentPinWithRadiusInfo:
       type: object
       description: 'The configuration for the Pin with Radius location segment. Required and only settable when `segment_area_type` is `PIN_WITH_RADIUS`.
@@ -2096,115 +2085,126 @@ components:
           description: 'The radius in meters from the central point of the location.
 
             '
-    SmartViewArticleCategoryId:
-      type: integer
-      format: int32
-    SmartViewArticleKeywordTargeting:
-      type:
-      - object
-      - 'null'
-      required:
-      - include
-      - exclude
-      description: 'SmartView article keyword targeting settings for ad delivery.
-
-
-        Ads will be delivered to SmartView ad placements of articles which include and/or exclude these keywords or a similar topic.
-
-
-        This field is only configurable when `media_types` includes `SMART_VIEW`.
-
-
-        include `[]` means deliver to articles containing any keyword
-
-
-        exclude `[]` means no articles are excluded by keyword
-
-
-        A keyword cannot appear in both the include and exclude lists.
-
-
-        Only system available keywords are allowed. To get the list of available keywords, use the `POST /api/ma/v3/article_keywords/search` endpoint.
-
-
-        Duplicate values in the request payload are ignored; the response returns a unique set of keywords.
-
-
-        Some example settings:
-
-        | **Case** | **Include**                          | **Exclude**                | **Behavior**                                                                                        |
-
-        |----------|--------------------------------------|----------------------------|-----------------------------------------------------------------------------------------------------|
-
-        | 1        | `[]` (include All)                   | `[]`                       | Deliver to articles containing any keyword (Also the default value for UI)                          |
-
-        | 2        | `[]` (include All)                   | `["soccer", "baseball"]`   | Deliver to all articles except those containing `"soccer"` or `"baseball"`                          |
-
-        | 3        | `["restaurant", "tokyo", "travel"]`  | `[]`                       | Deliver only to articles containing `"restaurant"`, `"tokyo"`, or `"travel"`                        |
-
-        | 4        | `["restaurant", "tokyo"]`            | `["soccer", "baseball"]`   | Deliver to articles containing `"restaurant"` or `"tokyo"`, excluding those containing `"soccer"` or `"baseball"` |
-
-        | 5        | `["restaurant", "tokyo", "soccer"]`  | `["soccer", "baseball"]`   | ❌ Validation error - keyword `"soccer"` appears in both lists                                     |
-
-        '
-      properties:
-        include:
-          description: An array of keywords. Ads will be delivered to articles containing these keywords.
-          type: array
-          items:
-            type: string
-        exclude:
-          description: An array of keywords. Articles containing these keywords will be excluded from delivery.
-          type: array
-          items:
-            type: string
-    HyperLocationConfigRequest:
-      type:
-      - object
-      - 'null'
-      description: 'An object containing hyper location targeting configuration.
+    CarrierTypes:
+      description: 'An array of mobile network carriers to target.
 
 
         Note: This field is not settable for US region ad accounts.
 
         '
-      required:
-      - user_segment
-      - location_segments
-      properties:
-        user_segment:
-          $ref: '#/components/schemas/UserSegment'
-        location_segments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/LocationSegmentRequest'
-          description: 'The list of location segments to target.
+      type: array
+      items:
+        $ref: '#/components/schemas/CarrierType'
+    DeliveryStatusReason:
+      type: string
+      enum:
+      - CAMPAIGN_DELETED
+      - CAMPAIGN_PAUSED
+      - NO_AD_GROUPS
+      - ALL_AD_GROUPS_PAUSED_OR_DELETED
+      - NO_ADS
+      - NO_SUBMITTED_ADS
+      - ALL_ADS_PAUSED_DELETED_OR_REJECTED
+      - NO_APPROVED_ADS
+      - CAMPAIGN_STARTS_IN_FUTURE
+      - CAMPAIGN_ENDED
+      - CAMPAIGN_OUTSIDE_DAILY_SCHEDULE
+      - NO_ACTIVE_APPROVED_ADS
+      - CAMPAIGN_ELIGIBLE
+      - AD_GROUP_DELETED
+      - AD_GROUP_PAUSED
+      - AD_GROUP_ELIGIBLE
+      - AD_DELETED
+      - AD_NOT_SUBMITTED
+      - AD_NOT_REVIEWED
+      - AD_REJECTED
+      - AD_PAUSED
+      - AD_ELIGIBLE
+      - CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT
+      - UNCONFIRMED
+      - BUSINESS_DISABLED
+      - AD_ACCOUNT_OR_BRAND_DISABLED
+      - BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW
+      - BUSINESS_NOT_APPROVED
+      - AD_ACCOUNT_NOT_APPROVED
+      - PAYMENT_METHOD_NOT_VERIFIED
+      - PAYMENT_METHOD_ISSUE
+      - PRODUCT_SET_NOT_READY
+      - STORE_SET_NOT_READY
+      description: 'An enum field for the reason the delivery status was determined.
 
+        | Reason                                    | Layers    |
 
-            The list must contain all the segments to target. If a segment is not included in the list, it will be removed from the targeting configuration in a PATCH request.
+        |-------------------------------------------|-----------|
 
+        | CAMPAIGN_DELETED                          | Campaign  |
 
-            Exactly one of `pin_with_radius_info` or `fixed_area_info` must be set based on the `segment_area_type` value.
+        | CAMPAIGN_PAUSED                           | Campaign, Ad group, Ad |
 
-            '
-      example:
-        user_segment: RESIDENT_AND_VISITOR
-        location_segments:
-        - segment_area_type: FIXED_AREA
-          fixed_area_info:
-            location_id: 70196
-        - segment_area_type: FIXED_AREA
-          fixed_area_info:
-            location_id: 70150
-        - segment_area_type: PIN_WITH_RADIUS
-          pin_with_radius_info:
-            address: 福島県伊達郡川俣町山木屋キトウスズ山２
-            latitude: '37.59268044952155'
-            longitude: '140.63639730916015'
-            radius_in_meters: 3000
-            label: My Label
-    UnexpectedErrorExtension:
+        | NO_AD_GROUPS                              | Campaign  |
+
+        | ALL_AD_GROUPS_PAUSED_OR_DELETED           | Campaign  |
+
+        | NO_ADS                                    | Campaign, Ad group |
+
+        | NO_SUBMITTED_ADS                          | Campaign, Ad group |
+
+        | ALL_ADS_PAUSED_DELETED_OR_REJECTED        | Campaign, Ad group |
+
+        | NO_APPROVED_ADS                           | Campaign, Ad group |
+
+        | CAMPAIGN_STARTS_IN_FUTURE                 | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_ENDED                            | Campaign, Ad group, Ad |
+
+        | CAMPAIGN_OUTSIDE_DAILY_SCHEDULE           | Campaign |
+
+        | NO_ACTIVE_APPROVED_ADS                    | Campaign, Ad group |
+
+        | CAMPAIGN_ELIGIBLE                         | Campaign  |
+
+        | AD_GROUP_DELETED                          | Ad group  |
+
+        | AD_GROUP_PAUSED                           | Ad group, Ad  |
+
+        | AD_GROUP_ELIGIBLE                         | Ad group  |
+
+        | AD_DELETED                                | Ad        |
+
+        | AD_NOT_SUBMITTED                          | Ad        |
+
+        | AD_NOT_REVIEWED                           | Ad        |
+
+        | AD_REJECTED                               | Ad        |
+
+        | AD_PAUSED                                 | Ad        |
+
+        | AD_ELIGIBLE                               | Ad        |
+
+        | CAMPAIGN_EXCEEDED_LIFETIME_SPENDING_LIMIT | Campaign, Ad group, Ad|
+
+        | UNCONFIRMED                               | Campaign, Ad group, Ad|
+
+        | BUSINESS_DISABLED                         | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_OR_BRAND_DISABLED              | Campaign, Ad group, Ad |
+
+        | BUSINESS_AND_AD_ACCOUNT_UNDER_REVIEW      | Campaign, Ad group, Ad |
+
+        | BUSINESS_NOT_APPROVED                     | Campaign, Ad group, Ad |
+
+        | AD_ACCOUNT_NOT_APPROVED                   | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_NOT_VERIFIED               | Campaign, Ad group, Ad |
+
+        | PAYMENT_METHOD_ISSUE                      | Campaign, Ad group, Ad |
+
+        | PRODUCT_SET_NOT_READY                     | Campaign, Ad group, Ad |
+
+        | STORE_SET_NOT_READY                       | Campaign, Ad group, Ad |
+
+        '
+    ForbiddenErrorExtension:
       type: object
       required:
       - type
@@ -2212,67 +2212,78 @@ components:
         type:
           type: string
           enum:
-          - UNEXPECTED_ERROR
-    AdGroupResponse:
-      allOf:
-      - $ref: '#/components/schemas/AdGroupRequest'
-      - type: object
-        required:
-        - ad_group_id
-        - campaign_id
-        - created_at
-        - updated_at
-        - parent
-        - audience
-        - delivery_status
-        - has_any_video_ads
-        - is_migrated_from_v1
-        properties:
-          campaign_id:
-            $ref: '#/components/schemas/CampaignID'
-          ad_group_id:
-            $ref: '#/components/schemas/AdGroupID'
-          created_at:
-            $ref: '#/components/schemas/AdGroupSchemas_CreatedAt'
-          updated_at:
-            $ref: '#/components/schemas/AdGroupSchemas_UpdatedAt'
-          parent:
-            $ref: '#/components/schemas/Parent'
-          audience:
-            $ref: '#/components/schemas/AudienceResponse'
-          frequency_control:
-            $ref: '#/components/schemas/FrequencyControl'
-          delivery_status:
-            $ref: '#/components/schemas/DeliveryStatusObject'
-          has_any_video_ads:
-            $ref: '#/components/schemas/HasAnyVideoAds'
-          is_migrated_from_v1:
-            $ref: '#/components/schemas/IsMigratedFromV1'
-          dynamic_ads_config:
-            $ref: '#/components/schemas/DynamicAdsConfigSchema'
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
           type: string
-        retriable:
-          type: boolean
-    LocationSegmentRequest:
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    BadRequestError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BadRequestErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AudienceRequest:
+      type: object
+      description: "In Patch Request, if you omit the property, the data will remain unchanged.\n\nIf you want to remove the current settings, set individual fields to either `null` or an empty array.\n\ne.g. This will remove the current settings of ages and genders, while keeping the locations and other audience fields unchanged:\n```\n{\n  ages: [],\n  genders: null,\n}\n```\n"
+      properties:
+        ages:
+          $ref: '#/components/schemas/Ages'
+        genders:
+          $ref: '#/components/schemas/Genders'
+        locations:
+          $ref: '#/components/schemas/AdGroupLocations'
+        zip_codes:
+          $ref: '#/components/schemas/ZipCodes'
+        hyper_location_config:
+          $ref: '#/components/schemas/HyperLocationConfigRequest'
+        operating_system:
+          $ref: '#/components/schemas/OperatingSystem'
+        custom_audiences:
+          $ref: '#/components/schemas/CustomAudiences'
+        connection_types:
+          $ref: '#/components/schemas/ConnectionTypes'
+        carrier_types:
+          $ref: '#/components/schemas/CarrierTypes'
+        interests:
+          $ref: '#/components/schemas/Interests'
+        media_types:
+          $ref: '#/components/schemas/MediaTypes'
+        channel_alias_labels:
+          $ref: '#/components/schemas/ChannelAliasLabels'
+        smart_view_article_category_targeting:
+          $ref: '#/components/schemas/SmartViewArticleCategoryTargeting'
+        smart_view_article_keyword_targeting:
+          $ref: '#/components/schemas/SmartViewArticleKeywordTargeting'
+        automated_targeting:
+          $ref: '#/components/schemas/AutomatedTargeting'
+    BusinessErrorResponse:
       type: object
       required:
-      - segment_area_type
+      - error
       properties:
-        location_segment_id:
-          $ref: '#/components/schemas/LocationSegmentId'
-        segment_area_type:
-          $ref: '#/components/schemas/SegmentAreaType'
-        pin_with_radius_info:
-          $ref: '#/components/schemas/LocationSegmentPinWithRadiusInfo'
-        fixed_area_info:
-          $ref: '#/components/schemas/LocationSegmentFixedAreaInfo'
+        error:
+          $ref: '#/components/schemas/BusinessError'
+    Interval:
+      type: string
+      description: The time interval which frequency will be calculated.
+      enum:
+      - LAST_1_DAY
+      - LAST_7_DAYS
+    AdGroupArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdGroupResponse'
     BusinessErrorExtension:
       type: object
       required:
@@ -2282,6 +2293,23 @@ components:
           type: string
           enum:
           - BUSINESS_ERROR
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
     ResourceNotFoundErrorExtension:
       type: object
       required:
@@ -2308,35 +2336,35 @@ components:
           - CATALOG
           - STORE_SET
           - RULE
-    ProductSetID:
-      type: integer
-      format: int64
-      description: The ID of the product set.
-    CarrierType:
-      type: string
-      enum:
-      - DOCOMO
-      - AU
-      - SOFTBANK
-      - ATNT
-      - VERIZON
-      - TMOBILE
-      - BOOST
-      - SPRINT
-      - USCELLULAR
-      - XFINITY
-      - RAKUTEN
-      - OTHERS
-      - UNKNOWN
-    UnauthorizedErrorExtension:
+    ValidationErrorResponse:
       type: object
       required:
-      - type
+      - error
       properties:
-        type:
-          type: string
-          enum:
-          - UNAUTHORIZED
+        error:
+          $ref: '#/components/schemas/ValidationError'
+    BadRequestErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BadRequestError'
+    Age:
+      type: string
+      enum:
+      - AGE_UNDER_20
+      - AGE_21_24
+      - AGE_25_29
+      - AGE_30_34
+      - AGE_35_39
+      - AGE_40_44
+      - AGE_45_49
+      - AGE_50_54
+      - AGE_55_59
+      - AGE_60_64
+      - AGE_65_69
+      - AGE_OVER_70
     DeliveryStatusObject:
       type: object
       required:
@@ -2352,105 +2380,77 @@ components:
           type: string
           description: A localized human readable description of the reason. The language is controlled by the Accept-Language header in the request.
       description: An Object that provides information about the delivery status of the campaign.
-    AudienceResponse:
-      type: object
-      required:
-      - ages
-      - genders
-      - custom_audiences
-      - locations
-      properties:
-        ages:
-          $ref: '#/components/schemas/Ages'
-        genders:
-          $ref: '#/components/schemas/Genders'
-        locations:
-          $ref: '#/components/schemas/AdGroupLocations'
-        zip_codes:
-          $ref: '#/components/schemas/ZipCodes'
-        hyper_location_config:
-          $ref: '#/components/schemas/HyperLocationConfigResponse'
-        custom_audiences:
-          $ref: '#/components/schemas/CustomAudiences'
-        operating_system:
-          $ref: '#/components/schemas/OperatingSystem'
-        connection_types:
-          $ref: '#/components/schemas/ConnectionTypes'
-        carrier_types:
-          $ref: '#/components/schemas/CarrierTypes'
-        interests:
-          $ref: '#/components/schemas/Interests'
-        media_types:
-          $ref: '#/components/schemas/MediaTypes'
-        channel_alias_labels:
-          $ref: '#/components/schemas/ChannelAliasLabels'
-        smart_view_article_category_targeting:
-          $ref: '#/components/schemas/SmartViewArticleCategoryTargeting'
-        smart_view_article_keyword_targeting:
-          $ref: '#/components/schemas/SmartViewArticleKeywordTargeting'
-        automated_targeting:
-          $ref: '#/components/schemas/AutomatedTargeting'
-    AutomatedTargeting:
+    OperatingSystem:
       type:
       - object
       - 'null'
-      description: 'Automated targeting settings for the ads to be delivered with SN optimized strategy.
-
-
-        If this field is non-null, automated targeting is enabled (even if the object is empty). Otherwise, it is disabled.
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
-      properties:
-        age_unbreakable:
-          type: boolean
-          default: false
-          description: If this field is `true`, then age targeting will be strictly followed
-        gender_unbreakable:
-          type: boolean
-          default: false
-          description: If this field is `true`, then gender targeting will be strictly followed
-        location_unbreakable:
-          type: boolean
-          default: false
-          description: If this field is `true`, then location targeting will be strictly followed
-        custom_audience_unbreakable:
-          type: boolean
-          default: false
-          description: If this field is `true`, then custom audience will be strictly followed
-        carrier_unbreakable:
-          type: boolean
-          default: false
-          description: If this field is `true`, then carrier targeting will be strictly followed
-        connection_type_unbreakable:
-          type: boolean
-          default: false
-          description: If this field is `true`, then connection type targeting will be strictly followed
-        os_version_unbreakable:
-          type: boolean
-          default: false
-          description: If this field is `true`, then advertiser's os version targeting will be strictly followed
-    ValidationErrorExtension:
+      description: Target OS and optionally a specific OS version. If it is not specified, all OS and OS versions are targeted.
       required:
       - type
-      - error_fields
       properties:
         type:
           type: string
+          description: 'The OS to target.
+
+            '
           enum:
-          - VALIDATION_ERROR
-        error_fields:
-          type: array
-          items:
-            type: object
-            properties:
-              field_name:
-                type: string
-                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
-              reason:
-                type: string
+          - IOS
+          - ANDROID
+        since_version:
+          type: string
+          description: 'Selected OS version of users for the ads to be delivered.
+
+            Ex: `13.0.0` means iOS 13.0.0 or later. Empty mean all version.
+
+            '
+    CampaignObjective:
+      type: string
+      enum:
+      - TRAFFIC
+      - SALES
+      - AWARENESS
+      - APP_PROMOTION
+      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
+
+
+        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
+
+        '
+    AdGroupSchemas_UpdatedAt:
+      type: string
+      format: date-time
+      description: The date-time at which the ad group was last updated.
+    OptimizationEvent:
+      type:
+      - string
+      - 'null'
+      enum:
+      - PURCHASE
+      - ADD_TO_CART
+      - INITIATE_CHECKOUT
+      - SUBMIT_FORM
+      - SUBSCRIBE
+      - COMPLETE_REGISTRATION
+      - CONTACT
+      - SIGN_UP
+      - VIEW_CONTENT
+      - ADD_PAYMENT_INFO
+      - ADD_TO_WISH_LIST
+      - VISIT_CART
+      - CUSTOMIZE_PRODUCT
+      - SEARCH
+      - BOOKING
+      - DOWNLOAD
+      - START_TRIAL
+      - SHARE
+      - LOGIN
+      - DONATE
+      - FIND_LOCATION
+      - TIME_SPENT
+      - LEAD
+      - INSTALL
+      - D1_RETENTION
+      description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
   requestBodies:
     post-requestBody:
       content:

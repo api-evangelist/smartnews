@@ -703,6 +703,358 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    VideoCreativeInfoPatchRequest:
+      type: object
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_file_ids:
+          $ref: '#/components/schemas/MediaFileIds'
+    MediaFileStatus:
+      type: string
+      description: 'The status of the media file.
+
+        - `ACTIVE`: The media file is visible in the Media Library.
+
+        - `INACTIVE`: The media file has been soft-deleted and is no longer visible in the Media Library.
+
+
+        Note: Even if a media file is set to `INACTIVE`, it will still be visible in the creatives where it is used.
+
+        '
+      enum:
+      - ACTIVE
+      - INACTIVE
+    ConfiguredStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - DELETED
+      description: The status of the object configured by an ad operator.
+    SponsoredName:
+      type: string
+      minLength: 1
+      maxLength: 22
+      description: 'Name of advertiser/service name/brand name/product name etc which is displayed to users to show the sponsorship of Ad.
+
+
+        Note: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
+
+        '
+    ValidationErrorExtension:
+      required:
+      - type
+      - error_fields
+      properties:
+        type:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+        error_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
+              reason:
+                type: string
+    StoreSetId:
+      type: integer
+      format: int64
+      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
+
+        Store sets are managed under Business Management.
+
+        '
+    AdRequest:
+      allOf:
+      - $ref: '#/components/schemas/AdCreationParams'
+      - type: object
+        properties:
+          creative:
+            allOf:
+            - $ref: '#/components/schemas/CreativeRequest'
+            description: 'The `creative` to configure for the ad.
+
+
+              Depending on the format, the corresponding `*_info` object is required.
+
+
+              For example, if `format` is `IMAGE`, `image_creative_info` is required. If `format` is `VIDEO`, `video_creative_info` is required, and so on.
+
+              '
+        required:
+        - creative
+    AdPatchRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/AdSchemas_Name'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        landing_page_url:
+          $ref: '#/components/schemas/LandingPageUrl'
+        cta_label:
+          $ref: '#/components/schemas/CtaLabel'
+        submission_status:
+          $ref: '#/components/schemas/SubmissionStatus'
+        creative:
+          $ref: '#/components/schemas/CreativePatchRequest'
+        impression_measurement:
+          $ref: '#/components/schemas/AdImpressionMeasurement'
+        is_price_label_enabled:
+          $ref: '#/components/schemas/PriceLabelEnabled'
+    ImageCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - description
+      - sponsored_name
+      - media_files
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        description:
+          $ref: '#/components/schemas/Description'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFileResponse'
+          description: 'Only image media files are returned.
+
+            '
+    Parent:
+      type: object
+      required:
+      - id
+      - type
+      - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: The ID of the parent object.
+        type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+        name:
+          type: string
+          description: The name of the object.
+        objective:
+          $ref: '#/components/schemas/CampaignObjective'
+        optimization_event:
+          $ref: '#/components/schemas/OptimizationEvent'
+        ready_for_delivery:
+          $ref: '#/components/schemas/ReadyForDelivery'
+        store_set_id:
+          $ref: '#/components/schemas/StoreSetId'
+        parent:
+          type: object
+          description: 'The parent of the parent. The properties are the same as parent (`id`, `name`, `type`, `objective`,
+
+            `optimization_event` ,`ready_for_delivery` ,`store_set_id` ,`parent`)
+
+            '
+    PageSize:
+      type: integer
+      minimum: 1
+      maximum: 1000
+      default: 1000
+      example: 100
+      description: 'The number of objects to return per page.
+
+
+        The maximum page size is 1000 and the default is 1000.
+
+        '
+    ModerationElementType:
+      type: object
+      required:
+      - object
+      - field
+      properties:
+        object:
+          type: string
+          enum:
+          - AD
+          - CREATIVE
+          description: 'This specifies which object violates the policy
+
+            '
+        field:
+          type:
+          - string
+          - 'null'
+          enum:
+          - LANDING_PAGE_URL
+          - HEADLINE
+          - DESCRIPTION
+          - MEDIA_FILES
+          - SPONSORED_NAME
+          - CAROUSEL_CARDS
+          description: 'This specifies the field of the object that violates the policy. This can be null if the object itself violates the policy.
+
+            '
+    BusinessError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BusinessErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    ImageCreativeInfoPatchRequest:
+      type: object
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        description:
+          $ref: '#/components/schemas/Description'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_file_ids:
+          $ref: '#/components/schemas/MediaFileIds'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    BadRequestErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BAD_REQUEST
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    Url:
+      type: string
+      description: The storage full url path of the image file.
+    VideoCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - sponsored_name
+      - format
+      - media_files
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_files:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaFileResponse'
+    CarouselCreativeInfoPatchRequest:
+      type: object
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        carousel_cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselCardRequest'
+          minItems: 3
+          maxItems: 10
+          description: 'The order in the array represents the order of the cards.
+
+            '
+    AdCreationParams:
+      type: object
+      required:
+      - name
+      - configured_status
+      properties:
+        name:
+          $ref: '#/components/schemas/AdSchemas_Name'
+        landing_page_url:
+          $ref: '#/components/schemas/LandingPageUrl'
+        cta_label:
+          $ref: '#/components/schemas/CtaLabel'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+          description: 'Used for Call to Action Button. In the creative, corresponding translated UI text will be displayed in Creative.
+
+
+            No difference for the available Call To Action labels for each region.
+
+
+            This field is set automatically and not configurable if the `click_destination_type` of the Campaign is `APP_STORE` or `APP`.
+
+            '
+        impression_measurement:
+          $ref: '#/components/schemas/AdImpressionMeasurement'
+        url_tracking_parameters:
+          $ref: '#/components/schemas/UrlTrackingParameters'
+        is_price_label_enabled:
+          $ref: '#/components/schemas/PriceLabelEnabled'
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    PriceLabelEnabled:
+      type:
+      - boolean
+      - 'null'
+      description: "If `true`, show a price label on the ad. Otherwise, do not show.\n\nThis field is required when the parent campaign has `is_dynamic_ads` set to `true` and ad's creative is of \nCATALOG_CAROUSEL format type. \nOtherwise, this field is not settable.\n"
+      default: null
     MediaFileResponse:
       type: object
       required:
@@ -782,13 +1134,589 @@ components:
           description: The date-time at which the media file was last updated.
         status:
           $ref: '#/components/schemas/MediaFileStatus'
-    UnexpectedErrorResponse:
+    AdPaginatedResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AdResponse'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoResponse'
+    CreativeResponse:
+      type: object
+      required:
+      - format
+      - creative_id
+      - created_at
+      - updated_at
+      properties:
+        format:
+          $ref: '#/components/schemas/Format'
+        creative_id:
+          type: integer
+          format: int64
+          description: The ID of the creative.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which the adgroup was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: The date-time at which the adgroup was last updated.
+        image_creative_info:
+          $ref: '#/components/schemas/ImageCreativeInfoResponse'
+        video_creative_info:
+          $ref: '#/components/schemas/VideoCreativeInfoResponse'
+        carousel_creative_info:
+          $ref: '#/components/schemas/CarouselCreativeInfoResponse'
+        catalog_carousel_creative_info:
+          $ref: '#/components/schemas/CatalogCarouselCreativeInfoResponse'
+        catalog_image_creative_info:
+          $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
+      description: 'The response of the creative resource.
+
+
+        Only one of `image_creative_info`, `video_creative_info`, `carousel_creative_info`, `catalog_carousel_creative_info`, or `catalog_image_creative_info` will be returned based on the format of the creative.
+
+        '
+    CarouselCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - sponsored_name
+      - carousel_cards
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        carousel_cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselCardResponse'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AdResponse:
+      allOf:
+      - $ref: '#/components/schemas/AdCreationParams'
+      - type: object
+        required:
+        - ad_id
+        - ad_account_id
+        - click_destination_type
+        - moderation_status
+        - submission_status
+        - creative
+        - created_at
+        - updated_at
+        - parent
+        - delivery_status
+        - is_migrated_from_v1
+        properties:
+          ad_id:
+            type: integer
+            format: int64
+            description: The ID of the ad object.
+          click_destination_type:
+            $ref: '#/components/schemas/ClickDestinationType'
+          moderation_status:
+            $ref: '#/components/schemas/ModerationStatus'
+          rejection_reasons:
+            type: array
+            maxItems: 10
+            items:
+              $ref: '#/components/schemas/RejectionReason'
+            description: 'The reasons why the ad was rejected.
+
+              This field is only returned when the `moderation_status` is `REJECTED`.
+
+              '
+          submission_status:
+            $ref: '#/components/schemas/SubmissionStatus'
+          creative:
+            $ref: '#/components/schemas/CreativeResponse'
+          created_at:
+            type: string
+            format: date-time
+            description: The date-time at which the ad was created.
+          updated_at:
+            type: string
+            format: date-time
+            description: The date-time at which the ad was last updated.
+          parent:
+            $ref: '#/components/schemas/Parent'
+          delivery_status:
+            $ref: '#/components/schemas/DeliveryStatusObject'
+          impression_measurement:
+            $ref: '#/components/schemas/AdImpressionMeasurement'
+          is_migrated_from_v1:
+            type: boolean
+            description: A boolean flag that, when `true`, indicates that the ad is migrated from v1.
+          is_price_label_enabled:
+            $ref: '#/components/schemas/PriceLabelEnabled'
+    CatalogCarouselCreativeInfoResponse:
+      type: object
+      required:
+      - headline
+      - sponsored_name
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+    ImageResponse:
+      type: object
+      required:
+      - width
+      - height
+      - url
+      - filesize
+      - aspect_ratio_type
+      - image_scale
+      - created_at
+      properties:
+        width:
+          type: integer
+          description: The width of the ad image in pixels.
+        height:
+          type: integer
+          description: The height of the ad image in pixels.
+        url:
+          $ref: '#/components/schemas/Url'
+        filesize:
+          type: integer
+          description: The file size of image file.
+        aspect_ratio_type:
+          $ref: '#/components/schemas/AspectRatioType'
+        image_scale:
+          type: string
+          enum:
+          - FULL
+          - HALF
+          - ORIGINAL
+          description: The scale of the image according to the delivery spec.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which this record was created.
+    IncludeDeleted:
+      type: boolean
+      default: false
+    AdImpressionMeasurement:
+      type:
+      - object
+      - 'null'
+      description: 'Configuration for 3rd party ad impression measurement
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - vendor_type
+      - measurement_url
+      properties:
+        vendor_type:
+          $ref: '#/components/schemas/VendorType'
+        measurement_url:
+          type: string
+          example: https://example.com
+          description: 'The URL to use for impression measurement
+
+            '
+    UrlTrackingParameters:
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      maxLength: 256
+      example: utm_source=smartnews&utm_medium=display&cp_id={campaign_id}
+      description: 'The parameters added to the landing page URL. This field is only supported for Dynamic Ads.
+
+
+        The API will return a Validation Error if the field doesn''t follow the below rules:
+
+        1. All characters should be escaped accordingly, except macro parameters.
+
+        2. The following macro parameters are supported. The curly brackets characters `{` or `}` can only be used as part of the macro parameters.
+
+        - `{ad_account_id}`
+
+        - `{campaign_id}`
+
+        - `{ad_group_id}`
+
+        - `{ad_id}`
+
+        - `{click_id}`
+
+        '
+    CarouselCardRequest:
+      type: object
+      description: 'Combination of image and caption text for carousel format.
+
+        '
+      required:
+      - caption
+      - media_file_id
+      properties:
+        caption:
+          type: string
+          minLength: 5
+          maxLength: 50
+        media_file_id:
+          $ref: '#/components/schemas/CarouselCardMediaFileId'
+    PaginationInfoResponse:
+      description: 'An object describing pagination parameters for this response.
+
+        '
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_objects
+      properties:
+        page:
+          type: integer
+          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
+          example: 1
+        page_size:
+          type: integer
+          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
+          example: 100
+        total_pages:
+          type: integer
+          description: The total number of pages for this query.
+          example: 10
+        total_objects:
+          type: integer
+          description: The total number of objects that exist across all pages.
+          example: 987
+    CreativePatchRequest:
+      type: object
+      properties:
+        image_creative_info:
+          $ref: '#/components/schemas/ImageCreativeInfoPatchRequest'
+        video_creative_info:
+          $ref: '#/components/schemas/VideoCreativeInfoPatchRequest'
+        carousel_creative_info:
+          $ref: '#/components/schemas/CarouselCreativeInfoPatchRequest'
+        catalog_carousel_creative_info:
+          $ref: '#/components/schemas/CatalogCarouselCreativeInfoRequest'
+        catalog_image_creative_info:
+          $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
+    CatalogImageCreativeInfoRequestResponse:
+      type: object
+      description: 'Required when `format` is `CATALOG_IMAGE`.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - sponsored_name
+      properties:
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+    AdSchemas_Name:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: 'Name of an Ad. It is only used by customers to distinguish their Ads on Ads Manager.
+
+
+        Note: Our standard length calculation rules apply to length validation: [See details](https://help-ads.smartnews.com/item-3888/)
+
+        '
+    Headline:
+      type: string
+      minLength: 10
+      maxLength: 70
+      description: "Headline text of a Creative.\n\nNote: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)\n\nMaximum length of the headline changes depending on the creative format.\n| Creative Format | Max Length |\n| --------------- | ---------- |\n| IMAGE,CAROUSEL  | 70         |\n| VIDEO           | 56         |\n\nA Validation Error will also be returned if the field contains illegal characters or illegal character sequences.\n\n**Dynamic Tags (controlled by feature flag `AMV2-1031`):**\n\nWhen the feature flag is enabled, the headline supports dynamic tags that are replaced with user location data during ad delivery.\n\nSupported tags (case-insensitive):\n- For US region ad accounts: `{state}`, `{city}`\n- For JP region ad accounts: `{prefecture}`, `{city}`\n\nTag validation rules:\n- Only the supported tags listed above are allowed\n- Tags must use the exact format with curly brackets: `{tag_name}`\n- When the feature flag is disabled, any `{` or `}` characters in the text will be rejected\n- Dynamic Ads (campaigns with `is_dynamic_ads` = `true`) do not support dynamic tags\n\nTag replacement during delivery:\n- Tags are replaced with the user's location based on the ad group's targeting configuration\n- If no user location is available, fallback text is used:\n  - US: `{state}` → \"Your area\", `{city}` → \"Your area\"\n  - JP: `{prefecture}` → \"この地域\", `{city}` → \"この地域\"\n\nPreview mock values:\n- US: `{state}` → \"California\", `{city}` → \"Los Angeles\"\n- JP: `{prefecture}` → \"東京都\", `{city}` → \"新宿区\"\n"
+    MediaType:
+      type: string
+      description: The type of the media file.
+      enum:
+      - IMAGE
+      - VIDEO
+    DeliveryStatus:
+      type: string
+      enum:
+      - DELETED
+      - PAUSED
+      - NOT_ELIGIBLE
+      - PENDING
+      - ENDED
+      - ELIGIBLE
+      - UNKNOWN
+      - DISABLED
+      description: 'The delivery status of the object determined by the system.
+
+
+        | Delivery status | What it means |
+
+        |-----------------|---------------|
+
+        | DELETED         | The object is deleted by an ad operator |
+
+        | PAUSED          | The object is paused by an ad operator  |
+
+        | NOT_ELIGIBLE    | The object is configured to be active but is not delivered due to some conditions. Please check the `reason` or `description` field for more details |
+
+        | PENDING         | The object is configured to be active and will be delivered when certain conditions are met. Please check Please check the `reason` or `description` field for more details |
+
+        | ENDED           | The object is configured to be active but the campaign has ended |
+
+        | ELIGIBLE        | The object is configured to be active and is delivering ads |
+
+        | UNKNOWN         | The object is configured to be active but its delivery status is unknown |
+
+        | DISABLED        | The object is disabled because the business, account, or brand is disabled|
+
+        '
+    Format:
+      type: string
+      enum:
+      - IMAGE
+      - VIDEO
+      - CAROUSEL
+      - CATALOG_CAROUSEL
+      - CATALOG_IMAGE
+      description: 'The format of the Creative that defines the view attribution of an Ad.
+
+
+        Note: `CAROUSEL`, `CATALOG_CAROUSEL`, and `CATALOG_IMAGE` are not settable for US region ad accounts.
+
+        '
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ResourceNotFoundErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/UnexpectedError'
+          $ref: '#/components/schemas/ResourceNotFoundError'
+    AcceptLanguage:
+      type: string
+      description: 'The language to use for system generated text within API responses.
+
+
+        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
+
+        '
+      example: en-US
+    CtaLabel:
+      type:
+      - string
+      - 'null'
+      description: If specified, a call to action button with the specified option is displayed on the ad (may not be displayed in all placements).
+      enum:
+      - BOOK_NOW
+      - START_BOOKING
+      - CONTACT_US
+      - CALL_US
+      - REGISTER
+      - SIGN_UP
+      - SHOP_NOW
+      - START_ORDER
+      - SEE_MORE
+      - LEARN_MORE
+      - WATCH_MORE
+      - REPLY
+      - APPLY_NOW
+      - REQUEST_CATALOG
+      - RESPOND_TO_SURVEY
+      - PLAY_GAME
+      - USE_APP
+      - DOWNLOAD
+      - INSTALL
+      - LAUNCH_APP
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    ImageCreativeInfoRequest:
+      type: object
+      description: Required when `format` is `IMAGE`.
+      required:
+      - headline
+      - description
+      - sponsored_name
+      - media_file_ids
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        description:
+          $ref: '#/components/schemas/Description'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        media_file_ids:
+          $ref: '#/components/schemas/MediaFileIds'
+    CarouselCreativeInfoRequest:
+      type: object
+      description: 'Required when `format` is `CAROUSEL`.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+      required:
+      - headline
+      - sponsored_name
+      - carousel_cards
+      properties:
+        headline:
+          $ref: '#/components/schemas/Headline'
+        sponsored_name:
+          $ref: '#/components/schemas/SponsoredName'
+        carousel_cards:
+          type: array
+          items:
+            $ref: '#/components/schemas/CarouselCardRequest'
+          minItems: 3
+          maxItems: 10
+          description: 'The order in the array represents the order of the cards.
+
+            '
+    ReadyForDelivery:
+      type: boolean
+      description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
+
+        When the flag is true, the following fields are not updatable anymore.
+
+        1. `start_date_time`
+
+        2. `billing_event`
+
+        3. `optimization_goal`
+
+        4. `optimization_event`
+
+        5. `website_tracking_tag`
+
+        6. `viewability_measurement`
+
+        7. `app_promotion_info` (PatchAppPromotionInfo)
+
+        '
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    Page:
+      type: integer
+      minimum: 1
+      default: 1
+      example: 2
+      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
+
+
+        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
+
+        '
+    VideoResponse:
+      type: object
+      required:
+      - width
+      - height
+      - url
+      - length
+      - filesize
+      - aspect_ratio_type
+      - video_quality
+      - created_at
+      properties:
+        width:
+          type: integer
+          description: The width of the ad video in pixels.
+        height:
+          type: integer
+          description: The height of the ad video in pixels.
+        url:
+          $ref: '#/components/schemas/VideoSchemas_Url'
+        length:
+          type: integer
+          description: The length of the video in ms.
+        filesize:
+          type: integer
+          description: The file size of video file.
+        aspect_ratio_type:
+          $ref: '#/components/schemas/AspectRatioType'
+        video_quality:
+          type: string
+          enum:
+          - ORIGINAL
+          - HIGH
+          - MIDDLE
+          - LOW
+          description: The quality of the video according to the delivery spec.
+        created_at:
+          type: string
+          format: date-time
+          description: The date-time at which this record was created
+    AspectRatioType:
+      type: string
+      enum:
+      - ASPECT_RATIO_1_1
+      - ASPECT_RATIO_6_5
+      - ASPECT_RATIO_16_9
+      - ASPECT_RATIO_191_100
+      description: The predefined enums for the aspect ratio of images and videos.
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    CarouselCardResponse:
+      type: object
+      description: 'Caption and Media file combination for carousel format.
+
+        '
+      required:
+      - caption
+      - media_file
+      properties:
+        caption:
+          type: string
+          minLength: 5
+          maxLength: 50
+        media_file:
+          description: The image for the carousel needs to be 1:1 aspect ratio.
+          $ref: '#/components/schemas/MediaFileResponse'
+    CarouselCardMediaFileId:
+      type: integer
+      format: int64
+      description: 'The Id of the media file. Only image is supported.
+
+        The image for the carousel needs to be 1:1 aspect ratio.
+
+        '
     DeliveryStatusReason:
       type: string
       enum:
@@ -898,162 +1826,61 @@ components:
         | STORE_SET_NOT_READY                       | Campaign, Ad group, Ad |
 
         '
-    CarouselCreativeInfoRequest:
+    ForbiddenErrorExtension:
       type: object
-      description: 'Required when `format` is `CAROUSEL`.
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
       required:
-      - headline
-      - sponsored_name
-      - carousel_cards
+      - type
       properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-        carousel_cards:
-          type: array
-          items:
-            $ref: '#/components/schemas/CarouselCardRequest'
-          minItems: 3
-          maxItems: 10
-          description: 'The order in the array represents the order of the cards.
-
-            '
-    IncludeDeleted:
-      type: boolean
-      default: false
-    AdRequest:
-      allOf:
-      - $ref: '#/components/schemas/AdCreationParams'
-      - type: object
-        properties:
-          creative:
-            allOf:
-            - $ref: '#/components/schemas/CreativeRequest'
-            description: 'The `creative` to configure for the ad.
-
-
-              Depending on the format, the corresponding `*_info` object is required.
-
-
-              For example, if `format` is `IMAGE`, `image_creative_info` is required. If `format` is `VIDEO`, `video_creative_info` is required, and so on.
-
-              '
-        required:
-        - creative
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
     BadRequestError:
       type: object
       allOf:
       - $ref: '#/components/schemas/BadRequestErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    CreativeResponse:
+    MediaFileIds:
+      type: array
+      items:
+        type: integer
+        format: int64
+      description: "List of Media File IDs which will be used for a Creative.\n\nMedia Files can be created via the `POST media_files` endpoint.\n\nThe specified Media Files must belong to the same ad account which the ad belongs to, otherwise the API returns a Resource Not Found Error.\n\nOnly 1 image per aspect ratio type can be added per request.\n- When `format` of the creative = `IMAGE`, one of the following combinations of images is accepted:\n  1.  Required: `ASPECT_RATIO_1_1`, `ASPECT_RATIO_191_100`. Optional: `ASPECT_RATIO_6_5`, `ASPECT_RATIO_16_9`\n  2.  Required: `ASPECT_RATIO_1_1`, `ASPECT_RATIO_6_5`, `ASPECT_RATIO_16_9`, Optional: `ASPECT_RATIO_191_100`\n  3.  [When parent campaign's `is_large_unit_square_ads` field is set to `true`] Required: `ASPECT_RATIO_1_1` with at least 600 x 600 resolution\n- When `format` of the creative = `VIDEO`, it requires exactly a pair of `VIDEO` and `IMAGE` `media_file_id`s\n  - VIDEO: (Please check the spec in `POST /api/v1/ad_accounts/{ad_account_id}/media_files`)\\\n  - IMAGE: Must be an `ASPECT_RATIO_16_9` image\n"
+    ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    Description:
+      type: string
+      minLength: 10
+      maxLength: 180
+      description: "Description text of a Creative. This is used when an Ad is displayed in SmartView.\n- Required if the creative format is `IMAGE`.\n- Must be null for other formats.\n\nNote: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)\n\nA Validation Error will also be returned if the field contains illegal characters or illegal character sequences.\n\n**Dynamic Tags (controlled by feature flag `AMV2-1031`):**\n\nWhen the feature flag is enabled, the description supports dynamic tags that are replaced with user location data during ad delivery.\n\nSupported tags (case-insensitive):\n- For US region ad accounts: `{state}`, `{city}`\n- For JP region ad accounts: `{prefecture}`, `{city}`\n\nTag validation rules:\n- Only the supported tags listed above are allowed\n- Tags must use the exact format with curly brackets: `{tag_name}`\n- When the feature flag is disabled, any `{` or `}` characters in the text will be rejected\n- Dynamic Ads (campaigns with `is_dynamic_ads` = `true`) do not support dynamic tags\n\nTag replacement during delivery:\n- Tags are replaced with the user's location based on the ad group's targeting configuration\n- If no user location is available, fallback text is used:\n  - US: `{state}` → \"Your area\", `{city}` → \"Your area\"\n  - JP: `{prefecture}` → \"この地域\", `{city}` → \"この地域\"\n\nPreview mock values:\n- US: `{state}` → \"California\", `{city}` → \"Los Angeles\"\n- JP: `{prefecture}` → \"東京都\", `{city}` → \"新宿区\"\n"
+    VendorType:
+      type: string
+      enum:
+      - DAR
+      - DCM
+      description: The vendor to use for impression measurement
+    BusinessErrorResponse:
       type: object
       required:
-      - format
-      - creative_id
-      - created_at
-      - updated_at
+      - error
       properties:
-        format:
-          $ref: '#/components/schemas/Format'
-        creative_id:
-          type: integer
-          format: int64
-          description: The ID of the creative.
-        created_at:
-          type: string
-          format: date-time
-          description: The date-time at which the adgroup was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: The date-time at which the adgroup was last updated.
-        image_creative_info:
-          $ref: '#/components/schemas/ImageCreativeInfoResponse'
-        video_creative_info:
-          $ref: '#/components/schemas/VideoCreativeInfoResponse'
-        carousel_creative_info:
-          $ref: '#/components/schemas/CarouselCreativeInfoResponse'
-        catalog_carousel_creative_info:
-          $ref: '#/components/schemas/CatalogCarouselCreativeInfoResponse'
-        catalog_image_creative_info:
-          $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
-      description: 'The response of the creative resource.
-
-
-        Only one of `image_creative_info`, `video_creative_info`, `carousel_creative_info`, `catalog_carousel_creative_info`, or `catalog_image_creative_info` will be returned based on the format of the creative.
-
-        '
-    AdResponse:
-      allOf:
-      - $ref: '#/components/schemas/AdCreationParams'
-      - type: object
-        required:
-        - ad_id
-        - ad_account_id
-        - click_destination_type
-        - moderation_status
-        - submission_status
-        - creative
-        - created_at
-        - updated_at
-        - parent
-        - delivery_status
-        - is_migrated_from_v1
-        properties:
-          ad_id:
-            type: integer
-            format: int64
-            description: The ID of the ad object.
-          click_destination_type:
-            $ref: '#/components/schemas/ClickDestinationType'
-          moderation_status:
-            $ref: '#/components/schemas/ModerationStatus'
-          rejection_reasons:
-            type: array
-            maxItems: 10
-            items:
-              $ref: '#/components/schemas/RejectionReason'
-            description: 'The reasons why the ad was rejected.
-
-              This field is only returned when the `moderation_status` is `REJECTED`.
-
-              '
-          submission_status:
-            $ref: '#/components/schemas/SubmissionStatus'
-          creative:
-            $ref: '#/components/schemas/CreativeResponse'
-          created_at:
-            type: string
-            format: date-time
-            description: The date-time at which the ad was created.
-          updated_at:
-            type: string
-            format: date-time
-            description: The date-time at which the ad was last updated.
-          parent:
-            $ref: '#/components/schemas/Parent'
-          delivery_status:
-            $ref: '#/components/schemas/DeliveryStatusObject'
-          impression_measurement:
-            $ref: '#/components/schemas/AdImpressionMeasurement'
-          is_migrated_from_v1:
-            type: boolean
-            description: A boolean flag that, when `true`, indicates that the ad is migrated from v1.
-          is_price_label_enabled:
-            $ref: '#/components/schemas/PriceLabelEnabled'
-    ForbiddenError:
+        error:
+          $ref: '#/components/schemas/BusinessError'
+    VideoCreativeInfoRequest:
       type: object
-      allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    VideoCreativeInfoPatchRequest:
-      type: object
+      description: Required when `format` is `VIDEO`.
+      required:
+      - headline
+      - sponsored_name
+      - media_file_ids
       properties:
         headline:
           $ref: '#/components/schemas/Headline'
@@ -1061,6 +1888,37 @@ components:
           $ref: '#/components/schemas/SponsoredName'
         media_file_ids:
           $ref: '#/components/schemas/MediaFileIds'
+    ModerationStatus:
+      type: string
+      enum:
+      - NOT_REVIEWED
+      - APPROVED
+      - REJECTED
+      description: 'This is the moderation result of current Ad.
+
+        '
+    ClickDestinationType:
+      type:
+      - string
+      - 'null'
+      enum:
+      - WEB_VIEW
+      - BROWSER
+      - APP
+      - APP_STORE
+      description: "This defines which components SmartNews opens after an ad is clicked.\n\nIf click_destination_type = null when creating campaign then default value is set as below:\n  1. click_destination_type = APP / APP_STORE for APP_PROMOTION objective\n  2. click_destination_type = WEB_VIEW for remaining available objectives\n\n| Objective     | Available click destination types |\n|---------------|-----------------------------------|\n| TRAFFIC       | WEB_VIEW, BROWSER                 |\n| SALES         | WEB_VIEW, BROWSER                 |\n| AWARENESS     | WEB_VIEW, BROWSER                 |\n| APP_PROMOTION | APP, APP_STORE                    |\n\n`BROWSER` is not usable for US region ad accounts.\n"
+    VideoSchemas_Url:
+      type: string
+      description: The full url path of the video file.
+    BusinessErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BUSINESS_ERROR
     RateLimitedError:
       type: object
       allOf:
@@ -1073,6 +1931,37 @@ components:
             type: string
             enum:
             - TOO_MANY_REQUESTS
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ResourceNotFoundErrorExtension:
+      type: object
+      required:
+      - type
+      - resource_type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_FOUND
+          - DELETED
+        resource_type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+          - AD
+          - MEDIA_FILE
+          - AD_ACCOUNT
+          - PIXEL
+          - CUSTOM_AUDIENCE
+          - PIXEL_URL_CONFIGURATION
+          - AM_CONFIGURATION
+          - CATALOG
+          - STORE_SET
+          - RULE
     CreativeRequest:
       type: object
       required:
@@ -1090,69 +1979,48 @@ components:
           $ref: '#/components/schemas/CatalogCarouselCreativeInfoRequest'
         catalog_image_creative_info:
           $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
-    VendorType:
-      type: string
-      enum:
-      - DAR
-      - DCM
-      description: The vendor to use for impression measurement
-    RateLimitedErrorResponse:
+    BadRequestErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/RateLimitedError'
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ImageCreativeInfoPatchRequest:
-      type: object
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        description:
-          $ref: '#/components/schemas/Description'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-        media_file_ids:
-          $ref: '#/components/schemas/MediaFileIds'
-    BusinessError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BusinessErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    AdCreationParams:
+          $ref: '#/components/schemas/BadRequestError'
+    ValidationErrorResponse:
       type: object
       required:
-      - name
-      - configured_status
+      - error
       properties:
-        name:
-          $ref: '#/components/schemas/AdSchemas_Name'
-        landing_page_url:
-          $ref: '#/components/schemas/LandingPageUrl'
-        cta_label:
-          $ref: '#/components/schemas/CtaLabel'
-        configured_status:
-          $ref: '#/components/schemas/ConfiguredStatus'
-          description: 'Used for Call to Action Button. In the creative, corresponding translated UI text will be displayed in Creative.
+        error:
+          $ref: '#/components/schemas/ValidationError'
+    DeliveryStatusObject:
+      type: object
+      required:
+      - status
+      - reason
+      - description
+      properties:
+        status:
+          $ref: '#/components/schemas/DeliveryStatus'
+        reason:
+          $ref: '#/components/schemas/DeliveryStatusReason'
+        description:
+          type: string
+          description: A localized human readable description of the reason. The language is controlled by the Accept-Language header in the request.
+      description: An Object that provides information about the delivery status of the campaign.
+    CampaignObjective:
+      type: string
+      enum:
+      - TRAFFIC
+      - SALES
+      - AWARENESS
+      - APP_PROMOTION
+      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
 
 
-            No difference for the available Call To Action labels for each region.
+        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
 
-
-            This field is set automatically and not configurable if the `click_destination_type` of the Campaign is `APP_STORE` or `APP`.
-
-            '
-        impression_measurement:
-          $ref: '#/components/schemas/AdImpressionMeasurement'
-        url_tracking_parameters:
-          $ref: '#/components/schemas/UrlTrackingParameters'
-        is_price_label_enabled:
-          $ref: '#/components/schemas/PriceLabelEnabled'
+        '
     RejectionReason:
       type: object
       required:
@@ -1205,254 +2073,22 @@ components:
             | CREATIVE.CAROUSEL_CARDS                                          | index position in cards from 0 |
 
             '
-    ImageResponse:
+    CatalogCarouselCreativeInfoRequest:
       type: object
-      required:
-      - width
-      - height
-      - url
-      - filesize
-      - aspect_ratio_type
-      - image_scale
-      - created_at
-      properties:
-        width:
-          type: integer
-          description: The width of the ad image in pixels.
-        height:
-          type: integer
-          description: The height of the ad image in pixels.
-        url:
-          $ref: '#/components/schemas/Url'
-        filesize:
-          type: integer
-          description: The file size of image file.
-        aspect_ratio_type:
-          $ref: '#/components/schemas/AspectRatioType'
-        image_scale:
-          type: string
-          enum:
-          - FULL
-          - HALF
-          - ORIGINAL
-          description: The scale of the image according to the delivery spec.
-        created_at:
-          type: string
-          format: date-time
-          description: The date-time at which this record was created.
-    PageSize:
-      type: integer
-      minimum: 1
-      maximum: 1000
-      default: 1000
-      example: 100
-      description: 'The number of objects to return per page.
+      description: 'Required when `format` is `CATALOG_CAROUSEL`.
 
 
-        The maximum page size is 1000 and the default is 1000.
+        Note: This field is not settable for US region ad accounts.
 
         '
-    CreativePatchRequest:
-      type: object
-      properties:
-        image_creative_info:
-          $ref: '#/components/schemas/ImageCreativeInfoPatchRequest'
-        video_creative_info:
-          $ref: '#/components/schemas/VideoCreativeInfoPatchRequest'
-        carousel_creative_info:
-          $ref: '#/components/schemas/CarouselCreativeInfoPatchRequest'
-        catalog_carousel_creative_info:
-          $ref: '#/components/schemas/CatalogCarouselCreativeInfoRequest'
-        catalog_image_creative_info:
-          $ref: '#/components/schemas/CatalogImageCreativeInfoRequestResponse'
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    MediaFileStatus:
-      type: string
-      description: 'The status of the media file.
-
-        - `ACTIVE`: The media file is visible in the Media Library.
-
-        - `INACTIVE`: The media file has been soft-deleted and is no longer visible in the Media Library.
-
-
-        Note: Even if a media file is set to `INACTIVE`, it will still be visible in the creatives where it is used.
-
-        '
-      enum:
-      - ACTIVE
-      - INACTIVE
-    CarouselCardResponse:
-      type: object
-      description: 'Caption and Media file combination for carousel format.
-
-        '
-      required:
-      - caption
-      - media_file
-      properties:
-        caption:
-          type: string
-          minLength: 5
-          maxLength: 50
-        media_file:
-          description: The image for the carousel needs to be 1:1 aspect ratio.
-          $ref: '#/components/schemas/MediaFileResponse'
-    SubmissionStatus:
-      type: string
-      enum:
-      - BEFORE_SUBMISSION
-      - SUBMITTED
-      description: 'This is the status of the ad to know whether our customers submit the ad to moderation or not.
-
-        '
-    VideoSchemas_Url:
-      type: string
-      description: The full url path of the video file.
-    MediaType:
-      type: string
-      description: The type of the media file.
-      enum:
-      - IMAGE
-      - VIDEO
-    BadRequestErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - BAD_REQUEST
-    DeliveryStatus:
-      type: string
-      enum:
-      - DELETED
-      - PAUSED
-      - NOT_ELIGIBLE
-      - PENDING
-      - ENDED
-      - ELIGIBLE
-      - UNKNOWN
-      - DISABLED
-      description: 'The delivery status of the object determined by the system.
-
-
-        | Delivery status | What it means |
-
-        |-----------------|---------------|
-
-        | DELETED         | The object is deleted by an ad operator |
-
-        | PAUSED          | The object is paused by an ad operator  |
-
-        | NOT_ELIGIBLE    | The object is configured to be active but is not delivered due to some conditions. Please check the `reason` or `description` field for more details |
-
-        | PENDING         | The object is configured to be active and will be delivered when certain conditions are met. Please check Please check the `reason` or `description` field for more details |
-
-        | ENDED           | The object is configured to be active but the campaign has ended |
-
-        | ELIGIBLE        | The object is configured to be active and is delivering ads |
-
-        | UNKNOWN         | The object is configured to be active but its delivery status is unknown |
-
-        | DISABLED        | The object is disabled because the business, account, or brand is disabled|
-
-        '
-    ConfiguredStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - PAUSED
-      - DELETED
-      description: The status of the object configured by an ad operator.
-    ValidationError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ValidationErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    ValidationErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ValidationError'
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    VideoCreativeInfoRequest:
-      type: object
-      description: Required when `format` is `VIDEO`.
-      required:
-      - headline
-      - sponsored_name
-      - media_file_ids
       properties:
         headline:
           $ref: '#/components/schemas/Headline'
         sponsored_name:
           $ref: '#/components/schemas/SponsoredName'
-        media_file_ids:
-          $ref: '#/components/schemas/MediaFileIds'
-    CarouselCardMediaFileId:
-      type: integer
-      format: int64
-      description: 'The Id of the media file. Only image is supported.
-
-        The image for the carousel needs to be 1:1 aspect ratio.
-
-        '
-    Parent:
-      type: object
       required:
-      - id
-      - type
-      - name
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: The ID of the parent object.
-        type:
-          type: string
-          enum:
-          - CAMPAIGN
-          - AD_GROUP
-        name:
-          type: string
-          description: The name of the object.
-        objective:
-          $ref: '#/components/schemas/CampaignObjective'
-        optimization_event:
-          $ref: '#/components/schemas/OptimizationEvent'
-        ready_for_delivery:
-          $ref: '#/components/schemas/ReadyForDelivery'
-        store_set_id:
-          $ref: '#/components/schemas/StoreSetId'
-        parent:
-          type: object
-          description: 'The parent of the parent. The properties are the same as parent (`id`, `name`, `type`, `objective`,
-
-            `optimization_event` ,`ready_for_delivery` ,`store_set_id` ,`parent`)
-
-            '
+      - headline
+      - sponsored_name
     OptimizationEvent:
       type:
       - string
@@ -1484,655 +2120,19 @@ components:
       - INSTALL
       - D1_RETENTION
       description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
-    UrlTrackingParameters:
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      maxLength: 256
-      example: utm_source=smartnews&utm_medium=display&cp_id={campaign_id}
-      description: 'The parameters added to the landing page URL. This field is only supported for Dynamic Ads.
-
-
-        The API will return a Validation Error if the field doesn''t follow the below rules:
-
-        1. All characters should be escaped accordingly, except macro parameters.
-
-        2. The following macro parameters are supported. The curly brackets characters `{` or `}` can only be used as part of the macro parameters.
-
-        - `{ad_account_id}`
-
-        - `{campaign_id}`
-
-        - `{ad_group_id}`
-
-        - `{ad_id}`
-
-        - `{click_id}`
-
-        '
-    BusinessErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/BusinessError'
-    PaginationInfoResponse:
-      description: 'An object describing pagination parameters for this response.
-
-        '
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_objects
-      properties:
-        page:
-          type: integer
-          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
-          example: 1
-        page_size:
-          type: integer
-          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
-          example: 100
-        total_pages:
-          type: integer
-          description: The total number of pages for this query.
-          example: 10
-        total_objects:
-          type: integer
-          description: The total number of objects that exist across all pages.
-          example: 987
-    ServiceUnavailableErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
-    AdSchemas_Name:
-      type: string
-      minLength: 1
-      maxLength: 256
-      description: 'Name of an Ad. It is only used by customers to distinguish their Ads on Ads Manager.
-
-
-        Note: Our standard length calculation rules apply to length validation: [See details](https://help-ads.smartnews.com/item-3888/)
-
-        '
-    AdImpressionMeasurement:
-      type:
-      - object
-      - 'null'
-      description: 'Configuration for 3rd party ad impression measurement
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
-      required:
-      - vendor_type
-      - measurement_url
-      properties:
-        vendor_type:
-          $ref: '#/components/schemas/VendorType'
-        measurement_url:
-          type: string
-          example: https://example.com
-          description: 'The URL to use for impression measurement
-
-            '
-    ImageCreativeInfoResponse:
-      type: object
-      required:
-      - headline
-      - description
-      - sponsored_name
-      - media_files
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        description:
-          $ref: '#/components/schemas/Description'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-        media_files:
-          type: array
-          items:
-            $ref: '#/components/schemas/MediaFileResponse'
-          description: 'Only image media files are returned.
-
-            '
-    CatalogCarouselCreativeInfoResponse:
-      type: object
-      required:
-      - headline
-      - sponsored_name
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-    CatalogCarouselCreativeInfoRequest:
-      type: object
-      description: 'Required when `format` is `CATALOG_CAROUSEL`.
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-      required:
-      - headline
-      - sponsored_name
-    Format:
+    SubmissionStatus:
       type: string
       enum:
-      - IMAGE
-      - VIDEO
-      - CAROUSEL
-      - CATALOG_CAROUSEL
-      - CATALOG_IMAGE
-      description: 'The format of the Creative that defines the view attribution of an Ad.
-
-
-        Note: `CAROUSEL`, `CATALOG_CAROUSEL`, and `CATALOG_IMAGE` are not settable for US region ad accounts.
+      - BEFORE_SUBMISSION
+      - SUBMITTED
+      description: 'This is the status of the ad to know whether our customers submit the ad to moderation or not.
 
         '
-    ImageCreativeInfoRequest:
-      type: object
-      description: Required when `format` is `IMAGE`.
-      required:
-      - headline
-      - description
-      - sponsored_name
-      - media_file_ids
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        description:
-          $ref: '#/components/schemas/Description'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-        media_file_ids:
-          $ref: '#/components/schemas/MediaFileIds'
     LandingPageUrl:
       type: string
       minLength: 1
       maxLength: 1024
       description: "URL of the Website which is opened when an Ad is clicked.\\\nIt is required when the parent campaign's `click_destination_type` is one of the following. It cannot be set if the parent campaign has any other `click_destination_type`.\n  1. WEB_VIEW\n  2. BROWSER\nThe API will return a Validation Error if the field doesn't follow the below rules:\n1. URL format should follow the [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) spec\n2. All characters should be escaped accordingly, except macro parameters.\n3. Only http and https are allowed protocols.\n4. The following macro parameters are supported. The curly brackets characters `{` or `}` can only be used as part of the macro parameters.\n- `{ad_account_id}`\n- `{campaign_id}`\n- `{ad_group_id}`\n- `{ad_id}`\n- `{click_id}`\n"
-    VideoCreativeInfoResponse:
-      type: object
-      required:
-      - headline
-      - sponsored_name
-      - format
-      - media_files
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-        media_files:
-          type: array
-          items:
-            $ref: '#/components/schemas/MediaFileResponse'
-    Url:
-      type: string
-      description: The storage full url path of the image file.
-    Page:
-      type: integer
-      minimum: 1
-      default: 1
-      example: 2
-      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
-
-
-        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
-
-        '
-    StoreSetId:
-      type: integer
-      format: int64
-      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
-
-        Store sets are managed under Business Management.
-
-        '
-    Description:
-      type: string
-      minLength: 10
-      maxLength: 180
-      description: "Description text of a Creative. This is used when an Ad is displayed in SmartView.\n- Required if the creative format is `IMAGE`.\n- Must be null for other formats.\n\nNote: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)\n\nA Validation Error will also be returned if the field contains illegal characters or illegal character sequences.\n\n**Dynamic Tags (controlled by feature flag `AMV2-1031`):**\n\nWhen the feature flag is enabled, the description supports dynamic tags that are replaced with user location data during ad delivery.\n\nSupported tags (case-insensitive):\n- For US region ad accounts: `{state}`, `{city}`\n- For JP region ad accounts: `{prefecture}`, `{city}`\n\nTag validation rules:\n- Only the supported tags listed above are allowed\n- Tags must use the exact format with curly brackets: `{tag_name}`\n- When the feature flag is disabled, any `{` or `}` characters in the text will be rejected\n- Dynamic Ads (campaigns with `is_dynamic_ads` = `true`) do not support dynamic tags\n\nTag replacement during delivery:\n- Tags are replaced with the user's location based on the ad group's targeting configuration\n- If no user location is available, fallback text is used:\n  - US: `{state}` → \"Your area\", `{city}` → \"Your area\"\n  - JP: `{prefecture}` → \"この地域\", `{city}` → \"この地域\"\n\nPreview mock values:\n- US: `{state}` → \"California\", `{city}` → \"Los Angeles\"\n- JP: `{prefecture}` → \"東京都\", `{city}` → \"新宿区\"\n"
-    ReadyForDelivery:
-      type: boolean
-      description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
-
-        When the flag is true, the following fields are not updatable anymore.
-
-        1. `start_date_time`
-
-        2. `billing_event`
-
-        3. `optimization_goal`
-
-        4. `optimization_event`
-
-        5. `website_tracking_tag`
-
-        6. `viewability_measurement`
-
-        7. `app_promotion_info` (PatchAppPromotionInfo)
-
-        '
-    Headline:
-      type: string
-      minLength: 10
-      maxLength: 70
-      description: "Headline text of a Creative.\n\nNote: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)\n\nMaximum length of the headline changes depending on the creative format.\n| Creative Format | Max Length |\n| --------------- | ---------- |\n| IMAGE,CAROUSEL  | 70         |\n| VIDEO           | 56         |\n\nA Validation Error will also be returned if the field contains illegal characters or illegal character sequences.\n\n**Dynamic Tags (controlled by feature flag `AMV2-1031`):**\n\nWhen the feature flag is enabled, the headline supports dynamic tags that are replaced with user location data during ad delivery.\n\nSupported tags (case-insensitive):\n- For US region ad accounts: `{state}`, `{city}`\n- For JP region ad accounts: `{prefecture}`, `{city}`\n\nTag validation rules:\n- Only the supported tags listed above are allowed\n- Tags must use the exact format with curly brackets: `{tag_name}`\n- When the feature flag is disabled, any `{` or `}` characters in the text will be rejected\n- Dynamic Ads (campaigns with `is_dynamic_ads` = `true`) do not support dynamic tags\n\nTag replacement during delivery:\n- Tags are replaced with the user's location based on the ad group's targeting configuration\n- If no user location is available, fallback text is used:\n  - US: `{state}` → \"Your area\", `{city}` → \"Your area\"\n  - JP: `{prefecture}` → \"この地域\", `{city}` → \"この地域\"\n\nPreview mock values:\n- US: `{state}` → \"California\", `{city}` → \"Los Angeles\"\n- JP: `{prefecture}` → \"東京都\", `{city}` → \"新宿区\"\n"
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ResourceNotFoundError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    CampaignObjective:
-      type: string
-      enum:
-      - TRAFFIC
-      - SALES
-      - AWARENESS
-      - APP_PROMOTION
-      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
-
-
-        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
-
-        '
-    ClickDestinationType:
-      type:
-      - string
-      - 'null'
-      enum:
-      - WEB_VIEW
-      - BROWSER
-      - APP
-      - APP_STORE
-      description: "This defines which components SmartNews opens after an ad is clicked.\n\nIf click_destination_type = null when creating campaign then default value is set as below:\n  1. click_destination_type = APP / APP_STORE for APP_PROMOTION objective\n  2. click_destination_type = WEB_VIEW for remaining available objectives\n\n| Objective     | Available click destination types |\n|---------------|-----------------------------------|\n| TRAFFIC       | WEB_VIEW, BROWSER                 |\n| SALES         | WEB_VIEW, BROWSER                 |\n| AWARENESS     | WEB_VIEW, BROWSER                 |\n| APP_PROMOTION | APP, APP_STORE                    |\n\n`BROWSER` is not usable for US region ad accounts.\n"
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
-    SponsoredName:
-      type: string
-      minLength: 1
-      maxLength: 22
-      description: 'Name of advertiser/service name/brand name/product name etc which is displayed to users to show the sponsorship of Ad.
-
-
-        Note: The validated length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
-
-        '
-    CtaLabel:
-      type:
-      - string
-      - 'null'
-      description: If specified, a call to action button with the specified option is displayed on the ad (may not be displayed in all placements).
-      enum:
-      - BOOK_NOW
-      - START_BOOKING
-      - CONTACT_US
-      - CALL_US
-      - REGISTER
-      - SIGN_UP
-      - SHOP_NOW
-      - START_ORDER
-      - SEE_MORE
-      - LEARN_MORE
-      - WATCH_MORE
-      - REPLY
-      - APPLY_NOW
-      - REQUEST_CATALOG
-      - RESPOND_TO_SURVEY
-      - PLAY_GAME
-      - USE_APP
-      - DOWNLOAD
-      - INSTALL
-      - LAUNCH_APP
-    MediaFileIds:
-      type: array
-      items:
-        type: integer
-        format: int64
-      description: "List of Media File IDs which will be used for a Creative.\n\nMedia Files can be created via the `POST media_files` endpoint.\n\nThe specified Media Files must belong to the same ad account which the ad belongs to, otherwise the API returns a Resource Not Found Error.\n\nOnly 1 image per aspect ratio type can be added per request.\n- When `format` of the creative = `IMAGE`, one of the following combinations of images is accepted:\n  1.  Required: `ASPECT_RATIO_1_1`, `ASPECT_RATIO_191_100`. Optional: `ASPECT_RATIO_6_5`, `ASPECT_RATIO_16_9`\n  2.  Required: `ASPECT_RATIO_1_1`, `ASPECT_RATIO_6_5`, `ASPECT_RATIO_16_9`, Optional: `ASPECT_RATIO_191_100`\n  3.  [When parent campaign's `is_large_unit_square_ads` field is set to `true`] Required: `ASPECT_RATIO_1_1` with at least 600 x 600 resolution\n- When `format` of the creative = `VIDEO`, it requires exactly a pair of `VIDEO` and `IMAGE` `media_file_id`s\n  - VIDEO: (Please check the spec in `POST /api/v1/ad_accounts/{ad_account_id}/media_files`)\\\n  - IMAGE: Must be an `ASPECT_RATIO_16_9` image\n"
-    VideoResponse:
-      type: object
-      required:
-      - width
-      - height
-      - url
-      - length
-      - filesize
-      - aspect_ratio_type
-      - video_quality
-      - created_at
-      properties:
-        width:
-          type: integer
-          description: The width of the ad video in pixels.
-        height:
-          type: integer
-          description: The height of the ad video in pixels.
-        url:
-          $ref: '#/components/schemas/VideoSchemas_Url'
-        length:
-          type: integer
-          description: The length of the video in ms.
-        filesize:
-          type: integer
-          description: The file size of video file.
-        aspect_ratio_type:
-          $ref: '#/components/schemas/AspectRatioType'
-        video_quality:
-          type: string
-          enum:
-          - ORIGINAL
-          - HIGH
-          - MIDDLE
-          - LOW
-          description: The quality of the video according to the delivery spec.
-        created_at:
-          type: string
-          format: date-time
-          description: The date-time at which this record was created
-    ForbiddenErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    ModerationStatus:
-      type: string
-      enum:
-      - NOT_REVIEWED
-      - APPROVED
-      - REJECTED
-      description: 'This is the moderation result of current Ad.
-
-        '
-    BadRequestErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/BadRequestError'
-    CarouselCardRequest:
-      type: object
-      description: 'Combination of image and caption text for carousel format.
-
-        '
-      required:
-      - caption
-      - media_file_id
-      properties:
-        caption:
-          type: string
-          minLength: 5
-          maxLength: 50
-        media_file_id:
-          $ref: '#/components/schemas/CarouselCardMediaFileId'
-    AdPaginatedResponse:
-      type: object
-      required:
-      - data
-      - pagination
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AdResponse'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfoResponse'
-    AcceptLanguage:
-      type: string
-      description: 'The language to use for system generated text within API responses.
-
-
-        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
-
-        '
-      example: en-US
-    PriceLabelEnabled:
-      type:
-      - boolean
-      - 'null'
-      description: "If `true`, show a price label on the ad. Otherwise, do not show.\n\nThis field is required when the parent campaign has `is_dynamic_ads` set to `true` and ad's creative is of \nCATALOG_CAROUSEL format type. \nOtherwise, this field is not settable.\n"
-      default: null
-    CarouselCreativeInfoPatchRequest:
-      type: object
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-        carousel_cards:
-          type: array
-          items:
-            $ref: '#/components/schemas/CarouselCardRequest'
-          minItems: 3
-          maxItems: 10
-          description: 'The order in the array represents the order of the cards.
-
-            '
-    ResourceNotFoundErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ResourceNotFoundError'
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    AspectRatioType:
-      type: string
-      enum:
-      - ASPECT_RATIO_1_1
-      - ASPECT_RATIO_6_5
-      - ASPECT_RATIO_16_9
-      - ASPECT_RATIO_191_100
-      description: The predefined enums for the aspect ratio of images and videos.
-    CatalogImageCreativeInfoRequestResponse:
-      type: object
-      description: 'Required when `format` is `CATALOG_IMAGE`.
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
-      required:
-      - sponsored_name
-      properties:
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-    BusinessErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - BUSINESS_ERROR
-    ResourceNotFoundErrorExtension:
-      type: object
-      required:
-      - type
-      - resource_type
-      properties:
-        type:
-          type: string
-          enum:
-          - NOT_FOUND
-          - DELETED
-        resource_type:
-          type: string
-          enum:
-          - CAMPAIGN
-          - AD_GROUP
-          - AD
-          - MEDIA_FILE
-          - AD_ACCOUNT
-          - PIXEL
-          - CUSTOM_AUDIENCE
-          - PIXEL_URL_CONFIGURATION
-          - AM_CONFIGURATION
-          - CATALOG
-          - STORE_SET
-          - RULE
-    CarouselCreativeInfoResponse:
-      type: object
-      required:
-      - headline
-      - sponsored_name
-      - carousel_cards
-      properties:
-        headline:
-          $ref: '#/components/schemas/Headline'
-        sponsored_name:
-          $ref: '#/components/schemas/SponsoredName'
-        carousel_cards:
-          type: array
-          items:
-            $ref: '#/components/schemas/CarouselCardResponse'
-    ModerationElementType:
-      type: object
-      required:
-      - object
-      - field
-      properties:
-        object:
-          type: string
-          enum:
-          - AD
-          - CREATIVE
-          description: 'This specifies which object violates the policy
-
-            '
-        field:
-          type:
-          - string
-          - 'null'
-          enum:
-          - LANDING_PAGE_URL
-          - HEADLINE
-          - DESCRIPTION
-          - MEDIA_FILES
-          - SPONSORED_NAME
-          - CAROUSEL_CARDS
-          description: 'This specifies the field of the object that violates the policy. This can be null if the object itself violates the policy.
-
-            '
-    UnauthorizedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNAUTHORIZED
-    DeliveryStatusObject:
-      type: object
-      required:
-      - status
-      - reason
-      - description
-      properties:
-        status:
-          $ref: '#/components/schemas/DeliveryStatus'
-        reason:
-          $ref: '#/components/schemas/DeliveryStatusReason'
-        description:
-          type: string
-          description: A localized human readable description of the reason. The language is controlled by the Accept-Language header in the request.
-      description: An Object that provides information about the delivery status of the campaign.
-    AdPatchRequest:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/AdSchemas_Name'
-        configured_status:
-          $ref: '#/components/schemas/ConfiguredStatus'
-        landing_page_url:
-          $ref: '#/components/schemas/LandingPageUrl'
-        cta_label:
-          $ref: '#/components/schemas/CtaLabel'
-        submission_status:
-          $ref: '#/components/schemas/SubmissionStatus'
-        creative:
-          $ref: '#/components/schemas/CreativePatchRequest'
-        impression_measurement:
-          $ref: '#/components/schemas/AdImpressionMeasurement'
-        is_price_label_enabled:
-          $ref: '#/components/schemas/PriceLabelEnabled'
-    ValidationErrorExtension:
-      required:
-      - type
-      - error_fields
-      properties:
-        type:
-          type: string
-          enum:
-          - VALIDATION_ERROR
-        error_fields:
-          type: array
-          items:
-            type: object
-            properties:
-              field_name:
-                type: string
-                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
-              reason:
-                type: string
   requestBodies:
     AdsByAdGroupPaginated_post-requestBody:
       content:

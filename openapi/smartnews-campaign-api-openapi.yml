@@ -572,6 +572,597 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
+    ChannelViewPlacement:
+      type: string
+      enum:
+      - IN_FEED
+      - PRIMARY_SLOT
+      description: 'The placement of the campaign''s ads within the channel view.
+
+
+        - `IN_FEED`: Shown in between articles in the feed
+
+        - `PRIMARY_SLOT`: Shown in the first ad slot of the feed, typically before any articles
+
+
+        `PRIMARY_SLOT` can only be specified when `is_large_unit_ads` or `is_large_unit_square_ads` is `true`.
+
+
+        The default is `IN_FEED`.
+
+        '
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    CampaignDailySchedule:
+      type: object
+      required:
+      - start_time
+      - end_time
+      properties:
+        start_time:
+          type: string
+          pattern: ^(?:([0-1]?[0-9]|2[0-3]):([0-5][0-9]))$
+          example: 09:00
+          description: 'The start time (inclusive) in 24 hour time, using the ad account''s timezone.
+
+
+            Must be between 00:00 and 23:00, and less than end_time. Minutes must be set to `00`.
+
+
+            00:00 represents midnight at the start of the day.
+
+            '
+        end_time:
+          type: string
+          pattern: ^(?:([0-1]?[1-9]|2[0-3]):([0-5][0-9])|24:00)$
+          example: '17:00'
+          description: 'The end time (exclusive) in 24 hour time, using the ad account''s timezone.
+
+
+            Must be between `01:00` and `24:00`, and greater than start_time. Minutes must be set to `00`.
+
+
+            `24:00` represents midnight at the end of the day.
+
+            '
+    HasAnyVideoAds:
+      type: boolean
+      description: Whether the ad object has any video ads, including those that have been deleted.
+    DailyBudgetAmountMicro:
+      type: integer
+      format: int64
+      example: 10000000000
+      description: 'The average budget per day in [micros](#section/About-Currency-Units) of the ad account currency base unit.
+
+
+        | Ad Account''s currency | Minimum value   | Maximum Value             |   Minimum unit   |
+
+        |-----------------------|-----------------|---------------------------|------------------|
+
+        | JPY                   | 100,000,000     | 100,000,000,000,000       | 1,000,000        |
+
+        | USD                   | 1,000,000       | 1,000,000,000,000         | 10,000           |
+
+
+        The API will return an error if the provided value is not divisible by the minimum unit.
+
+        '
+    PatchAppPromotionInfo:
+      type: object
+      description: It contains the fields of AppPromotionInfo which are updatable.
+      properties:
+        mmp_type:
+          $ref: '#/components/schemas/AppMmpType'
+        mmp_tracking_url:
+          $ref: '#/components/schemas/AppMmpTrackingUrl'
+    ConversionAttributionWindow:
+      type: string
+      enum:
+      - ONE_DAY
+      - SEVEN_DAYS
+      - FOURTEEN_DAYS
+      - THIRTY_DAYS
+      description: "It specifies the time frame in which conversions are counted for the campaign.\n\nThe default value is `THIRTY_DAYS` if not specified.\n\nAvailable values are dependent on the campaign objective:\n  - `SALES`: All values are available.\n  - others: Only `THIRTY_DAYS` is available.\n"
+    AppOperatingSystem:
+      type: string
+      enum:
+      - IOS
+      - ANDROID
+      description: The platform of promoted app
+    ConfiguredStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - DELETED
+      description: The status of the object configured by an ad operator.
+    IsLargeUnitAds:
+      type: boolean
+      description: 'A boolean flag that indicates whether ads from this campaign are displayed in the app using the large unit format.
+
+
+        This feature is only available when objective is `AWARENESS`.
+
+
+        For eligible ad accounts, this feature is also available when objective is `TRAFFIC` or `SALES`.
+
+
+        This field''s value cannot be changed if the campaign already has 1 or more ads.
+
+
+        Note: This field is not settable for US region ad accounts.
+
+        '
+    ValidationErrorExtension:
+      required:
+      - type
+      - error_fields
+      properties:
+        type:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+        error_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
+              reason:
+                type: string
+    StoreSetId:
+      type: integer
+      format: int64
+      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
+
+        Store sets are managed under Business Management.
+
+        '
+    StartDateTime:
+      type: string
+      format: date-time
+      example: '2046-01-07T16:02:00Z'
+      description: 'The date-time at which the campaign is scheduled to start.
+
+
+        Minimum value: ≥ today (ad account based timezone)\
+
+        Maximum value: `2099-12-31T23:58:00` (ad account based timezone)
+
+
+        The API rejects the value if seconds / milliseconds are specified except 0.
+
+
+        This field is not updatable when `ready_for_delivery` is `true`.
+
+        '
+    PageSize:
+      type: integer
+      minimum: 1
+      maximum: 1000
+      default: 1000
+      example: 100
+      description: 'The number of objects to return per page.
+
+
+        The maximum page size is 1000 and the default is 1000.
+
+        '
+    CatalogId:
+      type: integer
+      description: 'The catalog ID to use for this dynamic ads campaign.
+
+        '
+    BusinessError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BusinessErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    CampaignID:
+      type: integer
+      format: int64
+      description: The ID of the campaign.
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    AppTrackingConfig:
+      type: object
+      required:
+      - operating_system
+      - store_id
+      properties:
+        operating_system:
+          $ref: '#/components/schemas/AppOperatingSystem'
+        store_id:
+          $ref: '#/components/schemas/AppStoreId'
+        mmp_type:
+          $ref: '#/components/schemas/AppMmpType'
+        mmp_tracking_url:
+          $ref: '#/components/schemas/AppMmpTrackingUrl'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    BidAmountMicro:
+      type:
+      - integer
+      - 'null'
+      format: int64
+      description: 'The bidding amount for `MANUAL` bidding strategy in [micros](#section/About-Currency-Units) of the ad account currency base unit.
+
+
+        This field is configurable and required if and only if the bid_strategy is `MANUAL`.
+
+
+        | Ad Account''s currency | Minimum value   | Maximum Value             |   Minimum unit   |
+
+        |-----------------------|-----------------|---------------------------|------------------|
+
+        | JPY                   | 1,000,000       | 1,000,000,000,000         | 1,000,000        |
+
+        | USD                   | 10,000          | 10,000,000,000            | 10,000           |
+
+
+        The API will return an error if the provided value is not divisible by the minimum unit.
+
+
+        If the billing event is IMPRESSION, then the bidding amount is the price the campaign bids for 1000 VIMPs.
+
+        '
+    BadRequestErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - BAD_REQUEST
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    IsMultiOrderAttribution:
+      type: boolean
+      example: false
+      description: 'If enabled, multiple Purchase event postbacks generated from the same click are recorded as separate Purchase events. Otherwise, only the first postback will be recorded.
+
+
+        The default value is `false` if not specified.
+
+
+        Note: only usable when campaign objective is `SALES`, optimization event is `PURCHASE` and bid strategy is not `TARGET_COST`.
+
+        '
+    IsDynamicAds:
+      type: boolean
+      default: false
+      description: 'A boolean flag that indicates whether the campaign is dynamic ads or standard ads.\
+
+
+        Note: The US region ad accounts are not allowed to create dynamic ads campaigns.
+
+
+        Currently supported objectives for dynamic ads campaigns:
+
+        - `TRAFFIC`
+
+        - `SALES`
+
+        '
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    CampaignRequest:
+      type: object
+      required:
+      - name
+      - objective
+      - daily_budget_amount_micro
+      - bid_strategy
+      - billing_event
+      - start_date_time
+      - configured_status
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        objective:
+          $ref: '#/components/schemas/CampaignObjective'
+        website_tracking_tag:
+          $ref: '#/components/schemas/WebsiteTrackingTag'
+        daily_budget_amount_micro:
+          $ref: '#/components/schemas/DailyBudgetAmountMicro'
+        bid_strategy:
+          $ref: '#/components/schemas/BidStrategy'
+        target_cost_micro:
+          $ref: '#/components/schemas/TargetCostMicro'
+        bid_amount_micro:
+          $ref: '#/components/schemas/BidAmountMicro'
+        billing_event:
+          $ref: '#/components/schemas/BillingEvent'
+        optimization_goal:
+          $ref: '#/components/schemas/OptimizationGoal'
+        delivery_type:
+          $ref: '#/components/schemas/DeliveryType'
+        optimization_event:
+          $ref: '#/components/schemas/OptimizationEvent'
+        conversion_attribution_window:
+          $ref: '#/components/schemas/ConversionAttributionWindow'
+        start_date_time:
+          $ref: '#/components/schemas/StartDateTime'
+        end_date_time:
+          $ref: '#/components/schemas/EndDateTime'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        spending_limit_micro:
+          $ref: '#/components/schemas/SpendingLimitMicro'
+        viewability_measurement:
+          $ref: '#/components/schemas/ViewabilityMeasurement'
+        click_destination_type:
+          $ref: '#/components/schemas/ClickDestinationType'
+        is_large_unit_ads:
+          $ref: '#/components/schemas/IsLargeUnitAds'
+        is_large_unit_square_ads:
+          $ref: '#/components/schemas/IsLargeUnitSquareAds'
+        is_sticky_placements_enabled:
+          $ref: '#/components/schemas/IsStickyPlacementsEnabled'
+        is_multi_order_attribution:
+          $ref: '#/components/schemas/IsMultiOrderAttribution'
+        is_skadnetwork_enabled:
+          $ref: '#/components/schemas/IsSKAdNetworkEnabled'
+        is_dynamic_ads:
+          $ref: '#/components/schemas/IsDynamicAds'
+        dynamic_ads_info:
+          $ref: '#/components/schemas/DynamicAdsInfo'
+        budget_auto_target_cpa_micro:
+          $ref: '#/components/schemas/BudgetAutoTargetCpaMicro'
+        app_promotion_info:
+          $ref: '#/components/schemas/AppPromotionInfo'
+        app_tracking_configs:
+          $ref: '#/components/schemas/AppTrackingConfigs'
+        daily_schedules:
+          $ref: '#/components/schemas/DailySchedules'
+        store_set_id:
+          $ref: '#/components/schemas/StoreSetId'
+        channel_view_placement:
+          $ref: '#/components/schemas/ChannelViewPlacement'
+    Name:
+      type: string
+      minLength: 1
+      maxLength: 256
+      description: 'The name of the campaign.
+
+
+        Note: The maximum length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
+
+        '
+    AppMmpTrackingUrl:
+      type: string
+      minLength: 1
+      maxLength: 1024
+      description: 'A URL used to track and attribute mobile app marketing campaign performance.
+
+
+        For detailed validation rules, see the [help page](https://help-ads.smartnews.com/item-3673/)
+
+        '
+    AppTrackingConfigs:
+      type: array
+      items:
+        $ref: '#/components/schemas/AppTrackingConfig'
+      maxItems: 2
+      description: "This field is used to configure app tracking when conversions from both the app and the web need to be tracked.\n\nIf the campaign's objective = APP_PROMOTION, then please set campaign.app_promotion_info instead. Otherwise, \n  validation error will be thrown.\n\nThis field can be set only when the following conditions are met otherwise it will validation error\n  1.1 For DA campaign, it is allowed for objective = SALES or TRAFFIC\n  1.2 For non-DA campaign, it is allowed for SALES objective only.\n  2. website_tracking_tag is set. \n\nWhen there are two configs then make sure following conditions apply\n  - One of the config is for iOS and another for Android.\n  - Both appStoreIds exist and are unique.\n  - If MMP is selected, then MmpType is same for both configs.\n\nFor PATCH request,\n  If you want to keep the value unchanged, then omit this field from patch request.\n  If you want to remove the current appTrackingConfigs entirely then set this property to empty array.\n  If you want to replace the existing config, then please provide entire array of appTrackingConfig.\n"
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    MinimalSpendingLimitMicro:
+      type: integer
+      format: int64
+      example: 10000000000
+      description: 'The current minimum required value when you attempt to update the `spending_limit_micro`.
+
+        This value considers the factors like the `total_spending` of the campaign and may change by the time our system receives a update request.
+
+        Null if updating `spending_limit_micro` is not available at the moment.
+
+        '
+    AppPromotionInfo:
+      type: object
+      description: Configuration specific to App Promotion objective campaigns. It is required when `objective` is `APP_PROMOTION`
+      required:
+      - promotion_type
+      - operating_system
+      - store_id
+      - mmp_type
+      - mmp_tracking_url
+      properties:
+        promotion_type:
+          $ref: '#/components/schemas/AppPromotionType'
+        operating_system:
+          $ref: '#/components/schemas/AppOperatingSystem'
+        store_id:
+          $ref: '#/components/schemas/AppStoreId'
+        mmp_type:
+          $ref: '#/components/schemas/AppMmpType'
+        mmp_tracking_url:
+          $ref: '#/components/schemas/AppMmpTrackingUrl'
+    IncludeDeleted:
+      type: boolean
+      default: false
+    AppStoreId:
+      type: string
+      minLength: 1
+      maxLength: 255
+      description: 'The promoted app''s App store ID. Each platform has a different format for the ID.
+
+
+        For `IOS`, it is string containing digits only. Example: `"579581125"`
+
+        For `ANDROID`,it is a string. Example: `"jp.gocro.smartnews.android"`
+
+        '
+    UpdatedAt:
+      type: string
+      format: date-time
+      description: The date-time at which the campaign was last updated.
+    PaginationInfoResponse:
+      description: 'An object describing pagination parameters for this response.
+
+        '
+      type: object
+      required:
+      - page
+      - page_size
+      - total_pages
+      - total_objects
+      properties:
+        page:
+          type: integer
+          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
+          example: 1
+        page_size:
+          type: integer
+          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
+          example: 100
+        total_pages:
+          type: integer
+          description: The total number of pages for this query.
+          example: 10
+        total_objects:
+          type: integer
+          description: The total number of objects that exist across all pages.
+          example: 987
+    IsStickyPlacementsEnabled:
+      type: boolean
+      description: 'A boolean flag that indicates whether fixed on-scroll sticky placements are included for this campaign.
+
+
+        The default value is `false` if not specified.
+
+
+        Note: This field can be `true` only when both `is_large_unit_ads` and `is_large_unit_square_ads` are `false`.
+
+        '
+    DeliveryStatus:
+      type: string
+      enum:
+      - DELETED
+      - PAUSED
+      - NOT_ELIGIBLE
+      - PENDING
+      - ENDED
+      - ELIGIBLE
+      - UNKNOWN
+      - DISABLED
+      description: 'The delivery status of the object determined by the system.
+
+
+        | Delivery status | What it means |
+
+        |-----------------|---------------|
+
+        | DELETED         | The object is deleted by an ad operator |
+
+        | PAUSED          | The object is paused by an ad operator  |
+
+        | NOT_ELIGIBLE    | The object is configured to be active but is not delivered due to some conditions. Please check the `reason` or `description` field for more details |
+
+        | PENDING         | The object is configured to be active and will be delivered when certain conditions are met. Please check Please check the `reason` or `description` field for more details |
+
+        | ENDED           | The object is configured to be active but the campaign has ended |
+
+        | ELIGIBLE        | The object is configured to be active and is delivering ads |
+
+        | UNKNOWN         | The object is configured to be active but its delivery status is unknown |
+
+        | DISABLED        | The object is disabled because the business, account, or brand is disabled|
+
+        '
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ResourceNotFoundError'
+    DailySchedules:
+      type: array
+      items:
+        $ref: '#/components/schemas/CampaignDailySchedule'
+      maxItems: 6
+      description: 'An array of daily delivery schedules for the campaign. By default, it is empty. If empty, the campaign will run 24/7.
+
+
+        To run an overnight schedule, please create two schedules. For example, to run a campaign from 10 PM to 2 AM, create one schedule from `22:00` to `24:00` and another from `00:00` to `02:00`.
+
+
+        Note: even if a daily schedule is provided, the campaign will only be delivered during the campaign''s `start_date_time` and `end_date_time`.
+
+
+        The number of schedules must be between 1 and 6, if non-null. Windows must not overlap within the same campaign.
+
+
+        In a `PATCH` request, provide the entire array of daily schedules to replace the existing schedules. If you want to remove all schedules, provide an empty array. To leave unchanged, omit the field from the request body.
+
+        '
+    AcceptLanguage:
+      type: string
+      description: 'The language to use for system generated text within API responses.
+
+
+        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
+
+        '
+      example: en-US
     TotalSpending:
       type: string
       pattern: ^\d+(\.\d+)?$
@@ -583,56 +1174,216 @@ components:
         Null if our system is not able to determine the value currently.
 
         '
-    OptimizationGoal:
+    CampaignPatchRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        configured_status:
+          $ref: '#/components/schemas/ConfiguredStatus'
+        daily_budget_amount_micro:
+          $ref: '#/components/schemas/DailyBudgetAmountMicro'
+        website_tracking_tag:
+          $ref: '#/components/schemas/WebsiteTrackingTag'
+        optimization_event:
+          $ref: '#/components/schemas/OptimizationEvent'
+        conversion_attribution_window:
+          $ref: '#/components/schemas/ConversionAttributionWindow'
+        start_date_time:
+          $ref: '#/components/schemas/StartDateTime'
+        end_date_time:
+          $ref: '#/components/schemas/EndDateTime'
+        bid_strategy:
+          $ref: '#/components/schemas/BidStrategy'
+        target_cost_micro:
+          $ref: '#/components/schemas/TargetCostMicro'
+        bid_amount_micro:
+          $ref: '#/components/schemas/BidAmountMicro'
+        billing_event:
+          $ref: '#/components/schemas/BillingEvent'
+        optimization_goal:
+          $ref: '#/components/schemas/OptimizationGoal'
+        delivery_type:
+          $ref: '#/components/schemas/DeliveryType'
+        spending_limit_micro:
+          $ref: '#/components/schemas/SpendingLimitMicro'
+        viewability_measurement:
+          $ref: '#/components/schemas/ViewabilityMeasurement'
+        click_destination_type:
+          $ref: '#/components/schemas/ClickDestinationType'
+        is_large_unit_ads:
+          $ref: '#/components/schemas/IsLargeUnitAds'
+        is_large_unit_square_ads:
+          $ref: '#/components/schemas/IsLargeUnitSquareAds'
+        is_sticky_placements_enabled:
+          $ref: '#/components/schemas/IsStickyPlacementsEnabled'
+        is_multi_order_attribution:
+          $ref: '#/components/schemas/IsMultiOrderAttribution'
+        is_skadnetwork_enabled:
+          $ref: '#/components/schemas/IsSKAdNetworkEnabled'
+        store_set_id:
+          $ref: '#/components/schemas/StoreSetId'
+        budget_auto_target_cpa_micro:
+          $ref: '#/components/schemas/BudgetAutoTargetCpaMicro'
+        app_promotion_info:
+          $ref: '#/components/schemas/PatchAppPromotionInfo'
+        app_tracking_configs:
+          $ref: '#/components/schemas/AppTrackingConfigs'
+        daily_schedules:
+          $ref: '#/components/schemas/DailySchedules'
+        channel_view_placement:
+          $ref: '#/components/schemas/ChannelViewPlacement'
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    WebsiteTrackingTag:
       type:
       - string
       - 'null'
-      enum:
-      - CLICKS
-      - OFFSITE_CONVERSIONS
-      - VIEWABLE_IMPRESSIONS
-      - INSTALL
-      - INSTALL_WITH_IN_APP_EVENT
-      - ROAS
-      description: 'Optimization goal defines how the campaign is optimized.
+      example: 89d2b4523c7245ee9ec773a8
+      description: 'The pixel tag id that is used to report web events generated through a campaign. \
 
-
-        This is required and configurable unless bidding strategy is `MANUAL`.
-
-
-        | Objective     | Bid Strategy   | Available Optimization Goal         |
-
-        |---------------|----------------|-------------------------------------|
-
-        | TRAFFIC       | HIGHEST_VOLUME | CLICKS                              |
-
-        | TRAFFIC       | MANUAL         | null                                |
-
-        | SALES         | HIGHEST_VOLUME | OFFSITE_CONVERSIONS, ROAS           |
-
-        | SALES         | TARGET_COST    | OFFSITE_CONVERSIONS                 |
-
-        | AWARENESS     | HIGHEST_VOLUME | VIEWABLE_IMPRESSIONS                |
-
-        | AWARENESS     | MANUAL         | null                                |
-
-        | APP_PROMOTION | HIGHEST_VOLUME | INSTALL, INSTALL_WITH_IN_APP_EVENT  |
-
-        | APP_PROMOTION | TARGET_COST    | INSTALL, INSTALL_WITH_IN_APP_EVENT  |
+        Required if Objective is `SALES` and Click Destination Type is `WEB_VIEW`
 
 
         This field is not updatable when `ready_for_delivery` is `true`.
 
-        ROAS is only allowed to Dynamic Ads campaign with SALES Objective.
+        '
+    DynamicAdsInfo:
+      type: object
+      required:
+      - catalog_id
+      properties:
+        catalog_id:
+          $ref: '#/components/schemas/CatalogId'
+      description: 'Configuration specific to dynamic ads campaigns.
+
+
+        If `is_dynamic_ads` is true, this field is required.
 
         '
-    UnexpectedErrorResponse:
+    ReadyForDelivery:
+      type: boolean
+      description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
+
+        When the flag is true, the following fields are not updatable anymore.
+
+        1. `start_date_time`
+
+        2. `billing_event`
+
+        3. `optimization_goal`
+
+        4. `optimization_event`
+
+        5. `website_tracking_tag`
+
+        6. `viewability_measurement`
+
+        7. `app_promotion_info` (PatchAppPromotionInfo)
+
+        '
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    Page:
+      type: integer
+      minimum: 1
+      default: 1
+      example: 2
+      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
+
+
+        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
+
+        '
+    EndDateTime:
+      type:
+      - string
+      - 'null'
+      format: date-time
+      example: '2046-02-07T16:02:00Z'
+      description: 'The date-time at which the campaign is scheduled to end.
+
+
+        Minimum value: max(`current_date_time`, `start_date_time`)\
+
+        Maximum value: `2099-12-31T23:59:00` (ad account based timezone)
+
+
+        The API rejects the value if seconds / milliseconds are specified except 0.
+
+
+        This field is nullable. When it is set to `null`, it means the campaign runs indefinitely.
+
+        '
+    IsMigratedFromV1:
+      type: boolean
+      description: A boolean flag that indicates whether the object is migrated from v1.
+    AppMmpType:
+      type: string
+      enum:
+      - ADJUST
+      - APPS_FLYER
+      - SINGULAR
+      description: 'The third-party service provider that helps advertisers track, measure, and attribute the performance of
+
+        their mobile ad campaigns.
+
+
+        It is not editable when `ready_for_delivery` is `true`.
+
+        '
+    IsSKAdNetworkEnabled:
+      type: boolean
+      example: false
+      description: '[Coming Soon] This feature is not yet available but will be supported soon.
+
+
+        A boolean flag that indicates whether the campaign is using SKAdNetwork to collect data.
+
+
+        The default value is `false` if not specified.
+
+
+        Note: only usable when campaign objective is `APP_PROMOTION` and targets an iOS app.
+
+        '
+    RateLimitedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/UnexpectedError'
+          $ref: '#/components/schemas/RateLimitedError'
+    BudgetAutoTargetCpaMicro:
+      type:
+      - integer
+      - 'null'
+      format: int64
+      default: null
+      example: 10000000000
+      description: 'Budget Auto-adjustment Expected CPA in [micros](#section/About-Currency-Units) of the ad account currency base unit.
+
+
+        This value is only able to be set when campaign objective is `SALES` and bidding strategy is `HIGHEST_VOLUME`.
+
+        Otherwise it must be `null`.
+
+        '
     DeliveryStatusReason:
       type: string
       enum:
@@ -742,55 +1493,21 @@ components:
         | STORE_SET_NOT_READY                       | Campaign, Ad group, Ad |
 
         '
-    ConversionAttributionWindow:
-      type: string
-      enum:
-      - ONE_DAY
-      - SEVEN_DAYS
-      - FOURTEEN_DAYS
-      - THIRTY_DAYS
-      description: "It specifies the time frame in which conversions are counted for the campaign.\n\nThe default value is `THIRTY_DAYS` if not specified.\n\nAvailable values are dependent on the campaign objective:\n  - `SALES`: All values are available.\n  - others: Only `THIRTY_DAYS` is available.\n"
-    UpdatedAt:
-      type: string
-      format: date-time
-      description: The date-time at which the campaign was last updated.
-    AppPromotionInfo:
-      type: object
-      description: Configuration specific to App Promotion objective campaigns. It is required when `objective` is `APP_PROMOTION`
-      required:
-      - promotion_type
-      - operating_system
-      - store_id
-      - mmp_type
-      - mmp_tracking_url
-      properties:
-        promotion_type:
-          $ref: '#/components/schemas/AppPromotionType'
-        operating_system:
-          $ref: '#/components/schemas/AppOperatingSystem'
-        store_id:
-          $ref: '#/components/schemas/AppStoreId'
-        mmp_type:
-          $ref: '#/components/schemas/AppMmpType'
-        mmp_tracking_url:
-          $ref: '#/components/schemas/AppMmpTrackingUrl'
-    IncludeDeleted:
+    IsLargeUnitSquareAds:
       type: boolean
-      default: false
-    AppTrackingConfigs:
-      type: array
-      items:
-        $ref: '#/components/schemas/AppTrackingConfig'
-      maxItems: 2
-      description: "This field is used to configure app tracking when conversions from both the app and the web need to be tracked.\n\nIf the campaign's objective = APP_PROMOTION, then please set campaign.app_promotion_info instead. Otherwise, \n  validation error will be thrown.\n\nThis field can be set only when the following conditions are met otherwise it will validation error\n  1.1 For DA campaign, it is allowed for objective = SALES or TRAFFIC\n  1.2 For non-DA campaign, it is allowed for SALES objective only.\n  2. website_tracking_tag is set. \n\nWhen there are two configs then make sure following conditions apply\n  - One of the config is for iOS and another for Android.\n  - Both appStoreIds exist and are unique.\n  - If MMP is selected, then MmpType is same for both configs.\n\nFor PATCH request,\n  If you want to keep the value unchanged, then omit this field from patch request.\n  If you want to remove the current appTrackingConfigs entirely then set this property to empty array.\n  If you want to replace the existing config, then please provide entire array of appTrackingConfig.\n"
-    AppMmpTrackingUrl:
-      type: string
-      minLength: 1
-      maxLength: 1024
-      description: 'A URL used to track and attribute mobile app marketing campaign performance.
+      description: 'A boolean flag that indicates whether ads from this campaign are displayed in the app using the large unit square format.
 
 
-        For detailed validation rules, see the [help page](https://help-ads.smartnews.com/item-3673/)
+        This feature is only available when objective is `AWARENESS`.
+
+
+        For eligible ad accounts, this feature is also available when objective is `TRAFFIC` or `SALES`.
+
+
+        This field''s value cannot be changed if the campaign already has 1 or more ads.
+
+
+        Note: This field is not settable for US region ad accounts.
 
         '
     BadRequestError:
@@ -798,206 +1515,52 @@ components:
       allOf:
       - $ref: '#/components/schemas/BadRequestErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    EndDateTime:
-      type:
-      - string
-      - 'null'
-      format: date-time
-      example: '2046-02-07T16:02:00Z'
-      description: 'The date-time at which the campaign is scheduled to end.
-
-
-        Minimum value: max(`current_date_time`, `start_date_time`)\
-
-        Maximum value: `2099-12-31T23:59:00` (ad account based timezone)
-
-
-        The API rejects the value if seconds / milliseconds are specified except 0.
-
-
-        This field is nullable. When it is set to `null`, it means the campaign runs indefinitely.
-
-        '
-    ForbiddenError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    SpendingLimitMicro:
-      type: integer
-      format: int64
-      example: 10000000000
-      description: 'The life-time spending limit in [micros](#section/About-Currency-Units) of the ad account currency base unit. Null means there is no limit.
-
-
-        | Ad Account''s currency | Minimum value (creation only)  | Maximum Value             |   Minimum unit   |
-
-        |-----------------------|--------------------------------|---------------------------|------------------|
-
-        | JPY                   | 100,000,000                    | 10,000,000,000,000,000    | 1,000,000        |
-
-        | USD                   | 1,000,000                      | 10,000,000,000,000        | 10,000           |
-
-
-        The API will return an error if the provided value is not divisible by the minimum unit.
-
-        After the creation, please refer to the `minimal_spending_limit_micro` field for the minimum value.
-
-        '
-    RateLimitedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ErrorBase'
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            enum:
-            - TOO_MANY_REQUESTS
-    ChannelViewPlacement:
-      type: string
-      enum:
-      - IN_FEED
-      - PRIMARY_SLOT
-      description: 'The placement of the campaign''s ads within the channel view.
-
-
-        - `IN_FEED`: Shown in between articles in the feed
-
-        - `PRIMARY_SLOT`: Shown in the first ad slot of the feed, typically before any articles
-
-
-        `PRIMARY_SLOT` can only be specified when `is_large_unit_ads` or `is_large_unit_square_ads` is `true`.
-
-
-        The default is `IN_FEED`.
-
-        '
-    BudgetAutoTargetCpaMicro:
-      type:
-      - integer
-      - 'null'
-      format: int64
-      default: null
-      example: 10000000000
-      description: 'Budget Auto-adjustment Expected CPA in [micros](#section/About-Currency-Units) of the ad account currency base unit.
-
-
-        This value is only able to be set when campaign objective is `SALES` and bidding strategy is `HIGHEST_VOLUME`.
-
-        Otherwise it must be `null`.
-
-        '
-    StartDateTime:
-      type: string
-      format: date-time
-      example: '2046-01-07T16:02:00Z'
-      description: 'The date-time at which the campaign is scheduled to start.
-
-
-        Minimum value: ≥ today (ad account based timezone)\
-
-        Maximum value: `2099-12-31T23:58:00` (ad account based timezone)
-
-
-        The API rejects the value if seconds / milliseconds are specified except 0.
-
-
-        This field is not updatable when `ready_for_delivery` is `true`.
-
-        '
-    RateLimitedErrorResponse:
+    ForbiddenErrorExtension:
       type: object
       required:
-      - error
+      - type
       properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    IsDynamicAds:
-      type: boolean
-      default: false
-      description: 'A boolean flag that indicates whether the campaign is dynamic ads or standard ads.\
-
-
-        Note: The US region ad accounts are not allowed to create dynamic ads campaigns.
-
-
-        Currently supported objectives for dynamic ads campaigns:
-
-        - `TRAFFIC`
-
-        - `SALES`
-
-        '
-    CampaignID:
-      type: integer
-      format: int64
-      description: The ID of the campaign.
-    BusinessError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BusinessErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ViewabilityMeasurement:
-      type: object
-      required:
-      - vendor_type
-      - vendor_key
-      - verification_parameters
-      - verification_script_url
-      description: 'Configuration for 3rd party viewability measurement provider. It is not editable when the campaign is ready for delivery.
-
-        Currently, only MOAT is supported.
-
-        '
-      properties:
-        vendor_type:
+        type:
           type: string
           enum:
-          - MOAT
-          description: The vendor to use for viewability measurement.
-        vendor_key:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
           type: string
-          minLength: 1
-          maxLength: 1024
-          description: The unique key provided by the vendor.
-        verification_parameters:
-          type: string
-          minLength: 1
-          maxLength: 1024
-          example: '{"campaign_name": "{campaign_name}"}'
-          description: "A string containing the viewability parameters to be sent along with impressions.\n\n- For MOAT, it is an escaped JSON string.\n  - Example: `{\\\"campaign_name\\\": \\\"{campaign_name}\\\", \\\"ad_group_name\\\": \\\"{ad_group_name}\\\"}`\n- For DoubleVerify, it uses URL query string syntax.\n  - Example: `campaign_name={campaign_name}&ad_group_name={ad_group_name}`\n\nBoth vendors accept the following macros:\n  - {ad_account_name}\n  - {campaign_name}\n  - {ad_group_name}\n  - {ad_name}\n\nDoubleVerify also accepts the following macros:\n  - {ad_account_id}\n  - {campaign_id}\n  - {ad_group_id}\n  - {ad_id}\n"
-        verification_script_url:
-          type: string
-          example: https://z.moatads.com/mydisplayads248228380663/moatad.js
-          minLength: 1
-          maxLength: 1024
-          description: 'The script URL provided by the vendor.
-
-            - URL format must follow the [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) spec
-
-            - The protocol must be `https`
-
-            '
-    PageSize:
-      type: integer
-      minimum: 1
-      maximum: 1000
-      default: 1000
-      example: 100
-      description: 'The number of objects to return per page.
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    AppPromotionType:
+      type: string
+      enum:
+      - INSTALL
+      - ENGAGEMENT
+      description: 'The type of app promotion campaign.
 
 
-        The maximum page size is 1000 and the default is 1000.
+        | Promotion type    | Description                               |
+
+        |-------------------|-------------------------------------------|
+
+        | INSTALL           | To promote app installations by new users |
+
+        | ENGAGEMENT        | To promote app activities on installed app|
+
+
+        It is not editable when `ready_for_delivery` is `true`.
 
         '
+    CampaignPaginatedResponse:
+      type: object
+      required:
+      - data
+      - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CampaignResponse'
+        pagination:
+          $ref: '#/components/schemas/PaginationInfoResponse'
     CampaignResponse:
       allOf:
       - $ref: '#/components/schemas/CampaignRequest'
@@ -1065,223 +1628,34 @@ components:
             type: boolean
             example: false
             description: Indicates that the campaign cannot be switched back to `ACTIVE` configured status. This state occurs when a campaign's SKAdNetwork source identifier is reused for another campaign.
-    DynamicAdsInfo:
-      type: object
-      required:
-      - catalog_id
-      properties:
-        catalog_id:
-          $ref: '#/components/schemas/CatalogId'
-      description: 'Configuration specific to dynamic ads campaigns.
-
-
-        If `is_dynamic_ads` is true, this field is required.
-
-        '
-    UnexpectedError:
+    ResourceNotFoundError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    BadRequestErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - BAD_REQUEST
-    DeliveryStatus:
-      type: string
-      enum:
-      - DELETED
-      - PAUSED
-      - NOT_ELIGIBLE
-      - PENDING
-      - ENDED
-      - ELIGIBLE
-      - UNKNOWN
-      - DISABLED
-      description: 'The delivery status of the object determined by the system.
-
-
-        | Delivery status | What it means |
-
-        |-----------------|---------------|
-
-        | DELETED         | The object is deleted by an ad operator |
-
-        | PAUSED          | The object is paused by an ad operator  |
-
-        | NOT_ELIGIBLE    | The object is configured to be active but is not delivered due to some conditions. Please check the `reason` or `description` field for more details |
-
-        | PENDING         | The object is configured to be active and will be delivered when certain conditions are met. Please check Please check the `reason` or `description` field for more details |
-
-        | ENDED           | The object is configured to be active but the campaign has ended |
-
-        | ELIGIBLE        | The object is configured to be active and is delivering ads |
-
-        | UNKNOWN         | The object is configured to be active but its delivery status is unknown |
-
-        | DISABLED        | The object is disabled because the business, account, or brand is disabled|
-
-        '
-    ConfiguredStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - PAUSED
-      - DELETED
-      description: The status of the object configured by an ad operator.
-    ValidationError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ValidationErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    Name:
-      type: string
-      minLength: 1
-      maxLength: 256
-      description: 'The name of the campaign.
-
-
-        Note: The maximum length is calculated by our standard length calculation rules: [See details](https://help-ads.smartnews.com/item-3888/)
-
-        '
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    AppTrackingConfig:
-      type: object
-      required:
-      - operating_system
-      - store_id
-      properties:
-        operating_system:
-          $ref: '#/components/schemas/AppOperatingSystem'
-        store_id:
-          $ref: '#/components/schemas/AppStoreId'
-        mmp_type:
-          $ref: '#/components/schemas/AppMmpType'
-        mmp_tracking_url:
-          $ref: '#/components/schemas/AppMmpTrackingUrl'
-    ValidationErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ValidationError'
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    WebsiteTrackingTag:
+    TargetCostMicro:
       type:
-      - string
+      - integer
       - 'null'
-      example: 89d2b4523c7245ee9ec773a8
-      description: 'The pixel tag id that is used to report web events generated through a campaign. \
-
-        Required if Objective is `SALES` and Click Destination Type is `WEB_VIEW`
+      format: int64
+      description: 'The cost per acquisition in [micros](#section/About-Currency-Units) of the ad account currency base unit.
 
 
-        This field is not updatable when `ready_for_delivery` is `true`.
-
-        '
-    AppStoreId:
-      type: string
-      minLength: 1
-      maxLength: 255
-      description: 'The promoted app''s App store ID. Each platform has a different format for the ID.
+        This is only required and configurable if and only if the bidding strategy is `TARGET_COST`.
 
 
-        For `IOS`, it is string containing digits only. Example: `"579581125"`
+        | Ad Account''s currency | Minimum value   | Maximum Value             |   Minimum unit   |
 
-        For `ANDROID`,it is a string. Example: `"jp.gocro.smartnews.android"`
+        |-----------------------|-----------------|---------------------------|------------------|
+
+        | JPY                   | 50,000,000      | 1,000,000,000,000         | 1,000,000        |
+
+        | USD                   | 500,000         | 10,000,000,000            | 10,000           |
+
+
+        The API will return an error if the provided value is not divisible by the minimum unit.
 
         '
-    DailySchedules:
-      type: array
-      items:
-        $ref: '#/components/schemas/CampaignDailySchedule'
-      maxItems: 6
-      description: 'An array of daily delivery schedules for the campaign. By default, it is empty. If empty, the campaign will run 24/7.
-
-
-        To run an overnight schedule, please create two schedules. For example, to run a campaign from 10 PM to 2 AM, create one schedule from `22:00` to `24:00` and another from `00:00` to `02:00`.
-
-
-        Note: even if a daily schedule is provided, the campaign will only be delivered during the campaign''s `start_date_time` and `end_date_time`.
-
-
-        The number of schedules must be between 1 and 6, if non-null. Windows must not overlap within the same campaign.
-
-
-        In a `PATCH` request, provide the entire array of daily schedules to replace the existing schedules. If you want to remove all schedules, provide an empty array. To leave unchanged, omit the field from the request body.
-
-        '
-    AppPromotionType:
-      type: string
-      enum:
-      - INSTALL
-      - ENGAGEMENT
-      description: 'The type of app promotion campaign.
-
-
-        | Promotion type    | Description                               |
-
-        |-------------------|-------------------------------------------|
-
-        | INSTALL           | To promote app installations by new users |
-
-        | ENGAGEMENT        | To promote app activities on installed app|
-
-
-        It is not editable when `ready_for_delivery` is `true`.
-
-        '
-    OptimizationEvent:
-      type:
-      - string
-      - 'null'
-      enum:
-      - PURCHASE
-      - ADD_TO_CART
-      - INITIATE_CHECKOUT
-      - SUBMIT_FORM
-      - SUBSCRIBE
-      - COMPLETE_REGISTRATION
-      - CONTACT
-      - SIGN_UP
-      - VIEW_CONTENT
-      - ADD_PAYMENT_INFO
-      - ADD_TO_WISH_LIST
-      - VISIT_CART
-      - CUSTOMIZE_PRODUCT
-      - SEARCH
-      - BOOKING
-      - DOWNLOAD
-      - START_TRIAL
-      - SHARE
-      - LOGIN
-      - DONATE
-      - FIND_LOCATION
-      - TIME_SPENT
-      - LEAD
-      - INSTALL
-      - D1_RETENTION
-      description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
     BusinessErrorResponse:
       type: object
       required:
@@ -1289,234 +1663,163 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/BusinessError'
-    PaginationInfoResponse:
-      description: 'An object describing pagination parameters for this response.
-
-        '
-      type: object
-      required:
-      - page
-      - page_size
-      - total_pages
-      - total_objects
-      properties:
-        page:
-          type: integer
-          description: The current page, where the first page starts at 1, and the last page corresponds to `total_pages`.
-          example: 1
-        page_size:
-          type: integer
-          description: 'The page size as specified in the request (note: the actual number of items in the response may be less if this is the last page of data.)'
-          example: 100
-        total_pages:
-          type: integer
-          description: The total number of pages for this query.
-          example: 10
-        total_objects:
-          type: integer
-          description: The total number of objects that exist across all pages.
-          example: 987
-    ServiceUnavailableErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
-    IsLargeUnitSquareAds:
-      type: boolean
-      description: 'A boolean flag that indicates whether ads from this campaign are displayed in the app using the large unit square format.
-
-
-        This feature is only available when objective is `AWARENESS`.
-
-
-        For eligible ad accounts, this feature is also available when objective is `TRAFFIC` or `SALES`.
-
-
-        This field''s value cannot be changed if the campaign already has 1 or more ads.
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
-    CreatedAt:
-      type: string
-      format: date-time
-      description: The date-time at which the campaign was created.
-    IsLargeUnitAds:
-      type: boolean
-      description: 'A boolean flag that indicates whether ads from this campaign are displayed in the app using the large unit format.
-
-
-        This feature is only available when objective is `AWARENESS`.
-
-
-        For eligible ad accounts, this feature is also available when objective is `TRAFFIC` or `SALES`.
-
-
-        This field''s value cannot be changed if the campaign already has 1 or more ads.
-
-
-        Note: This field is not settable for US region ad accounts.
-
-        '
-    HasAnyVideoAds:
-      type: boolean
-      description: Whether the ad object has any video ads, including those that have been deleted.
     BillingEvent:
       type: string
       enum:
       - CLICK
       - VIEWABLE_IMPRESSION
       description: "The type of event that the ad account wants to pay for the campaign.\n\n| Objective     | Available billing events         |\n|---------------|----------------------------------|\n| TRAFFIC       | VIEWABLE_IMPRESSION (non-DA campaign only), CLICK       |\n| SALES         | VIEWABLE_IMPRESSION (non-DA campaign only), CLICK       |\n| AWARENESS     | VIEWABLE_IMPRESSION              |\n| APP_PROMOTION | VIEWABLE_IMPRESSION, CLICK       |\n\nThis field is not updatable when `ready_for_delivery` is `true`. \n\n`VIEWABLE_IMPRESSION` is not supported for DA campaigns.\n"
-    IsMultiOrderAttribution:
-      type: boolean
-      example: false
-      description: 'If enabled, multiple Purchase event postbacks generated from the same click are recorded as separate Purchase events. Otherwise, only the first postback will be recorded.
-
-
-        The default value is `false` if not specified.
-
-
-        Note: only usable when campaign objective is `SALES`, optimization event is `PURCHASE` and bid strategy is not `TARGET_COST`.
-
-        '
-    Page:
-      type: integer
-      minimum: 1
-      default: 1
-      example: 2
-      description: 'The page of data to retrieve. The first page starts at 1, and each page will contain at most `page_size` items (the last page may contain less).
-
-
-        To get the maximum available page number, refer to the `total_pages` field in the response''s `pagination` object.
-
-        '
-    StoreSetId:
-      type: integer
-      format: int64
-      description: 'Identifier of the store set associated with this campaign for Store Visit measurement.
-
-        Store sets are managed under Business Management.
-
-        '
-    ReadyForDelivery:
-      type: boolean
-      description: 'A boolean flag that indicates whether a ready for delivery. The flag is immutable once it turned to `true`.
-
-        When the flag is true, the following fields are not updatable anymore.
-
-        1. `start_date_time`
-
-        2. `billing_event`
-
-        3. `optimization_goal`
-
-        4. `optimization_event`
-
-        5. `website_tracking_tag`
-
-        6. `viewability_measurement`
-
-        7. `app_promotion_info` (PatchAppPromotionInfo)
-
-        '
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    CampaignPaginatedResponse:
+    ClickDestinationType:
+      type:
+      - string
+      - 'null'
+      enum:
+      - WEB_VIEW
+      - BROWSER
+      - APP
+      - APP_STORE
+      description: "This defines which components SmartNews opens after an ad is clicked.\n\nIf click_destination_type = null when creating campaign then default value is set as below:\n  1. click_destination_type = APP / APP_STORE for APP_PROMOTION objective\n  2. click_destination_type = WEB_VIEW for remaining available objectives\n\n| Objective     | Available click destination types |\n|---------------|-----------------------------------|\n| TRAFFIC       | WEB_VIEW, BROWSER                 |\n| SALES         | WEB_VIEW, BROWSER                 |\n| AWARENESS     | WEB_VIEW, BROWSER                 |\n| APP_PROMOTION | APP, APP_STORE                    |\n\n`BROWSER` is not usable for US region ad accounts.\n"
+    BusinessErrorExtension:
       type: object
       required:
-      - data
-      - pagination
+      - type
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CampaignResponse'
-        pagination:
-          $ref: '#/components/schemas/PaginationInfoResponse'
-    ResourceNotFoundError:
+        type:
+          type: string
+          enum:
+          - BUSINESS_ERROR
+    RateLimitedError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/ResourceNotFoundErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    CampaignRequest:
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
+    CreatedAt:
+      type: string
+      format: date-time
+      description: The date-time at which the campaign was created.
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ViewabilityMeasurement:
       type: object
       required:
-      - name
-      - objective
-      - daily_budget_amount_micro
-      - bid_strategy
-      - billing_event
-      - start_date_time
-      - configured_status
+      - vendor_type
+      - vendor_key
+      - verification_parameters
+      - verification_script_url
+      description: 'Configuration for 3rd party viewability measurement provider. It is not editable when the campaign is ready for delivery.
+
+        Currently, only MOAT is supported.
+
+        '
       properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        objective:
-          $ref: '#/components/schemas/CampaignObjective'
-        website_tracking_tag:
-          $ref: '#/components/schemas/WebsiteTrackingTag'
-        daily_budget_amount_micro:
-          $ref: '#/components/schemas/DailyBudgetAmountMicro'
-        bid_strategy:
-          $ref: '#/components/schemas/BidStrategy'
-        target_cost_micro:
-          $ref: '#/components/schemas/TargetCostMicro'
-        bid_amount_micro:
-          $ref: '#/components/schemas/BidAmountMicro'
-        billing_event:
-          $ref: '#/components/schemas/BillingEvent'
-        optimization_goal:
-          $ref: '#/components/schemas/OptimizationGoal'
-        delivery_type:
-          $ref: '#/components/schemas/DeliveryType'
-        optimization_event:
-          $ref: '#/components/schemas/OptimizationEvent'
-        conversion_attribution_window:
-          $ref: '#/components/schemas/ConversionAttributionWindow'
-        start_date_time:
-          $ref: '#/components/schemas/StartDateTime'
-        end_date_time:
-          $ref: '#/components/schemas/EndDateTime'
-        configured_status:
-          $ref: '#/components/schemas/ConfiguredStatus'
-        spending_limit_micro:
-          $ref: '#/components/schemas/SpendingLimitMicro'
-        viewability_measurement:
-          $ref: '#/components/schemas/ViewabilityMeasurement'
-        click_destination_type:
-          $ref: '#/components/schemas/ClickDestinationType'
-        is_large_unit_ads:
-          $ref: '#/components/schemas/IsLargeUnitAds'
-        is_large_unit_square_ads:
-          $ref: '#/components/schemas/IsLargeUnitSquareAds'
-        is_sticky_placements_enabled:
-          $ref: '#/components/schemas/IsStickyPlacementsEnabled'
-        is_multi_order_attribution:
-          $ref: '#/components/schemas/IsMultiOrderAttribution'
-        is_skadnetwork_enabled:
-          $ref: '#/components/schemas/IsSKAdNetworkEnabled'
-        is_dynamic_ads:
-          $ref: '#/components/schemas/IsDynamicAds'
-        dynamic_ads_info:
-          $ref: '#/components/schemas/DynamicAdsInfo'
-        budget_auto_target_cpa_micro:
-          $ref: '#/components/schemas/BudgetAutoTargetCpaMicro'
-        app_promotion_info:
-          $ref: '#/components/schemas/AppPromotionInfo'
-        app_tracking_configs:
-          $ref: '#/components/schemas/AppTrackingConfigs'
-        daily_schedules:
-          $ref: '#/components/schemas/DailySchedules'
-        store_set_id:
-          $ref: '#/components/schemas/StoreSetId'
-        channel_view_placement:
-          $ref: '#/components/schemas/ChannelViewPlacement'
+        vendor_type:
+          type: string
+          enum:
+          - MOAT
+          description: The vendor to use for viewability measurement.
+        vendor_key:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          description: The unique key provided by the vendor.
+        verification_parameters:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          example: '{"campaign_name": "{campaign_name}"}'
+          description: "A string containing the viewability parameters to be sent along with impressions.\n\n- For MOAT, it is an escaped JSON string.\n  - Example: `{\\\"campaign_name\\\": \\\"{campaign_name}\\\", \\\"ad_group_name\\\": \\\"{ad_group_name}\\\"}`\n- For DoubleVerify, it uses URL query string syntax.\n  - Example: `campaign_name={campaign_name}&ad_group_name={ad_group_name}`\n\nBoth vendors accept the following macros:\n  - {ad_account_name}\n  - {campaign_name}\n  - {ad_group_name}\n  - {ad_name}\n\nDoubleVerify also accepts the following macros:\n  - {ad_account_id}\n  - {campaign_id}\n  - {ad_group_id}\n  - {ad_id}\n"
+        verification_script_url:
+          type: string
+          example: https://z.moatads.com/mydisplayads248228380663/moatad.js
+          minLength: 1
+          maxLength: 1024
+          description: 'The script URL provided by the vendor.
+
+            - URL format must follow the [RFC 3986](https://datatracker.ietf.org/doc/html/rfc3986) spec
+
+            - The protocol must be `https`
+
+            '
+    ResourceNotFoundErrorExtension:
+      type: object
+      required:
+      - type
+      - resource_type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_FOUND
+          - DELETED
+        resource_type:
+          type: string
+          enum:
+          - CAMPAIGN
+          - AD_GROUP
+          - AD
+          - MEDIA_FILE
+          - AD_ACCOUNT
+          - PIXEL
+          - CUSTOM_AUDIENCE
+          - PIXEL_URL_CONFIGURATION
+          - AM_CONFIGURATION
+          - CATALOG
+          - STORE_SET
+          - RULE
+    BidStrategy:
+      type: string
+      enum:
+      - MANUAL
+      - HIGHEST_VOLUME
+      - TARGET_COST
+      description: 'The strategy that defines how the amount of bid is decided.
+
+
+        | Objective     | Available bid strategies | Usable for US region ad accounts |
+
+        |---------------|--------------------------|----------------------------------|
+
+        | TRAFFIC       | HIGHEST_VOLUME           | TRUE                             |
+
+        | TRAFFIC       | MANUAL                   | TRUE                             |
+
+        | SALES         | HIGHEST_VOLUME           | TRUE                             |
+
+        | SALES         | TARGET_COST              | TRUE                             |
+
+        | AWARENESS     | HIGHEST_VOLUME           | FALSE                            |
+
+        | AWARENESS     | MANUAL                   | FALSE                            |
+
+        | APP_PROMOTION | HIGHEST_VOLUME           | FALSE                            |
+
+        | APP_PROMOTION | TARGET_COST              | FALSE                            |
+
+        '
+    ValidationErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ValidationError'
+    BadRequestErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/BadRequestError'
     DeliveryType:
       type:
       - string
@@ -1557,398 +1860,6 @@ components:
         `STANDARD` delivery type is not usable for US region ad accounts.
 
         '
-    CampaignObjective:
-      type: string
-      enum:
-      - TRAFFIC
-      - SALES
-      - AWARENESS
-      - APP_PROMOTION
-      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
-
-
-        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
-
-        '
-    ClickDestinationType:
-      type:
-      - string
-      - 'null'
-      enum:
-      - WEB_VIEW
-      - BROWSER
-      - APP
-      - APP_STORE
-      description: "This defines which components SmartNews opens after an ad is clicked.\n\nIf click_destination_type = null when creating campaign then default value is set as below:\n  1. click_destination_type = APP / APP_STORE for APP_PROMOTION objective\n  2. click_destination_type = WEB_VIEW for remaining available objectives\n\n| Objective     | Available click destination types |\n|---------------|-----------------------------------|\n| TRAFFIC       | WEB_VIEW, BROWSER                 |\n| SALES         | WEB_VIEW, BROWSER                 |\n| AWARENESS     | WEB_VIEW, BROWSER                 |\n| APP_PROMOTION | APP, APP_STORE                    |\n\n`BROWSER` is not usable for US region ad accounts.\n"
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
-    DailyBudgetAmountMicro:
-      type: integer
-      format: int64
-      example: 10000000000
-      description: 'The average budget per day in [micros](#section/About-Currency-Units) of the ad account currency base unit.
-
-
-        | Ad Account''s currency | Minimum value   | Maximum Value             |   Minimum unit   |
-
-        |-----------------------|-----------------|---------------------------|------------------|
-
-        | JPY                   | 100,000,000     | 100,000,000,000,000       | 1,000,000        |
-
-        | USD                   | 1,000,000       | 1,000,000,000,000         | 10,000           |
-
-
-        The API will return an error if the provided value is not divisible by the minimum unit.
-
-        '
-    IsMigratedFromV1:
-      type: boolean
-      description: A boolean flag that indicates whether the object is migrated from v1.
-    ForbiddenErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    IsStickyPlacementsEnabled:
-      type: boolean
-      description: 'A boolean flag that indicates whether fixed on-scroll sticky placements are included for this campaign.
-
-
-        The default value is `false` if not specified.
-
-
-        Note: This field can be `true` only when both `is_large_unit_ads` and `is_large_unit_square_ads` are `false`.
-
-        '
-    IsSKAdNetworkEnabled:
-      type: boolean
-      example: false
-      description: '[Coming Soon] This feature is not yet available but will be supported soon.
-
-
-        A boolean flag that indicates whether the campaign is using SKAdNetwork to collect data.
-
-
-        The default value is `false` if not specified.
-
-
-        Note: only usable when campaign objective is `APP_PROMOTION` and targets an iOS app.
-
-        '
-    MinimalSpendingLimitMicro:
-      type: integer
-      format: int64
-      example: 10000000000
-      description: 'The current minimum required value when you attempt to update the `spending_limit_micro`.
-
-        This value considers the factors like the `total_spending` of the campaign and may change by the time our system receives a update request.
-
-        Null if updating `spending_limit_micro` is not available at the moment.
-
-        '
-    BadRequestErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/BadRequestError'
-    BidAmountMicro:
-      type:
-      - integer
-      - 'null'
-      format: int64
-      description: 'The bidding amount for `MANUAL` bidding strategy in [micros](#section/About-Currency-Units) of the ad account currency base unit.
-
-
-        This field is configurable and required if and only if the bid_strategy is `MANUAL`.
-
-
-        | Ad Account''s currency | Minimum value   | Maximum Value             |   Minimum unit   |
-
-        |-----------------------|-----------------|---------------------------|------------------|
-
-        | JPY                   | 1,000,000       | 1,000,000,000,000         | 1,000,000        |
-
-        | USD                   | 10,000          | 10,000,000,000            | 10,000           |
-
-
-        The API will return an error if the provided value is not divisible by the minimum unit.
-
-
-        If the billing event is IMPRESSION, then the bidding amount is the price the campaign bids for 1000 VIMPs.
-
-        '
-    AcceptLanguage:
-      type: string
-      description: 'The language to use for system generated text within API responses.
-
-
-        The currently supported languages are English (`en`, `en-*`) and Japanese (`ja`, `ja-JP`)
-
-        '
-      example: en-US
-    ResourceNotFoundErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ResourceNotFoundError'
-    PatchAppPromotionInfo:
-      type: object
-      description: It contains the fields of AppPromotionInfo which are updatable.
-      properties:
-        mmp_type:
-          $ref: '#/components/schemas/AppMmpType'
-        mmp_tracking_url:
-          $ref: '#/components/schemas/AppMmpTrackingUrl'
-    AppOperatingSystem:
-      type: string
-      enum:
-      - IOS
-      - ANDROID
-      description: The platform of promoted app
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    AppMmpType:
-      type: string
-      enum:
-      - ADJUST
-      - APPS_FLYER
-      - SINGULAR
-      description: 'The third-party service provider that helps advertisers track, measure, and attribute the performance of
-
-        their mobile ad campaigns.
-
-
-        It is not editable when `ready_for_delivery` is `true`.
-
-        '
-    CatalogId:
-      type: integer
-      description: 'The catalog ID to use for this dynamic ads campaign.
-
-        '
-    BusinessErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - BUSINESS_ERROR
-    ResourceNotFoundErrorExtension:
-      type: object
-      required:
-      - type
-      - resource_type
-      properties:
-        type:
-          type: string
-          enum:
-          - NOT_FOUND
-          - DELETED
-        resource_type:
-          type: string
-          enum:
-          - CAMPAIGN
-          - AD_GROUP
-          - AD
-          - MEDIA_FILE
-          - AD_ACCOUNT
-          - PIXEL
-          - CUSTOM_AUDIENCE
-          - PIXEL_URL_CONFIGURATION
-          - AM_CONFIGURATION
-          - CATALOG
-          - STORE_SET
-          - RULE
-    CampaignDailySchedule:
-      type: object
-      required:
-      - start_time
-      - end_time
-      properties:
-        start_time:
-          type: string
-          pattern: ^(?:([0-1]?[0-9]|2[0-3]):([0-5][0-9]))$
-          example: 09:00
-          description: 'The start time (inclusive) in 24 hour time, using the ad account''s timezone.
-
-
-            Must be between 00:00 and 23:00, and less than end_time. Minutes must be set to `00`.
-
-
-            00:00 represents midnight at the start of the day.
-
-            '
-        end_time:
-          type: string
-          pattern: ^(?:([0-1]?[1-9]|2[0-3]):([0-5][0-9])|24:00)$
-          example: '17:00'
-          description: 'The end time (exclusive) in 24 hour time, using the ad account''s timezone.
-
-
-            Must be between `01:00` and `24:00`, and greater than start_time. Minutes must be set to `00`.
-
-
-            `24:00` represents midnight at the end of the day.
-
-            '
-    BidStrategy:
-      type: string
-      enum:
-      - MANUAL
-      - HIGHEST_VOLUME
-      - TARGET_COST
-      description: 'The strategy that defines how the amount of bid is decided.
-
-
-        | Objective     | Available bid strategies | Usable for US region ad accounts |
-
-        |---------------|--------------------------|----------------------------------|
-
-        | TRAFFIC       | HIGHEST_VOLUME           | TRUE                             |
-
-        | TRAFFIC       | MANUAL                   | TRUE                             |
-
-        | SALES         | HIGHEST_VOLUME           | TRUE                             |
-
-        | SALES         | TARGET_COST              | TRUE                             |
-
-        | AWARENESS     | HIGHEST_VOLUME           | FALSE                            |
-
-        | AWARENESS     | MANUAL                   | FALSE                            |
-
-        | APP_PROMOTION | HIGHEST_VOLUME           | FALSE                            |
-
-        | APP_PROMOTION | TARGET_COST              | FALSE                            |
-
-        '
-    CampaignPatchRequest:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        configured_status:
-          $ref: '#/components/schemas/ConfiguredStatus'
-        daily_budget_amount_micro:
-          $ref: '#/components/schemas/DailyBudgetAmountMicro'
-        website_tracking_tag:
-          $ref: '#/components/schemas/WebsiteTrackingTag'
-        optimization_event:
-          $ref: '#/components/schemas/OptimizationEvent'
-        conversion_attribution_window:
-          $ref: '#/components/schemas/ConversionAttributionWindow'
-        start_date_time:
-          $ref: '#/components/schemas/StartDateTime'
-        end_date_time:
-          $ref: '#/components/schemas/EndDateTime'
-        bid_strategy:
-          $ref: '#/components/schemas/BidStrategy'
-        target_cost_micro:
-          $ref: '#/components/schemas/TargetCostMicro'
-        bid_amount_micro:
-          $ref: '#/components/schemas/BidAmountMicro'
-        billing_event:
-          $ref: '#/components/schemas/BillingEvent'
-        optimization_goal:
-          $ref: '#/components/schemas/OptimizationGoal'
-        delivery_type:
-          $ref: '#/components/schemas/DeliveryType'
-        spending_limit_micro:
-          $ref: '#/components/schemas/SpendingLimitMicro'
-        viewability_measurement:
-          $ref: '#/components/schemas/ViewabilityMeasurement'
-        click_destination_type:
-          $ref: '#/components/schemas/ClickDestinationType'
-        is_large_unit_ads:
-          $ref: '#/components/schemas/IsLargeUnitAds'
-        is_large_unit_square_ads:
-          $ref: '#/components/schemas/IsLargeUnitSquareAds'
-        is_sticky_placements_enabled:
-          $ref: '#/components/schemas/IsStickyPlacementsEnabled'
-        is_multi_order_attribution:
-          $ref: '#/components/schemas/IsMultiOrderAttribution'
-        is_skadnetwork_enabled:
-          $ref: '#/components/schemas/IsSKAdNetworkEnabled'
-        store_set_id:
-          $ref: '#/components/schemas/StoreSetId'
-        budget_auto_target_cpa_micro:
-          $ref: '#/components/schemas/BudgetAutoTargetCpaMicro'
-        app_promotion_info:
-          $ref: '#/components/schemas/PatchAppPromotionInfo'
-        app_tracking_configs:
-          $ref: '#/components/schemas/AppTrackingConfigs'
-        daily_schedules:
-          $ref: '#/components/schemas/DailySchedules'
-        channel_view_placement:
-          $ref: '#/components/schemas/ChannelViewPlacement'
-    UnauthorizedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNAUTHORIZED
-    TargetCostMicro:
-      type:
-      - integer
-      - 'null'
-      format: int64
-      description: 'The cost per acquisition in [micros](#section/About-Currency-Units) of the ad account currency base unit.
-
-
-        This is only required and configurable if and only if the bidding strategy is `TARGET_COST`.
-
-
-        | Ad Account''s currency | Minimum value   | Maximum Value             |   Minimum unit   |
-
-        |-----------------------|-----------------|---------------------------|------------------|
-
-        | JPY                   | 50,000,000      | 1,000,000,000,000         | 1,000,000        |
-
-        | USD                   | 500,000         | 10,000,000,000            | 10,000           |
-
-
-        The API will return an error if the provided value is not divisible by the minimum unit.
-
-        '
     DeliveryStatusObject:
       type: object
       required:
@@ -1964,25 +1875,114 @@ components:
           type: string
           description: A localized human readable description of the reason. The language is controlled by the Accept-Language header in the request.
       description: An Object that provides information about the delivery status of the campaign.
-    ValidationErrorExtension:
-      required:
-      - type
-      - error_fields
-      properties:
-        type:
-          type: string
-          enum:
-          - VALIDATION_ERROR
-        error_fields:
-          type: array
-          items:
-            type: object
-            properties:
-              field_name:
-                type: string
-                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
-              reason:
-                type: string
+    OptimizationGoal:
+      type:
+      - string
+      - 'null'
+      enum:
+      - CLICKS
+      - OFFSITE_CONVERSIONS
+      - VIEWABLE_IMPRESSIONS
+      - INSTALL
+      - INSTALL_WITH_IN_APP_EVENT
+      - ROAS
+      description: 'Optimization goal defines how the campaign is optimized.
+
+
+        This is required and configurable unless bidding strategy is `MANUAL`.
+
+
+        | Objective     | Bid Strategy   | Available Optimization Goal         |
+
+        |---------------|----------------|-------------------------------------|
+
+        | TRAFFIC       | HIGHEST_VOLUME | CLICKS                              |
+
+        | TRAFFIC       | MANUAL         | null                                |
+
+        | SALES         | HIGHEST_VOLUME | OFFSITE_CONVERSIONS, ROAS           |
+
+        | SALES         | TARGET_COST    | OFFSITE_CONVERSIONS                 |
+
+        | AWARENESS     | HIGHEST_VOLUME | VIEWABLE_IMPRESSIONS                |
+
+        | AWARENESS     | MANUAL         | null                                |
+
+        | APP_PROMOTION | HIGHEST_VOLUME | INSTALL, INSTALL_WITH_IN_APP_EVENT  |
+
+        | APP_PROMOTION | TARGET_COST    | INSTALL, INSTALL_WITH_IN_APP_EVENT  |
+
+
+        This field is not updatable when `ready_for_delivery` is `true`.
+
+        ROAS is only allowed to Dynamic Ads campaign with SALES Objective.
+
+        '
+    CampaignObjective:
+      type: string
+      enum:
+      - TRAFFIC
+      - SALES
+      - AWARENESS
+      - APP_PROMOTION
+      description: 'The objective of the campaign. It defines the business goal that customers pursue during a campaign.\
+
+
+        Note: Only `TRAFFIC` and `SALES` objectives are usable for US region ad account.
+
+        '
+    SpendingLimitMicro:
+      type: integer
+      format: int64
+      example: 10000000000
+      description: 'The life-time spending limit in [micros](#section/About-Currency-Units) of the ad account currency base unit. Null means there is no limit.
+
+
+        | Ad Account''s currency | Minimum value (creation only)  | Maximum Value             |   Minimum unit   |
+
+        |-----------------------|--------------------------------|---------------------------|------------------|
+
+        | JPY                   | 100,000,000                    | 10,000,000,000,000,000    | 1,000,000        |
+
+        | USD                   | 1,000,000                      | 10,000,000,000,000        | 10,000           |
+
+
+        The API will return an error if the provided value is not divisible by the minimum unit.
+
+        After the creation, please refer to the `minimal_spending_limit_micro` field for the minimum value.
+
+        '
+    OptimizationEvent:
+      type:
+      - string
+      - 'null'
+      enum:
+      - PURCHASE
+      - ADD_TO_CART
+      - INITIATE_CHECKOUT
+      - SUBMIT_FORM
+      - SUBSCRIBE
+      - COMPLETE_REGISTRATION
+      - CONTACT
+      - SIGN_UP
+      - VIEW_CONTENT
+      - ADD_PAYMENT_INFO
+      - ADD_TO_WISH_LIST
+      - VISIT_CART
+      - CUSTOMIZE_PRODUCT
+      - SEARCH
+      - BOOKING
+      - DOWNLOAD
+      - START_TRIAL
+      - SHARE
+      - LOGIN
+      - DONATE
+      - FIND_LOCATION
+      - TIME_SPENT
+      - LEAD
+      - INSTALL
+      - D1_RETENTION
+      description: "Optimization event defines which conversion event the campaign is optimized for.\n\n| Optimization Goal         | Available optimization events |\n|---------------------------|-------------------------------|\n| VIEWABLE_IMPRESSIONS      | n/a |\n| CLICK                     | n/a |\n| OFFSITE_CONVERSIONS       | PURCHASE, ADD_TO_CART, COMPLETE_REGISTRATION, VIEW_CONTENT, SUBSCRIBE, CONTACT, SIGN_UP, ADD_PAYMENT_INFO, ADD_TO_WISH_LIST, VISIT_CART, CUSTOMIZE_PRODUCT, SEARCH, BOOKING, DOWNLOAD, START_TRIAL, SHARE, LOGIN, DONATE, FIND_LOCATION, TIME_SPENT, INITIATE_CHECKOUT, SUBMIT_FORM |\n| ROAS (Dynamic Ads only)   | ADD_TO_CART, VIEW_CONTENT, PURCHASE, LEAD |\n| INSTALL                   | INSTALL |\n| INSTALL_WITH_IN_APP_EVENT | D1_RETENTION, PURCHASE, ADD_TO_CART, INITIATE_CHECKOUT, SUBMIT_FORM, SUBSCRIBE, COMPLETE_REGISTRATION, CONTACT, SIGN_UP, VIEW_CONTENT |\n\nNote:\n1. This field is not updatable when `ready_for_delivery` is `true`.\n2. `LEAD` event is only available for dynamic ads campaigns.\n3. For dynamic ads campaigns, only the following optimization events are supported:\n  - `ADD_TO_CART`\n  - `VIEW_CONTENT`\n  - `PURCHASE`\n  - `LEAD`\n"
   requestBodies:
     requestBody:
       content:

@@ -74,19 +74,21 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    RevokeAccessTokenRequest:
+    Error:
       type: object
       required:
-      - client_id
-      - client_secret
+      - error
       properties:
-        client_id:
-          type: integer
-          format: int64
-          description: The client id(developer app id) of the developer app.
-        client_secret:
-          type: string
-          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
+        error:
+          type: object
+          required:
+          - message
+          - retriable
+          properties:
+            message:
+              type: string
+            retriable:
+              type: boolean
     GenerateAccessTokenResponse:
       type: object
       required:
@@ -109,21 +111,19 @@ components:
         expires_in: 86400
         token_type: Bearer
         scope: ads-manager
-    Error:
+    RevokeAccessTokenRequest:
       type: object
       required:
-      - error
+      - client_id
+      - client_secret
       properties:
-        error:
-          type: object
-          required:
-          - message
-          - retriable
-          properties:
-            message:
-              type: string
-            retriable:
-              type: boolean
+        client_id:
+          type: integer
+          format: int64
+          description: The client id(developer app id) of the developer app.
+        client_secret:
+          type: string
+          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
     GenerateAccessTokenRequest:
       type: object
       required:

@@ -642,6 +642,13 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
     PostProductSetRequest:
       type: object
       required:
@@ -665,25 +672,17 @@ components:
 
             '
       description: Request body for creating a new product set.
-    BadRequestErrorResponse:
+    CatalogArrayResponse:
       type: object
       required:
-      - error
+      - data
       properties:
-        error:
-          $ref: '#/components/schemas/BadRequestError'
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogResponse'
+          description: Array of catalog objects returned by the list operation.
+      description: Response wrapper containing a list of catalogs for a given business.
     FilterCondition:
       type: string
       enum:
@@ -698,90 +697,286 @@ components:
       - IS_ANY_OF_THE_FOLLOWINGS
       - IS_NOT_ANY_OF_THE_FOLLOWINGS
       description: Supported operators for catalog product filtering rules.
-    CommonSchemas_ValidationErrorExtension:
+    TrackingType:
+      type: string
+      enum:
+      - ANDROID
+      - IOS
+      - ALL
+      description: 'The platform type for app tracking.
+
+        - ANDROID: Android platform only
+
+        - IOS: iOS platform only
+
+        - ALL: Both Android and iOS platforms
+
+        '
+    CommonSchemas_FileType:
+      type: string
+      enum:
+      - CSV
+      - TSV
+      description: 'The file format for product feed.
+
+        - CSV: Comma-separated values
+
+        - TSV: Tab-separated values
+
+        '
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    ProductSet:
+      type: object
+      required:
+      - product_set_id
+      - catalog_id
+      - name
+      - status
+      - rule_match_type
+      - item_count
+      - is_universal_set
+      - created_at
+      - updated_at
+      properties:
+        product_set_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the product set.
+        catalog_id:
+          type: integer
+          format: int64
+          description: Identifier of the catalog this product set belongs to.
+        name:
+          type: string
+          maxLength: 255
+          description: Human-readable display name for the product set.
+        status:
+          $ref: '#/components/schemas/Status'
+        rule_match_type:
+          $ref: '#/components/schemas/RuleMatchType'
+        filter_rules:
+          type: array
+          minItems: 0
+          items:
+            $ref: '#/components/schemas/FilterRule'
+          description: Collection of filter rules applied to build this product set. Empty array represents no filters applied.
+        item_count:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Number of catalog items that satisfied the filter rules in the latest run.
+        last_processed_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Timestamp of the latest product set generation completion.
+        condition_updated_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp at which productSet’s condition (rule_match_type, filter_rules) are changed.
+        is_universal_set:
+          type: boolean
+          description: Indicates whether this product set represents the default all-items set.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the product set was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the product set configuration was last updated.
+      description: Product set definition along with the latest operational metadata.
+    ServiceUnavailableErrorExtension:
+      type: object
       required:
       - type
-      - error_fields
       properties:
         type:
           type: string
           enum:
-          - VALIDATION_ERROR
-        error_fields:
+          - UNDER_MAINTENANCE
+    FilterRule:
+      type: object
+      required:
+      - filter_rule_id
+      - field
+      - condition
+      - values
+      properties:
+        filter_rule_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the filter rule.
+        field:
+          $ref: '#/components/schemas/FilterField'
+        condition:
+          $ref: '#/components/schemas/FilterCondition'
+        values:
           type: array
           items:
-            type: object
-            properties:
-              field_name:
-                type: string
-                description: 'The field name that doesn''t pass the validation.
+            type: string
+          maxItems: 10
+          description: 'Array of values used by the condition. Maximum 10 values allowed for IS_ANY_OF_THE_FOLLOWINGS and IS_NOT_ANY_OF_THE_FOLLOWINGS conditions.
 
-                  '
-              reason:
-                type: string
-    FilterField:
+            '
+      description: Filter rule definition used to build a product set.
+    CommonSchemas_ResourceNotFoundErrorExtension:
+      type: object
+      required:
+      - type
+      - resource_type
+      properties:
+        type:
+          type: string
+          enum:
+          - NOT_FOUND
+          - DELETED
+        resource_type:
+          type: string
+          enum:
+          - USER
+          - BUSINESS
+          - AD_ACCOUNT
+          - DEVELOPER_APP
+          - ENDPOINT
+          - USER_AD_ACCOUNT_ACCESS
+          - TERMS_OF_SERVICE
+          - BRAND
+          - CREDIT_CARD_PAYMENT_METHOD
+          - AD_ACCOUNT_PAYMENT_THRESHOLD
+          - MONTHLY_RECEIPT
+          - AD_ACCOUNT_OUTSTANDING_BALANCE
+          - AD_CREDIT_ACCOUNT
+          - CATALOG
+          - PRODUCT_SET
+          - STORE_SET
+    FilterRuleRequest:
+      type: object
+      required:
+      - field
+      - condition
+      - values
+      properties:
+        field:
+          $ref: '#/components/schemas/FilterField'
+        condition:
+          $ref: '#/components/schemas/FilterCondition'
+        values:
+          type: array
+          items:
+            type: string
+            maxLength: 255
+          maxItems: 10
+          description: 'Array of values used by the condition. Maximum 10 values allowed for IS_ANY_OF_THE_FOLLOWINGS and IS_NOT_ANY_OF_THE_FOLLOWINGS conditions. Other conditions take only one value.
+
+            For numeric comparison conditions (GREATER_THAN, LESS_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL), values must be numeric strings. Non-numeric strings will result in an error.
+
+            '
+      description: Filter rule input for creating or updating a product set.
+    CommonSchemas_ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CommonSchemas_ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    RuleMatchType:
       type: string
       enum:
-      - ID
-      - TITLE
-      - PRICE
-      - PRODUCT_TYPE
-      - SHOP_ID
-      - RATING
-      - CUSTOM_LABEL_0
-      - CUSTOM_LABEL_1
-      - CUSTOM_LABEL_2
-      - CUSTOM_LABEL_3
-      - CUSTOM_LABEL_4
-      - CUSTOM_NUMBER_0
-      - CUSTOM_NUMBER_1
-      - CUSTOM_NUMBER_2
-      - CUSTOM_NUMBER_3
-      - CUSTOM_NUMBER_4
-      description: Supported fields for catalog product filtering.
-    CatalogAdAccount:
+      - ALL
+      - AT_LEAST_ONE
+      description: 'Rule matching strategy within a product set.
+
+        - ALL: Products must satisfy every rule (logical AND).
+
+        - AT_LEAST_ONE: Products may satisfy any single rule (logical OR).
+
+        '
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    CreateCatalogResponse:
       type: object
       required:
-      - ad_account_id
-      - ad_account_name
+      - catalog_id
+      - business_id
+      - name
+      - currency
+      - review_status
+      - total_item_count
+      - ad_accounts
+      - product_sources
+      - created_at
+      - updated_at
       properties:
-        ad_account_id:
+        catalog_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the newly created catalog.
+        business_id:
+          type: integer
+          format: int64
+          description: Identifier of the business that owns this catalog.
+        name:
           type: string
-          description: Identifier of the ad account.
-        ad_account_name:
+          description: Human-readable display name for the catalog.
+        currency:
           type: string
-          description: Name of the ad account.
-      description: Ad account that has access to the catalog.
-    ProductSourceRequest:
-      type: object
-      required:
-      - product_source_name
-      - file_type
-      - file_url
-      properties:
-        product_source_name:
+          description: Currency for the catalog.
+        description:
           type: string
-          minLength: 1
-          maxLength: 256
-          description: Name of the product source.
-        file_type:
-          $ref: '#/components/schemas/CommonSchemas_FileType'
-        file_url:
+          description: Optional description of the catalog.
+        review_status:
+          $ref: '#/components/schemas/ReviewStatus'
+        total_item_count:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Total number of product items currently available in the catalog.
+        all_ad_account_access:
+          type: boolean
+          description: Whether all DA ad accounts of the business have access to this catalog.
+        pixel_tag_id:
           type: string
-          minLength: 1
-          maxLength: 1024
-          description: FTP, HTTP, or HTTPS URL to the feed file.
-        username:
+          description: Pixel tag ID associated with this catalog for web tracking.
+        app_tracking:
+          $ref: '#/components/schemas/AppTracking'
+        ad_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogAdAccount'
+          description: List of ad accounts that can access this catalog.
+        product_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSource'
+          description: List of product sources that populate the catalog with product data.
+        created_at:
           type: string
-          minLength: 1
-          maxLength: 256
-          description: Optional username for feed file access.
-        password:
+          format: date-time
+          description: Timestamp when the catalog was created.
+        updated_at:
           type: string
-          minLength: 1
-          maxLength: 256
-          description: Optional password for feed file access.
-      description: Product source configuration for catalog creation.
+          format: date-time
+          description: Timestamp when the catalog metadata or configuration was last updated.
+      description: Response for catalog creation containing the newly created catalog details.
     AppTracking:
       type: object
       required:
@@ -796,7 +991,14 @@ components:
           type: string
           description: Android App ID. Required if tracking_type is ANDROID or ALL.
       description: Mobile app tracking configuration for the catalog.
-    BadRequestErrorExtension:
+    CommonSchemas_ValidationErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/CommonSchemas_ValidationError'
+    UnexpectedErrorExtension:
       type: object
       required:
       - type
@@ -804,18 +1006,12 @@ components:
         type:
           type: string
           enum:
-          - BAD_REQUEST
-    CatalogArrayResponse:
+          - UNEXPECTED_ERROR
+    CommonSchemas_ResourceNotFoundError:
       type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CatalogResponse'
-          description: Array of catalog objects returned by the list operation.
-      description: Response wrapper containing a list of catalogs for a given business.
+      allOf:
+      - $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
     CreateCatalogRequest:
       type: object
       required:
@@ -859,71 +1055,6 @@ components:
         product_source:
           $ref: '#/components/schemas/ProductSourceRequest'
       description: Request body for creating a new catalog.
-    BadRequestError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/BadRequestErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ProductSourceStatus:
-      type: string
-      enum:
-      - CREATED
-      - SUCCESS
-      - WARNING
-      - ERROR
-      description: "Status of the product source, covering both the latest fetch (connection)\nand the health of the items it imported. On a successful fetch the status\nreflects the item import breakdown; WARNING is derived on the backend so the\nthreshold stays configurable (BMT-1190). out_of_stock items are NOT counted\nas excluded for the WARNING calculation.\n- CREATED: Product source has been created and is awaiting a successful fetch\n- SUCCESS: Last fetch completed successfully and at most 20% of input items\n  were excluded (unparsable + blocked)\n- WARNING: Last fetch completed successfully but more than 20% of input items\n  were excluded (unparsable + blocked). The threshold is backend-configurable.\n- ERROR: Last fetch failed with errors\n"
-    FilterRuleRequest:
-      type: object
-      required:
-      - field
-      - condition
-      - values
-      properties:
-        field:
-          $ref: '#/components/schemas/FilterField'
-        condition:
-          $ref: '#/components/schemas/FilterCondition'
-        values:
-          type: array
-          items:
-            type: string
-            maxLength: 255
-          maxItems: 10
-          description: 'Array of values used by the condition. Maximum 10 values allowed for IS_ANY_OF_THE_FOLLOWINGS and IS_NOT_ANY_OF_THE_FOLLOWINGS conditions. Other conditions take only one value.
-
-            For numeric comparison conditions (GREATER_THAN, LESS_THAN, GREATER_THAN_OR_EQUAL, LESS_THAN_OR_EQUAL), values must be numeric strings. Non-numeric strings will result in an error.
-
-            '
-      description: Filter rule input for creating or updating a product set.
-    ProductSetResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/ProductSet'
-      description: Response body containing a single product set.
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    ForbiddenError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
     IngestionErrorReason:
       type:
       - string
@@ -953,26 +1084,84 @@ components:
         - UNKNOWN_ERROR: Unclassifiable error (FTP 500-503/551, other)
 
         '
-    CommonSchemas_ValidationError:
+    CatalogResponse:
+      type: object
+      required:
+      - catalog_id
+      - business_id
+      - name
+      - review_status
+      - total_item_count
+      - ad_accounts
+      - product_sources
+      - created_at
+      - updated_at
+      properties:
+        catalog_id:
+          type: integer
+          format: int64
+          description: Unique identifier of the catalog.
+        business_id:
+          type: integer
+          format: int64
+          description: Identifier of the business that owns this catalog.
+        name:
+          type: string
+          maxLength: 256
+          description: Human-readable display name for the catalog.
+        currency:
+          type: string
+          description: Currency for the catalog.
+        description:
+          type: string
+          description: Optional description of the catalog.
+        review_status:
+          $ref: '#/components/schemas/ReviewStatus'
+        total_item_count:
+          type: integer
+          format: int32
+          minimum: 0
+          description: Total number of product items currently available in the catalog across all product sources.
+        all_ad_account_access:
+          type: boolean
+          description: Whether all DA ad accounts of the business have access to this catalog.
+        pixel_tag_id:
+          type: string
+          description: Pixel tag ID associated with this catalog for web tracking.
+        app_tracking:
+          $ref: '#/components/schemas/AppTracking'
+        ad_accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogAdAccount'
+          description: List of ad accounts that can access this catalog.
+        product_sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSource'
+          description: List of product sources that populate the catalog with product data.
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the catalog was created.
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the catalog metadata or configuration was last updated.
+      description: Complete representation of a catalog including metadata and configuration.
+    UnexpectedError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/CommonSchemas_ValidationErrorExtension'
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    Status:
+    ProductSourceStatus:
       type: string
       enum:
       - CREATED
-      - READY
+      - SUCCESS
+      - WARNING
       - ERROR
-      description: 'Status of the product set generation.
-
-        - CREATED: Product set is pending processing or regeneration.
-
-        - READY: Latest processing succeeded and the set is ready for delivery.
-
-        - ERROR: Latest processing failed or produced zero matching items.
-
-        '
+      description: "Status of the product source, covering both the latest fetch (connection)\nand the health of the items it imported. On a successful fetch the status\nreflects the item import breakdown; WARNING is derived on the backend so the\nthreshold stays configurable (BMT-1190). out_of_stock items are NOT counted\nas excluded for the WARNING calculation.\n- CREATED: Product source has been created and is awaiting a successful fetch\n- SUCCESS: Last fetch completed successfully and at most 20% of input items\n  were excluded (unparsable + blocked)\n- WARNING: Last fetch completed successfully but more than 20% of input items\n  were excluded (unparsable + blocked). The threshold is backend-configurable.\n- ERROR: Last fetch failed with errors\n"
     ProductSource:
       type: object
       required:
@@ -1063,169 +1252,87 @@ components:
           x-bypass-name-conversion: true
           description: Number of items blocked by content/moderation policy in the latest ingestion. Aggregate across all blocking reasons (specific reasons are not disclosed). Null until a successful ingestion has produced a breakdown.
       description: "Product source configuration and operational data. Returned identically by\nthe catalog endpoints (nested under `product_sources`) and by the product\nsource endpoints, so a client always sees the same complete representation\nof a product source regardless of which API surface it consumed.\nItem import breakdown (last_out_of_stock_item_count, last_unparsable_item_count,\nlast_blocked_item_count) from the latest successful ingestion's ParseSummary:\n  input    = parsable + last_unparsable_item_count\n  parsable = in_stock + last_out_of_stock_item_count\n  in_stock = last_successful_item_count (deliverable) + last_blocked_item_count\nThe breakdown counts are null until a successful ingestion has produced them.\n"
-    CatalogResponse:
-      type: object
-      required:
-      - catalog_id
-      - business_id
-      - name
-      - review_status
-      - total_item_count
-      - ad_accounts
-      - product_sources
-      - created_at
-      - updated_at
-      properties:
-        catalog_id:
-          type: integer
-          format: int64
-          description: Unique identifier of the catalog.
-        business_id:
-          type: integer
-          format: int64
-          description: Identifier of the business that owns this catalog.
-        name:
-          type: string
-          maxLength: 256
-          description: Human-readable display name for the catalog.
-        currency:
-          type: string
-          description: Currency for the catalog.
-        description:
-          type: string
-          description: Optional description of the catalog.
-        review_status:
-          $ref: '#/components/schemas/ReviewStatus'
-        total_item_count:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Total number of product items currently available in the catalog across all product sources.
-        all_ad_account_access:
-          type: boolean
-          description: Whether all DA ad accounts of the business have access to this catalog.
-        pixel_tag_id:
-          type: string
-          description: Pixel tag ID associated with this catalog for web tracking.
-        app_tracking:
-          $ref: '#/components/schemas/AppTracking'
-        ad_accounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/CatalogAdAccount'
-          description: List of ad accounts that can access this catalog.
-        product_sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductSource'
-          description: List of product sources that populate the catalog with product data.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the catalog was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the catalog metadata or configuration was last updated.
-      description: Complete representation of a catalog including metadata and configuration.
-    UnexpectedErrorExtension:
-      type: object
+    CommonSchemas_ValidationErrorExtension:
       required:
       - type
+      - error_fields
       properties:
         type:
           type: string
           enum:
-          - UNEXPECTED_ERROR
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    PatchProductSetRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 255
-          minLength: 1
-          description: Human-readable display name for the product set.
-        rule_match_type:
-          $ref: '#/components/schemas/RuleMatchType'
-        filter_rules:
+          - VALIDATION_ERROR
+        error_fields:
           type: array
           items:
-            $ref: '#/components/schemas/FilterRuleRequest'
-          description: 'Collection of filter rules to apply. Each field can have 1 or up to 2 rules.
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: 'The field name that doesn''t pass the validation.
 
-            '
-      description: Request body for updating an existing product set. At least one field must be provided.
-    CommonSchemas_ResourceNotFoundErrorResponse:
+                  '
+              reason:
+                type: string
+    ForbiddenErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundError'
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    CommonSchemas_ValidationErrorResponse:
+          $ref: '#/components/schemas/ForbiddenError'
+    UnexpectedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/CommonSchemas_ValidationError'
-    CommonSchemas_ResourceNotFoundErrorExtension:
+          $ref: '#/components/schemas/UnexpectedError'
+    BadRequestErrorResponse:
       type: object
       required:
-      - type
-      - resource_type
+      - error
       properties:
-        type:
-          type: string
-          enum:
-          - NOT_FOUND
-          - DELETED
-        resource_type:
-          type: string
-          enum:
-          - USER
-          - BUSINESS
-          - AD_ACCOUNT
-          - DEVELOPER_APP
-          - ENDPOINT
-          - USER_AD_ACCOUNT_ACCESS
-          - TERMS_OF_SERVICE
-          - BRAND
-          - CREDIT_CARD_PAYMENT_METHOD
-          - AD_ACCOUNT_PAYMENT_THRESHOLD
-          - MONTHLY_RECEIPT
-          - AD_ACCOUNT_OUTSTANDING_BALANCE
-          - AD_CREDIT_ACCOUNT
-          - CATALOG
-          - PRODUCT_SET
-          - STORE_SET
+        error:
+          $ref: '#/components/schemas/BadRequestError'
     ServiceUnavailableError:
       type: object
       allOf:
       - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    ServiceUnavailableErrorResponse:
+    ReviewStatus:
+      type: string
+      enum:
+      - SUBMITTED
+      - APPROVED
+      - REJECTED
+    FilterField:
+      type: string
+      enum:
+      - ID
+      - TITLE
+      - PRICE
+      - PRODUCT_TYPE
+      - SHOP_ID
+      - RATING
+      - CUSTOM_LABEL_0
+      - CUSTOM_LABEL_1
+      - CUSTOM_LABEL_2
+      - CUSTOM_LABEL_3
+      - CUSTOM_LABEL_4
+      - CUSTOM_NUMBER_0
+      - CUSTOM_NUMBER_1
+      - CUSTOM_NUMBER_2
+      - CUSTOM_NUMBER_3
+      - CUSTOM_NUMBER_4
+      description: Supported fields for catalog product filtering.
+    ProductSetResponse:
       type: object
       required:
-      - error
+      - data
       properties:
-        error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
+        data:
+          $ref: '#/components/schemas/ProductSet'
+      description: Response body containing a single product set.
     UnauthorizedErrorResponse:
       type: object
       required:
@@ -1233,7 +1340,29 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/UnauthorizedError'
-    UnauthorizedErrorExtension:
+    Status:
+      type: string
+      enum:
+      - CREATED
+      - READY
+      - ERROR
+      description: 'Status of the product set generation.
+
+        - CREATED: Product set is pending processing or regeneration.
+
+        - READY: Latest processing succeeded and the set is ready for delivery.
+
+        - ERROR: Latest processing failed or produced zero matching items.
+
+        '
+    CommonSchemas_ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundError'
+    ForbiddenErrorExtension:
       type: object
       required:
       - type
@@ -1241,38 +1370,30 @@ components:
         type:
           type: string
           enum:
-          - UNAUTHORIZED
-    ReviewStatus:
-      type: string
-      enum:
-      - SUBMITTED
-      - APPROVED
-      - REJECTED
-    FilterRule:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    BadRequestError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/BadRequestErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    CatalogAdAccount:
       type: object
       required:
-      - filter_rule_id
-      - field
-      - condition
-      - values
+      - ad_account_id
+      - ad_account_name
       properties:
-        filter_rule_id:
-          type: integer
-          format: int64
-          description: Unique identifier of the filter rule.
-        field:
-          $ref: '#/components/schemas/FilterField'
-        condition:
-          $ref: '#/components/schemas/FilterCondition'
-        values:
-          type: array
-          items:
-            type: string
-          maxItems: 10
-          description: 'Array of values used by the condition. Maximum 10 values allowed for IS_ANY_OF_THE_FOLLOWINGS and IS_NOT_ANY_OF_THE_FOLLOWINGS conditions.
-
-            '
-      description: Filter rule definition used to build a product set.
+        ad_account_id:
+          type: string
+          description: Identifier of the ad account.
+        ad_account_name:
+          type: string
+          description: Name of the ad account.
+      description: Ad account that has access to the catalog.
     UpdateCatalogRequest:
       type: object
       properties:
@@ -1321,103 +1442,63 @@ components:
         must be provided.
 
         '
-    TrackingType:
-      type: string
-      enum:
-      - ANDROID
-      - IOS
-      - ALL
-      description: 'The platform type for app tracking.
-
-        - ANDROID: Android platform only
-
-        - IOS: iOS platform only
-
-        - ALL: Both Android and iOS platforms
-
-        '
-    CommonSchemas_ResourceNotFoundError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    CreateCatalogResponse:
+    UnauthorizedErrorExtension:
       type: object
       required:
-      - catalog_id
-      - business_id
-      - name
-      - currency
-      - review_status
-      - total_item_count
-      - ad_accounts
-      - product_sources
-      - created_at
-      - updated_at
+      - type
       properties:
-        catalog_id:
-          type: integer
-          format: int64
-          description: Unique identifier of the newly created catalog.
-        business_id:
-          type: integer
-          format: int64
-          description: Identifier of the business that owns this catalog.
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    PatchProductSetRequest:
+      type: object
+      properties:
         name:
           type: string
-          description: Human-readable display name for the catalog.
-        currency:
-          type: string
-          description: Currency for the catalog.
-        description:
-          type: string
-          description: Optional description of the catalog.
-        review_status:
-          $ref: '#/components/schemas/ReviewStatus'
-        total_item_count:
-          type: integer
-          format: int32
-          minimum: 0
-          description: Total number of product items currently available in the catalog.
-        all_ad_account_access:
-          type: boolean
-          description: Whether all DA ad accounts of the business have access to this catalog.
-        pixel_tag_id:
-          type: string
-          description: Pixel tag ID associated with this catalog for web tracking.
-        app_tracking:
-          $ref: '#/components/schemas/AppTracking'
-        ad_accounts:
+          maxLength: 255
+          minLength: 1
+          description: Human-readable display name for the product set.
+        rule_match_type:
+          $ref: '#/components/schemas/RuleMatchType'
+        filter_rules:
           type: array
           items:
-            $ref: '#/components/schemas/CatalogAdAccount'
-          description: List of ad accounts that can access this catalog.
-        product_sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProductSource'
-          description: List of product sources that populate the catalog with product data.
-        created_at:
+            $ref: '#/components/schemas/FilterRuleRequest'
+          description: 'Collection of filter rules to apply. Each field can have 1 or up to 2 rules.
+
+            '
+      description: Request body for updating an existing product set. At least one field must be provided.
+    ProductSourceRequest:
+      type: object
+      required:
+      - product_source_name
+      - file_type
+      - file_url
+      properties:
+        product_source_name:
           type: string
-          format: date-time
-          description: Timestamp when the catalog was created.
-        updated_at:
+          minLength: 1
+          maxLength: 256
+          description: Name of the product source.
+        file_type:
+          $ref: '#/components/schemas/CommonSchemas_FileType'
+        file_url:
           type: string
-          format: date-time
-          description: Timestamp when the catalog metadata or configuration was last updated.
-      description: Response for catalog creation containing the newly created catalog details.
-    RuleMatchType:
-      type: string
-      enum:
-      - ALL
-      - AT_LEAST_ONE
-      description: 'Rule matching strategy within a product set.
-
-        - ALL: Products must satisfy every rule (logical AND).
-
-        - AT_LEAST_ONE: Products may satisfy any single rule (logical OR).
-
-        '
+          minLength: 1
+          maxLength: 1024
+          description: FTP, HTTP, or HTTPS URL to the feed file.
+        username:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Optional username for feed file access.
+        password:
+          type: string
+          minLength: 1
+          maxLength: 256
+          description: Optional password for feed file access.
+      description: Product source configuration for catalog creation.
     ProductSetArrayResponse:
       type: object
       required:
@@ -1429,19 +1510,7 @@ components:
             $ref: '#/components/schemas/ProductSet'
           description: Collection of product sets owned by the catalog.
       description: Response body containing multiple product sets.
-    CommonSchemas_FileType:
-      type: string
-      enum:
-      - CSV
-      - TSV
-      description: 'The file format for product feed.
-
-        - CSV: Comma-separated values
-
-        - TSV: Tab-separated values
-
-        '
-    ForbiddenErrorExtension:
+    BadRequestErrorExtension:
       type: object
       required:
       - type
@@ -1449,76 +1518,7 @@ components:
         type:
           type: string
           enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    ProductSet:
-      type: object
-      required:
-      - product_set_id
-      - catalog_id
-      - name
-      - status
-      - rule_match_type
-      - item_count
-      - is_universal_set
-      - created_at
-      - updated_at
-      properties:
-        product_set_id:
-          type: integer
-          format: int64
-          description: Unique identifier of the product set.
-        catalog_id:
-          type: integer
-          format: int64
-          description: Identifier of the catalog this product set belongs to.
-        name:
-          type: string
-          maxLength: 255
-          description: Human-readable display name for the product set.
-        status:
-          $ref: '#/components/schemas/Status'
-        rule_match_type:
-          $ref: '#/components/schemas/RuleMatchType'
-        filter_rules:
-          type: array
-          minItems: 0
-          items:
-            $ref: '#/components/schemas/FilterRule'
-          description: Collection of filter rules applied to build this product set. Empty array represents no filters applied.
-        item_count:
-          type: integer
-          format: int64
-          minimum: 0
-          description: Number of catalog items that satisfied the filter rules in the latest run.
-        last_processed_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: Timestamp of the latest product set generation completion.
-        condition_updated_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The timestamp at which productSet’s condition (rule_match_type, filter_rules) are changed.
-        is_universal_set:
-          type: boolean
-          description: Indicates whether this product set represents the default all-items set.
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the product set was created.
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the product set configuration was last updated.
-      description: Product set definition along with the latest operational metadata.
+          - BAD_REQUEST
   securitySchemes:
     ApiKeyAuth:
       type: http

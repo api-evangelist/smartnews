@@ -94,84 +94,18 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    UnexpectedErrorResponse:
+    ServiceUnavailableErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/UnexpectedError'
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    ForbiddenError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    AdAccountNamespaceRole:
-      type: string
-      enum:
-      - ADS_ADVERTISER_OPERATOR
-      - ADS_ADVERTISER_ANALYST
-      description: 'An ad account namespace role is a role assigned to each ad account.
-
-        - If a user has the ADS_ADVERTISER_OPERATOR role for a particular ad account, they can perform operations within that ad account as an advertiser operator, but this authority does not extend to other ad accounts even if they are in the same business.
-
-        - If a user has the ADS_ADVERTISER_ANALYST role for a particular ad account, they have read-only access to that particular ad account, but this authority does not extend to other ad accounts even if they are in the same business.
-
-        '
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
+          $ref: '#/components/schemas/ServiceUnavailableError'
     UnauthorizedError:
       type: object
       allOf:
       - $ref: '#/components/schemas/UnauthorizedErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    DeveloperAppAccessibleAdAccountArrayResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeveloperAppAccessibleAdAccountResponse'
-      description: 'This response contains list of ad accounts that associated with the specified business.
-
-        '
-    CommonSchemas_ResourceNotFoundErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundError'
     ErrorBase:
       type: object
       required:
@@ -182,6 +116,15 @@ components:
           type: string
         retriable:
           type: boolean
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
     CommonSchemas_ResourceNotFoundErrorExtension:
       type: object
       required:
@@ -212,18 +155,73 @@ components:
           - CATALOG
           - PRODUCT_SET
           - STORE_SET
-    ServiceUnavailableError:
+    ForbiddenError:
       type: object
       allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    ServiceUnavailableErrorResponse:
+    DeveloperAppAccessibleAdAccountArrayResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeveloperAppAccessibleAdAccountResponse'
+      description: 'This response contains list of ad accounts that associated with the specified business.
+
+        '
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    CommonSchemas_ResourceNotFoundError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ForbiddenErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
+          $ref: '#/components/schemas/ForbiddenError'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    AdAccountNamespaceRole:
+      type: string
+      enum:
+      - ADS_ADVERTISER_OPERATOR
+      - ADS_ADVERTISER_ANALYST
+      description: 'An ad account namespace role is a role assigned to each ad account.
+
+        - If a user has the ADS_ADVERTISER_OPERATOR role for a particular ad account, they can perform operations within that ad account as an advertiser operator, but this authority does not extend to other ad accounts even if they are in the same business.
+
+        - If a user has the ADS_ADVERTISER_ANALYST role for a particular ad account, they have read-only access to that particular ad account, but this authority does not extend to other ad accounts even if they are in the same business.
+
+        '
     UnauthorizedErrorResponse:
       type: object
       required:
@@ -231,6 +229,27 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/UnauthorizedError'
+    CommonSchemas_ResourceNotFoundErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundError'
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
     UnauthorizedErrorExtension:
       type: object
       required:
@@ -240,11 +259,6 @@ components:
           type: string
           enum:
           - UNAUTHORIZED
-    CommonSchemas_ResourceNotFoundError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/CommonSchemas_ResourceNotFoundErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
     DeveloperAppAccessibleAdAccountResponse:
       type: object
       required:
@@ -272,20 +286,6 @@ components:
           items:
             $ref: '#/components/schemas/AdAccountNamespaceRole'
           description: A list of roles that the ad account has.
-    ForbiddenErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
   securitySchemes:
     ApiKeyAuth:
       type: http

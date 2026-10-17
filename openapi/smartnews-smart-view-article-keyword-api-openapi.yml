@@ -86,6 +86,84 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
+    RateLimitedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ErrorBase'
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - TOO_MANY_REQUESTS
+    ForbiddenError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ForbiddenErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ValidationErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ValidationError'
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ValidationErrorExtension:
+      required:
+      - type
+      - error_fields
+      properties:
+        type:
+          type: string
+          enum:
+          - VALIDATION_ERROR
+        error_fields:
+          type: array
+          items:
+            type: object
+            properties:
+              field_name:
+                type: string
+                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
+              reason:
+                type: string
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
     ServiceUnavailableErrorResponse:
       type: object
       required:
@@ -93,6 +171,13 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ServiceUnavailableError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
     SmartViewArticleKeywordSearchRequest:
       type: object
       required:
@@ -129,125 +214,6 @@ components:
           minimum: 1
           maximum: 20
           default: 20
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    RateLimitedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ErrorBase'
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            enum:
-            - TOO_MANY_REQUESTS
-    ForbiddenError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ForbiddenErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ValidationErrorExtension:
-      required:
-      - type
-      - error_fields
-      properties:
-        type:
-          type: string
-          enum:
-          - VALIDATION_ERROR
-        error_fields:
-          type: array
-          items:
-            type: object
-            properties:
-              field_name:
-                type: string
-                description: "The field name that doesn't pass the validation.\\\nFor nested fields, the field name will be in the format of JSON path with dot notation.\\\nHere are some examples:\\\n  - `landing_page_url`(a root level field)\\\n  - `ad.creative.headline`(a nested object field)\\\n  - `creative.image_creative_info.media_file_ids`(an array in a nested object)\\\n  - `creative.carousel_creative_info.carousel_cards[0].caption`(a field of an object in an array)\\\n"
-              reason:
-                type: string
-    UnexpectedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNEXPECTED_ERROR
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ValidationError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ValidationErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    ValidationErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ValidationError'
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    RateLimitedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
     ForbiddenErrorExtension:
       type: object
       required:
@@ -262,6 +228,23 @@ components:
           type: string
           example: /terms/agreement
           description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
     SmartViewArticleKeywordSearchResponse:
       type: object
       description: 'A map of each input keyword to its list of suggested keywords sorted by relevance in descending order.
@@ -281,7 +264,24 @@ components:
         Tokyo:
         - Tokyo
         - 東京
-    UnauthorizedErrorExtension:
+    ValidationError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ValidationErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
+    UnexpectedErrorExtension:
       type: object
       required:
       - type
@@ -289,7 +289,7 @@ components:
         type:
           type: string
           enum:
-          - UNAUTHORIZED
+          - UNEXPECTED_ERROR
   securitySchemes:
     ApiKeyAuth:
       type: http

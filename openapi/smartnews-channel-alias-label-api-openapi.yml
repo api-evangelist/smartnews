@@ -94,13 +94,20 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    ServiceUnavailableErrorResponse:
+    ServiceUnavailableErrorExtension:
       type: object
       required:
-      - error
+      - type
       properties:
-        error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
     RateLimitedError:
       type: object
       allOf:
@@ -113,23 +120,86 @@ components:
             type: string
             enum:
             - TOO_MANY_REQUESTS
+    UnexpectedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNEXPECTED_ERROR
+    ChannelAliasLabelMasterName:
+      type: object
+      required:
+      - en
+      - ja
+      properties:
+        en:
+          type: string
+          description: The English name of the channel alias label.
+          example: News
+        ja:
+          type: string
+          description: The Japanese name of the channel alias label.
+          example: ニュース
     ForbiddenError:
       type: object
       allOf:
       - $ref: '#/components/schemas/ForbiddenErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    ChannelAliasLabelMaster:
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    ErrorBase:
       type: object
       required:
-      - id
-      - name
+      - message
+      - retriable
       properties:
-        id:
+        message:
           type: string
-          description: The unique ID of the channel alias label.
-          example: CR_JA_TOP
-        name:
-          $ref: '#/components/schemas/ChannelAliasLabelMasterName'
+        retriable:
+          type: boolean
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
     ForbiddenErrorExtension:
       type: object
       required:
@@ -144,20 +214,6 @@ components:
           type: string
           example: /terms/agreement
           description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    ForbiddenErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
     ChannelAliasLabelMasterResponse:
       type: array
       description: 'An array of channel alias label master data.
@@ -174,86 +230,30 @@ components:
         name:
           en: Politics
           ja: 政治
-    UnauthorizedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNAUTHORIZED
     ServiceUnavailableError:
       type: object
       allOf:
       - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    RateLimitedErrorResponse:
+    UnexpectedErrorResponse:
       type: object
       required:
       - error
       properties:
         error:
-          $ref: '#/components/schemas/RateLimitedError'
-    UnexpectedErrorExtension:
+          $ref: '#/components/schemas/UnexpectedError'
+    ChannelAliasLabelMaster:
       type: object
       required:
-      - type
+      - id
+      - name
       properties:
-        type:
+        id:
           type: string
-          enum:
-          - UNEXPECTED_ERROR
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
-    ChannelAliasLabelMasterName:
-      type: object
-      required:
-      - en
-      - ja
-      properties:
-        en:
-          type: string
-          description: The English name of the channel alias label.
-          example: News
-        ja:
-          type: string
-          description: The Japanese name of the channel alias label.
-          example: ニュース
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
+          description: The unique ID of the channel alias label.
+          example: CR_JA_TOP
+        name:
+          $ref: '#/components/schemas/ChannelAliasLabelMasterName'
   securitySchemes:
     ApiKeyAuth:
       type: http

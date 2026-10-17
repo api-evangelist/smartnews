@@ -97,37 +97,6 @@ paths:
                 $ref: '#/components/schemas/ServiceUnavailableErrorResponse'
 components:
   schemas:
-    ServiceUnavailableErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/ServiceUnavailableError'
-    UnauthorizedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ErrorBase:
-      type: object
-      required:
-      - message
-      - retriable
-      properties:
-        message:
-          type: string
-        retriable:
-          type: boolean
-    ServiceUnavailableErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNDER_MAINTENANCE
     RateLimitedError:
       type: object
       allOf:
@@ -145,6 +114,101 @@ components:
       allOf:
       - $ref: '#/components/schemas/ForbiddenErrorExtension'
       - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnexpectedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnauthorizedError'
+    ServiceUnavailableErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNDER_MAINTENANCE
+    UnauthorizedError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/UnauthorizedErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnauthorizedErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - UNAUTHORIZED
+    ServiceUnavailableErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ServiceUnavailableError'
+    ForbiddenErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ForbiddenError'
+    ForbiddenErrorExtension:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - TERMS_OF_SERVICE_NOT_ACCEPTED
+          - ACCESS_DENIED
+        terms_of_service_path:
+          type: string
+          example: /terms/agreement
+          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
+    ArticleCategoryId:
+      type: integer
+      format: int32
+    ErrorBase:
+      type: object
+      required:
+      - message
+      - retriable
+      properties:
+        message:
+          type: string
+        retriable:
+          type: boolean
+    RateLimitedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/RateLimitedError'
+    ServiceUnavailableError:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
+      - $ref: '#/components/schemas/ErrorBase'
+    UnexpectedErrorResponse:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/UnexpectedError'
     ArticleCategoryMaster:
       type: object
       required:
@@ -183,44 +247,20 @@ components:
           type: string
           enum:
           - UNEXPECTED_ERROR
-    UnexpectedError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/UnexpectedErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    ForbiddenErrorResponse:
+    ArticleCategoryMasterName:
       type: object
       required:
-      - error
+      - en
+      - ja
       properties:
-        error:
-          $ref: '#/components/schemas/ForbiddenError'
-    UnexpectedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnexpectedError'
-    ServiceUnavailableError:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/ServiceUnavailableErrorExtension'
-      - $ref: '#/components/schemas/ErrorBase'
-    RateLimitedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/RateLimitedError'
-    UnauthorizedErrorResponse:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          $ref: '#/components/schemas/UnauthorizedError'
+        en:
+          type: string
+          description: The English name of the article category.
+          example: Sports
+        ja:
+          type: string
+          description: The Japanese name of the article category.
+          example: スポーツ
     ArticleCategoryMasterResponse:
       type: array
       description: 'A nested tree of article category master data for contextual targeting.
@@ -241,46 +281,6 @@ components:
             en: Baseball
             ja: 野球
           children: []
-    ForbiddenErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - TERMS_OF_SERVICE_NOT_ACCEPTED
-          - ACCESS_DENIED
-        terms_of_service_path:
-          type: string
-          example: /terms/agreement
-          description: The path that the user must open in a browser to accept the terms of service. The hostname matches the API hostname.
-    UnauthorizedErrorExtension:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - UNAUTHORIZED
-    ArticleCategoryId:
-      type: integer
-      format: int32
-    ArticleCategoryMasterName:
-      type: object
-      required:
-      - en
-      - ja
-      properties:
-        en:
-          type: string
-          description: The English name of the article category.
-          example: Sports
-        ja:
-          type: string
-          description: The Japanese name of the article category.
-          example: スポーツ
   securitySchemes:
     ApiKeyAuth:
       type: http

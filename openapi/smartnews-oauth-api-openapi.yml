@@ -89,6 +89,24 @@ components:
               type: string
             retriable:
               type: boolean
+    GenerateAccessTokenRequest:
+      type: object
+      required:
+      - grant_type
+      - client_id
+      - client_secret
+      properties:
+        grant_type:
+          type: string
+          description: The grant type of the request. It should be 'client_credentials'.
+          example: client_credentials
+        client_id:
+          type: integer
+          format: int64
+          description: The client id(developer app id) of the developer app.
+        client_secret:
+          type: string
+          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
     GenerateAccessTokenResponse:
       type: object
       required:
@@ -117,24 +135,6 @@ components:
       - client_id
       - client_secret
       properties:
-        client_id:
-          type: integer
-          format: int64
-          description: The client id(developer app id) of the developer app.
-        client_secret:
-          type: string
-          description: The client secret of the developer app. Client secret is a credential generated when the developer app is created.
-    GenerateAccessTokenRequest:
-      type: object
-      required:
-      - grant_type
-      - client_id
-      - client_secret
-      properties:
-        grant_type:
-          type: string
-          description: The grant type of the request. It should be 'client_credentials'.
-          example: client_credentials
         client_id:
           type: integer
           format: int64
